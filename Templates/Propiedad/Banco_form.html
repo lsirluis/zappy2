@@ -1,0 +1,61 @@
+
+
+{% extends "Propiedad/Template_formulario.html" %}
+	
+	{%block DatosFormulario%}
+
+  {# {{form.administrador.value}} #}
+  {# {% if administrador %} #}
+  {# {{administrador}} #}
+  {# {% else %} #}
+    {# {{form.administrador.value}} #}
+  {# {% endif %} #}
+    <div class="control-group form-row field-administrador ">
+        
+	<input type="hidden" id="id_administrador" name="administrador" value="{% if administrador %}{{administrador}}{% else %}{{form.administrador.value}}{% endif %}">
+    </div>
+		<div class="control-group form-row field-banco ">
+        
+          <div><div class="control-label"><label class="required" for="id_banco">{{form.banco.label}}</label></div><div class="controls">
+          {{form.banco}}
+          <span class="errorlist">
+          {{form.banco.errors.as_text}}
+          </span>
+         </div></div>
+        
+
+      </div>
+      <div class="control-group form-row field-tipo_cuenta ">
+        
+          <div><div class="control-label">{{form.tipo_cuenta.label}}</div><div class="controls">
+          	{{form.tipo_cuenta}}
+          	{{form.tipo_cuenta.errors.as_text}}
+          </div></div>
+      </div>
+	  <div class="control-group form-row field-num_cuenta ">
+        
+          <div><div class="control-label"><label class="required" for="id_num_cuenta">{{form.num_cuenta.label}}</label></div>
+          <div class="controls">{{form.num_cuenta}}
+          <span class="errorlist">
+          	{{form.num_cuenta.errors.as_text}}
+          </span>
+      	  </div>
+  		</div>
+        
+      </div>
+	<div class="control-group form-row field-propiedad ">
+        
+          <div><div class="control-label"><label class="required" for="id_propiedad">{{form.propiedad.label}}:</label></div><div class="controls">
+          	{{form.propiedad}}
+          <span class="errorlist">
+          	{{form.propiedad.errors.as_text}}
+          </span>
+          </div>
+     	  </div>
+
+
+      </div>
+        
+
+	{%endblock%}
+	

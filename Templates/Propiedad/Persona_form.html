@@ -1,0 +1,147 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block title%} {{title}} {%endblock%}
+
+{% block content %}
+{{form.errors}}
+
+ {% if title == "Unidad no registrada" %}
+ 	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearuni' %}" class="btn btn-success ribbon1 base">Agregar nueva Unidad</a>
+		<br>
+	</div>
+  {% elif title == "Propiedad no registrada" %}
+ 	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+		<br>
+	</div>
+{% else %}
+ {# {% if object_list or form%} #}
+<script> function dismissAddAnotherPopup(win) {
+    win.close();
+}</script>
+<div id="content-main" class="inner-two-columns">
+          	{# <div class="ribbon base"></div> #}
+
+    <form enctype="multipart/form-data" action="" method="post" id="persona_form" class="form-horizontal" novalidate="">
+
+      <div class="inner-right-column">
+
+        <div class="box save-box">
+
+          
+			<div class="submit-row clearfix">
+  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar </b></button>
+
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
+
+			</div>
+
+		</div>   
+
+      </div>
+      <div class="inner-center-column ">
+		{%csrf_token%}
+        <div class="tab-content tab-content-main ">
+          <fieldset class="module aligned first ">
+          	<div class="ribbon base"></div>
+   
+
+		    <div class="control-group form-row field-identificacion ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_identificacion">{{form.identificacion.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.identificacion}}		        
+
+		        		<span class="errorlist">{{form.identificacion.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-nombre ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_nombre">{{form.nombre.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.nombre}}		        
+
+		        		<span class="errorlist">{{form.nombre.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-apellido ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_apellido">{{form.apellido.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.apellido}}		        
+
+		        		<span class="errorlist">{{form.apellido.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-email ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_email">{{form.email.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.email}}		        
+
+		        		<span class="errorlist">{{form.email.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-celular ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_celular">{{form.celular.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.celular}}		        
+
+		        		<span class="errorlist">{{form.celular.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-telefono ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_telefono">{{form.telefono.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.telefono}}		        
+
+		        		<span class="errorlist">{{form.telefono.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-tipo ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_tipo">{{form.tipo.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.tipo}}		        
+
+		        		<span class="errorlist">{{form.tipo.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+		       {# <div class="control-group form-row field-propiedad "> #}
+		        {# <div> #}
+		        	{# <div class="control-label"><label class="required" for="id_propiedad">{{form.propiedad.label}}:</label> #}
+		        	{# </div><div class="controls"> #}
+		        	{# {{form.propiedad}}		         #}
+
+		        		{# <span class="errorlist">{{form.propiedad.errors.as_text}}</span> #}
+					{# </div> #}
+		        {# </div> #}
+		      {# </div> #}
+
+    		</fieldset>
+		
+       	</div>
+
+		</div>
+
+	</form>
+
+</div>
+
+{# {% else %} #}
+	{# no hay datos #}
+	
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Listar usuarios</title>
+</head>
+<body>
+	<table>
+			estos son las propiedades en la base de datos
+
+		<thead>
+		<tr>
+			<td>#. identificacion</td>
+			<td>Nombre</td>
+			<td>Direccion</td>
+			<td>Administrador</td>
+
+		</tr>
+		</thead>
+		<tbody>
+			<br>
+			{% if propiedades %} 
+				si hay propiedades	
+				{% for datos in propiedades  %}
+					<tr>
+					<td>{{ datos.identificacion }}</td>
+					<td>{{ datos.nombre }}</td>
+					<td>{{ datos.direccion}}</td>
+					<td>{{ datos.administrador_id}}</td>
+					</tr>
+				{% endfor %}
+
+			{% else %}
+				no hay propiedades
+			{% endif %}
+
+		</tbody>
+	</table>
+</body>
+</html>

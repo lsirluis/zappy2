@@ -1,0 +1,186 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block title%} {{title}} {%endblock%}
+{% block content %}
+
+  {# <form action="" method="post"> #}
+    {# {% csrf_token %} #}
+    {# {{ form.as_p }} #}
+	
+    
+    {# <button class="btn btn-primary" type="submit">Agregar propiedad</button> #}
+{# </form> #}
+{% if title == "Propiedad no registrada" %}
+	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+	</div>	
+	<br>
+<br>
+{% else  %}
+	
+
+{{form.errors}}
+<br>
+
+<div id="content-main" class="inner-two-columns">
+
+    <form enctype="multipart/form-data" action="" method="post" id="propiedad_form" class="form-horizontal" novalidate="">
+
+      <div class="inner-right-column">
+
+        <div class="box save-box">
+
+          
+			<div class="submit-row clearfix">
+  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar</b></button>
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
+
+			</div>
+		</div>   
+
+      </div>
+      
+      <div class="inner-center-column">
+		{%csrf_token%}
+        <div class="tab-content tab-content-main">
+          <fieldset class="module aligned first ">
+          	          	<div class="ribbon base"></div>
+
+    		<div class="control-group form-row field-idlegal ">
+        
+          		<div>
+          			<div class="control-label ">
+          				<label class="required" for="id_idlegal">{{form.idlegal.label}}:</label>
+          			</div>
+          				<div class="controls">{{form.idlegal}}</div>
+          		</div>
+        
+
+     		</div>
+
+      		<div class="control-group form-row field-nombre ">
+		         <div>
+		         	<div class="control-label"><label class="required" for="id_nombre">{{form.nombre.label}}:</label>
+		         	</div><div class="controls">{{form.nombre}} </div>
+		         </div>
+        	</div>
+
+		    <div class="control-group form-row field-direccion ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_direccion">{{form.direccion.label}}:</label>
+		        	</div><div class="controls">{{form.direccion}}</div>
+		        </div>
+		      </div>
+    
+  
+    
+		      <div class="control-group form-row field-telefono "> 
+		          <div>
+		          	<div class="control-label"><label class="required" for="id_telefono">{{form.telefono.label}}:</label>
+		          	</div><div class="controls">{{form.telefono}}</div>
+		          </div>
+		       </div>
+    
+      			<div class="control-group form-row field-ciudad ">
+        
+         			 <div>
+         			 	<div class="control-label"><label class="required" for="id_ciudad">Ciudad:</label>
+         			 	</div><div class="controls">{{form.ciudad}}</div>
+         			 </div>
+      			</div>
+    
+  
+    
+      {# <div class="control-group form-row field-administrador "> #}
+        
+          {# <div><div class="control-label"><label class="required" for="id_administrador">Administrador:</label></div><div class="controls"><div class="related-widget-wrapper"><select id="id_administrador" name="administrador" required=""><option value="" selected="selected">---------</option><option value="1">(1067925688)-luis villadiego</option><option value="2">(218739127)-adniel villadiego</option></select><a class="related-widget-wrapper-link change-related" id="change_id_administrador" data-href-template="/admin/usuarios/administrador/__fk__/change/?_to_field=idu&amp;_popup=1" title="Cambiar Administrador seleccionado"><img src="/static/admin/img/icon-changelink.svg" alt="Modificar"></a><a class="related-widget-wrapper-link add-related" id="add_id_administrador" href="/admin/usuarios/administrador/add/?_to_field=idu&amp;_popup=1" title="Añadir otro Administrador"><img src="/static/admin/img/icon-addlink.svg" alt="Añadir"></a></div></div></div> #}
+        
+
+      {# </div> #}
+    
+  
+    
+		      <div class="control-group form-row field-area ">
+		        
+		          <div>
+		          	<div class="control-label"><label class="required" for="id_area">Area M<sup>2</sup>:</label>
+		          	</div><div class="controls">{{form.area}}</div>
+		          </div>
+		      </div>
+    
+		      <div class="control-group form-row field-tipo ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_tipo">Tipo Propiedad:</label>
+		        	</div><div class="controls">{{form.tipo}} </div>
+		        </div>
+		      </div>
+			    
+			      <div class="control-group form-row field-presupuesto_anual ">
+			          <div>
+			          	<div class="control-label"><label class="required" for="id_presupuesto_anual">Presupuesto anual:</label>
+			          	</div><div class="controls">{{form.presupuesto_anual}}</div>
+			          </div>
+			        
+
+			      </div>
+    
+  
+    
+			      <div class="control-group form-row field-dia_cobro ">
+			        <div>
+			        	<div class="control-label"><label class="required" for="id_dia_cobro">{{form.dia_cobro.label}}:</label>
+			        	</div><div class="controls">{{form.dia_cobro}}</div>
+			        </div>
+			      </div>
+    
+  
+    
+			      <div class="control-group form-row field-porcentaje_mora ">
+			        <div>
+			        	<div class="control-label"><label class="required" for="id_porcentaje_mora">Porcentaje mora:</label>
+			        	</div><div class="controls">{{form.porcentaje_mora}}</div>
+			        </div>
+        		  </div>
+			      <div class="control-group form-row field-Imagen ">    
+			          <div>
+			          	<div class="control-label"><label for="id_Imagen">Imagen:</label>
+			          	</div><div class="controls">{{form.Imagen}} </div></div>
+			      </div>
+    
+  
+</fieldset>
+
+        </div>
+
+            <script type="text/javascript">
+                (function($) {
+                    $(document).ready(function() {
+                        $('.add-another').click(function(e) {
+                            e.preventDefault();
+                            showAddAnotherPopup(this);
+                        });
+                        $('.related-lookup').click(function(e) {
+                            e.preventDefault();
+                            showRelatedObjectLookupPopup(this);
+                        });
+                    
+                        $('form#propiedad_form :input[type!=button][type!=submit]:visible:enabled:first').focus()
+                    
+                    });
+                })(django.jQuery);
+            </script>
+        
+
+        
+        
+<script type="text/javascript" id="django-admin-prepopulated-fields-constants" src="/static/admin/js/prepopulate_init.js" data-prepopulated-fields="[]">
+</script>
+
+
+      </div>
+    </form>
+  </div>
+
+{% endif %}
+{% endblock %}

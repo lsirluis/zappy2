@@ -1,0 +1,148 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block title%} {{title}} {%endblock%}
+
+{% block content %}
+
+{# <h1>fecha actual del servidor: {{fecha}}</h1> #}
+ {# /*<style>*/ #}
+      {# .table-striped>tbody>tr:nth-child(odd)>td,  #}
+      {# .table-striped>tbody>tr:nth-child(odd)>th { #}
+       {# background-color: #31DA88; #}
+      {# } #}
+      {# .table-striped>tbody>tr:nth-child(even)>td,  #}
+      {# .table-striped>tbody>tr:nth-child(even)>th { #}
+       {# background-color: #97F7C8; #}
+      {# } #}
+      {# .table-striped>thead>tr>th { #}
+         {# background-color: #eee; #}
+      {# }    #}
+    {# </style> #}
+
+
+
+{# {% block extrahead %} #}
+	{# <link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %}"> #}
+{# {% endblock %} #}
+	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+	</div>	
+	<br>
+<br>
+<div class="table-responsive">          
+  <table class="table table-hover table-striped " >
+    <thead>
+      <tr>
+        <th ><a href="">Imagen</a></th>      	
+        <th ><a href="">Nombre</a></th>
+        {# <th ><a href="">#. identificacion</a></th> #}
+        <th ><a href="">Ciudad</a></th>
+        <th ><a href="">Direccion</a></th>
+        <th ><a href="">Tipo</a></th>
+        <th ><a href="">Area M <sup>2</sup></a></th>
+        <th ><a href="">Dia Facturacion</a></th>        
+        <th ><a href="">Presupuesto Anual</a></th>
+        {# <th ><a href="">Administrador</a></th> #}
+
+    
+      </tr>
+    </thead>
+          	{# <div class="ribbon base"></div> #}
+
+    
+    <tbody  class="text-center">
+				{# {% for datos in propiedades  %} #}
+				{% for datos in object_list  %}
+					{# <td class="text-center"></td> #}
+					<tr >
+					<td><img src="/media/{{ datos.Imagen}}" class="imgperfilpropiedades"></td>						
+					<td   style="vertical-align:middle;" >
+						<a class="btn btn-info btn-block" href=" {% url 'Propiedad:Solicitud_apartamentos' datos.idlegal %}"><b>{{ datos.nombre }}</b>
+						</a>
+					</td>
+					{# <td   style="vertical-align:middle;" >{{ datos.idlegal }}</td> #}
+					{# <td><a href="{% url 'Propiedad:Solicitud_apartamentos' 3 %}{{datos.identificacion}}">{{ datos.nombre }}</a></td> #}
+					<td   style="vertical-align:middle;" >{{datos.ciudad.nombre}}</td>
+					<td  style="vertical-align:middle;" >{{ datos.direccion}}</td>
+					<td  style="vertical-align:middle;" >{{datos.get_tipo_display}}</td>
+					<td tyle="vertical-align:middle;">{{datos.area}}</td>
+					<td class="text-center" tyle="vertical-align:middle;">{{datos.dia_cobro}}</td>
+					<td style="background-color:#dff0d8; vertical-align:middle;">{{datos.presupuesto_anual}}</td>
+					{# <td  style="vertical-align:middle;" >({{ datos.administrador.identificacion}}) {{ datos.administrador.nombre1}}  {{ datos.administrador.apellido1}}</td> #}
+
+					</tr>
+
+				{% endfor %}
+
+    </tbody>
+  </table>
+  <ul class="pager">
+  	{# <li> #}
+  		{# cantidad de paginas: {{paginator.num_pages}} y numero de la siguiente pagina #}
+
+  		{%if object_list.has_previous %}
+  		<a class="btn btn-info" href="?page={{page_obj.previous_page_number}}">Anterior</a>
+  		{%endif%}
+  	{# </li> #}
+        <span class="current">
+          	  		pagina {{ object_list.number }} de {{ object_list.paginator.num_pages }}.
+        </span>
+          	{# <li> #}
+  		{%if object_list.has_next %} {# and paginator.num_pages != page_obj.next_page_number #}
+  			<a class="btn btn-info" href="?page={{page_obj.next_page_number}}">Siguiente &raquo;</a>
+  		{%endif%}
+  	{# </li> #}
+  </ul>
+   {# <script type="text/javascript" src="https://form.jotformz.com/jsform/63306089762663"></script>#}
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+	<table>
+			estos son las propiedades en la base de datos
+
+		<thead>
+		<tr>
+			<td>#. identificacion</td>
+			<td>Nombre</td>
+			<td>Direccion</td>
+			<td>Administrador</td>
+
+		</tr>
+		</thead>
+		<tbody>
+			<br>
+			{% if propiedades %} 
+				si hay propiedades	
+				{% for datos in propiedades  %}
+					<tr>
+					<td>{{ datos.identificacion }}</td>
+					<td>{{ datos.nombre }}</td>
+					<td>{{ datos.direccion}}</td>
+					<td>({{ datos.administrador_id}}) {{ datos.administrador.nombre}}  {{ datos.administrador.apellido}}</td>
+					</tr>
+				{% endfor %}
+
+			{% else %}
+				no hay propiedades
+			{% endif %}
+
+		</tbody>
+	</table>
+-->
+	{% endblock%}

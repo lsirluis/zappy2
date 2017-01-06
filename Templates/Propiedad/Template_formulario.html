@@ -1,0 +1,57 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block title%} {{title}} {%endblock%}
+
+{% block content %}
+<br>
+{% if title == "Banco no registrado" %}
+  <div>
+    <a href="{%url 'Propiedad:Solicitud_crearBanco' %}" class="btn btn-success ribbon1 base">Agregar nuevo Banco</a>
+  </div>  
+  <br>
+  <br>
+{% else %}
+ {{ form.errors}}
+
+<div id="content-main" class="inner-two-columns">
+          	{# <div class="ribbon base"></div> #}
+
+    <form enctype="multipart/form-data" action="" method="post" id="propiedad_form" class="form-horizontal" novalidate="">
+
+      <div class="inner-right-column">
+
+        <div class="box save-box">
+
+          
+			<div class="submit-row clearfix">
+  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar </b></button>
+
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
+
+			</div>
+
+		  </div>   
+
+    </div>
+      <div class="inner-center-column ">
+		    {%csrf_token%}
+        <div class="tab-content tab-content-main ">
+          <fieldset class="module aligned first ">
+          	<div class="ribbon base"></div>
+
+        {%block DatosFormulario %}
+
+        {%endblock%}
+
+
+
+
+          </fieldset>
+        </div>
+      </div>
+  </form>
+</div>
+{% endif %}
+
+{%endblock%}

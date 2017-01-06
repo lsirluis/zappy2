@@ -1,0 +1,102 @@
+{# <img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 > #}
+<table class="table tbottom table-bordered table-hover"  border="0px">
+	<thead>
+		<tr>
+			{# <th class="tr1"> #}
+				{# Imagen #}
+			{# </th> #}
+			<th class="tr6" colspan="1">
+				{# Ficha #}
+			</th>
+			<th class="tr4" colspan="2">
+				{# Estadistica #}
+			</th>
+			<th class="tr7"></th>
+			<th class="tr5" colspan="2">
+				{# Acciones #}
+			</th>
+		</tr>
+	</thead>
+	          	{# <div class="ribbon base"></div> #}
+
+	<tbody>
+		<tr class="trh">
+			{# <td rowspan="4"> #}
+				{# <img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 > #}
+			{# </td> #}
+			<td class="tup">
+				<b>Unidad en la Propiedad :</b>
+			</td>
+			<td  class="text-center tup">
+				<a href="{% url 'Propiedad:Solicitud_apartamentos' DatosUnidad.propiedad.idlegal %}">{{DatosUnidad.propiedad.nombre}}</a>
+			</td>
+			<td class="tup2"><b> Estado pago</b></td>
+			<td class="tup"> <span class="active"> 
+				{% if DatosUnidad.valor_mora > 0 or Uestado.0 == True %}
+					<img alt="True" src="/static/admin/img/icon-no.svg"> 
+					Moroso 
+				{% else %}
+					<img alt="True" src="/static/admin/img/icon-yes.svg"> 
+					Al Dia 
+				{% endif %} </span>
+				
+			</td>
+			<td class="tr2"></td>
+			<td>
+				<div class="btn-group">
+     			 {# <a href="">  #}
+     			 {# <button type="button" class="btn btn-info btntd">Editar</button> #}
+     			{# </a> #}
+					<a href="{% url 'Propiedad:Solicitud_updateUni' DatosUnidad.propiedad.idlegal DatosUnidad.id %}">
+                  {# <button type="button" class="btn btn-success">Editar</button> #}
+                  <button class="btn btn-info"><i class="icon-pencil  icon-white"></i>Editar </button>
+                </a>
+
+     			<a href="{%url 'Propiedad:Solicitud_addfactura' DatosUnidad.propiedad.idlegal DatosUnidad.id %}"> 
+     			 <button type="button" class="btn btn-info btntd"><i class="icon-plus-sign icon-white"></i> Factura</button>
+     			</a>
+     			 {# <a href="">  #}
+     			 {# <button type="button" class="btn btn-danger btntd">Cartera</button> #}
+     			{# </a> #}
+						
+				</div> 
+
+
+              </td>
+		</tr>
+
+
+		<tr class="trh">
+			<td class="tup2"><b>Torre</b></td>
+			<td class="text-center tup2">{{DatosUnidad.torre}}</td>
+			<td class="tup"><b>Propietario</b></td>
+			<td class="tup">{{DatosUnidad.propietario.nombre}} 
+						    {{DatosUnidad.propietario.apellido}} 
+						<b>Id</b>: <i>{{DatosUnidad.propietario.identificacion}}</i>
+			</td>
+			<td></td>
+			<td>
+				<div class="btn-group">
+     			 
+     			 {# <a href="">  #}
+     			 {# <button type="button" class="btn btn-danger btntd">Banco</button> #}
+     			{# </a> #}
+						
+				</div> 
+              </td>
+		</tr>
+		<tr class="trh">
+			<td class="tup"><b>#Unidad :</b></td>
+			<td class="text-center tup">{{DatosUnidad.numero}}</td>
+			<td class="tup">{# Estadistica 1 #}</td>
+			<td class="tup">{# Estadistica 2 #}</td>
+			<td></td>
+			<td></td>
+			{# <td></td> #}
+		</tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+
+		
+	</tbody>
+</table>

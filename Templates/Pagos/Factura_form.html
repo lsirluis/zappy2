@@ -1,0 +1,437 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block title%} {{title}} {%endblock%}
+
+{# <script src="{% static 'js/jquery-ui.js'%}"></script> #}
+{# <script src="{% static 'js/jquery-3.1.1.js'%}"></script> #}
+
+{# https://htmlpdfapi.com/blog/free_html5_invoice_templates #}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/FacturaStyles.css' %}" media="all">
+
+
+{# <form action="" method="post"> #}
+    {# {% csrf_token %} #}
+    {# {{ form.as_table }} #}
+	
+    
+    {# <button class="btn btn-primary" type="submit">Agregar propiedad</button> #}
+{# </form> #}
+
+ {# {{ form.errors}} #}
+ {# {{ form2.errors}} #}
+ {# {% if detalles %} #}
+   {# hay una descripcion = {{detalles|length}}{{contador}}  #}
+   {# {% for datos in detalles  %} #}
+      {# {{datos}} #}
+      {# {{forloop.counter}} #}
+   {# {% endfor %} #}
+   {# {% else %} #}
+   {# no hay descripcion #}
+ {# {% endif %} #}
+       	{# <h1>Generar una factura para esta unidad</h1> #}
+{# <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">  #}
+{# <script src="http://code.jquery.com/jquery-1.9.1.js"></script> #}
+{# <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> #}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+
+// funciones para fecha
+$.datepicker.regional['es'] = {
+ closeText: 'Cerrar',
+ prevText: '< Ant',
+ nextText: 'Sig >',
+ currentText: 'Hoy',
+ monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+ monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+ dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+ dayNamesShort: ['Dom','Lun','Mar','Mié','Juv','Vie','Sáb'],
+ dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','Sá'],
+ weekHeader: 'Sm',
+ dateFormat: 'dd/mm/yy',
+ firstDay: 1,
+ isRTL: false,
+ showMonthAfterYear: false,
+ yearSuffix: ''
+ };
+$.datepicker.setDefaults($.datepicker.regional['es']);
+$(document).ready(function() {
+
+
+    $("#btnfcrobrada").click(function(){
+      $('#id_fecha_cobrada').focus();
+    })
+    $("#btnfcrobrada2").click(function(){
+      $('#id_fecha_vencimiento').focus();
+    })
+ 
+       $('.datepicker').datepicker({
+           dateFormat: "dd/mm/yy",showButtonPanel: true,
+    });
+
+
+});
+</script>
+
+
+
+
+{# si hay datos de unidad #}
+ {% if DatosUnidad %}
+
+<div id="content-main" class="inner-two-columns">
+          	{# <div class="ribbon base"></div> #}
+
+    <form enctype="multipart/form-data" action="" method="post" id="propiedad_form" class="form-horizontal" novalidate="">
+
+      <div class="inner-right-column">
+
+        <div class="box save-box">
+
+          
+			<div class="submit-row clearfix">
+  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar factura </b></button>
+
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn">Guardar y enviar al correo</button>
+
+
+              <label for="" class="" ><b>Fecha Cobrada: </b> 
+                <br><span class="errorlist">{{form.fecha_cobrada.errors.as_text}}</span>
+              </label>
+            {{form.fecha_cobrada}}
+        {# <input type="text" class="datepicker hasDatepicker" placeholder="Dia / Mes / Año" > #}
+        
+                 <button type="button" id="btnfcrobrada"><i class="icon-calendar" ></i></button>
+              
+        <label for="" class="" ><b>Fecha Vencimiento: </b>
+        <br>
+        <span class="errorlist">{{form.fecha_vencimiento.errors.as_text}}</span>
+        </label>
+        {{form.fecha_vencimiento}}
+        <button type="button" id="btnfcrobrada2"><i class="icon-calendar" ></i></button>
+        {# <input type="text" class="mdinput" placeholder="Dia / Mes / Año"  > #}
+        {# <button type="button"><i class="icon-plus-sign" ></i></button> #}
+              
+
+			</div>
+
+		</div>   
+
+      </div>
+      <div class="inner-center-column ">
+		{%csrf_token%}
+        <div class="tab-content tab-content-main ">
+          <fieldset class="module aligned first ">
+          	<div class="ribbon base"></div>
+			{# div que contendra los valores input del formulario #}
+			<div id="valores">
+         <input type="hidden" name="unidad" value="{{DatosUnidad.id}}">
+<input type="hidden" name="tipo" value="pago">
+
+  {% if detalles %}
+    {% for datos in detalles %}
+        <input type="hidden" name="descripcion" value="{{datos.0}} ">
+      <input type="hidden" name="valor" value="{{datos.1}}">
+      <input type="hidden" name="interes" value="{{datos.2}}">
+      <input type="hidden" name="total" value="{{datos.3}}">
+    {% endfor %}
+  {% endif %}
+
+         {# {{DatosUnidad}} #}
+
+      </div>
+
+
+
+    		<div class="control-group form-row field-propiedad ">
+        
+          		{# <div> #}
+          			{# <div class="control-label "> #}
+          				{# <label class="required" for="id_propiedad">{{form.propiedad.label}}:</label> #}
+          			{# </div> #}
+          				{# <div class="controls"> #}
+          					{# {{form.propiedad}} #}
+          					{# <span class="errorlist">{{form.propiedad.errors.as_text}}</span> #}
+
+          					{# {{form.errors.propiedad}} #}
+          				{# </div> #}
+
+          		{# </div> #}
+        
+	<input type="hidden" id="id_propiedad" name="propiedad" value="{{object_list.idlegal}}">
+     		</div>
+ <header class="clearfix">
+      {# <div id="logo"> #}
+        {# <img src="{% static 'img/zapphy_text.png' %}"> #}
+      {# </div> #}
+      <h1>FACTURA #000{{consecutivo}}</h1>
+      
+      {# <div id="company" class="clearfix"> #}
+        {# <div>Company Name</div> #}
+        {# <div>455 Foggy Heights,<br> AZ 85004, US</div> #}
+        {# <div>(6/02) 519-0450</div> #}
+        {# <div><a href="mailto:company@example.com">company@example.com</a></div> #}
+      {# </div> #}
+      {# <div id="project"> #}
+        {# <div><span>PROJECT</span> Website development</div> #}
+        {# <div><span>CLIENT</span> John Doe</div> #}
+        {# <div><span>ADDRESS</span> 796 Silver Harbour, TX 79273, US</div> #}
+        {# <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div> #}
+        {# <div><span>DATE</span> August 17, 2015</div> #}
+        {# <div><span>DUE DATE</span> September 17, 2015</div> #}
+      {# </div> #}
+    </header>
+    <main class="ContainerInvoice">
+      <table id="TablaFactura" border="0px;">
+        <thead>
+          <tr>
+            <th class="service">#</th>
+            <th class="desc">DESCRIPCION</th>
+            <th>COSTO</th>
+            <th>INTERES</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {# <tr> #}
+            {# <td class="service">1</td> #}
+            {# <td class="desc">PAGO ADMINISTRACION</td> #}
+            {# <td class="unit">$100.000</td> #}
+            {# <td class="qty">0%</td> #}
+            {# <td class="total">$100.000</td> #}
+          {# </tr> #}
+        {% if detalles %}
+       
+ 
+
+          {% for datos in detalles %}
+            
+          <tr>
+              <td class="service">{{forloop.counter}}</td>
+              <td class="desc">{{datos.0}}</td>
+              <td class="unit">${{datos.1}}</td>
+              <td class="qty">{{datos.2}}%</td>
+              <td class="total">${{datos.3}}</td>
+           </tr>
+          {% endfor %}
+
+        {% endif %}
+
+  
+          <tr>
+            <td class="service"></td>
+            <td class="desc"><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign icon-white"></i>Agregar</button>
+
+            <td class="unit"></td>
+            <td class="qty"></td>
+            <td class="total"></td>
+          </tr>
+
+          {# parte post detalles #}
+          <tr class="tax separator">
+            <td colspan="4">SUBTOTAL</td>
+            <td class="total">$5,200.00</td>
+          </tr>
+          <tr class="tax">
+          	<td class="service"> 
+          	
+          	</td>
+          	<td class="service">  
+
+
+			       	 		
+  			</td>
+            <td colspan="2">IMPUESTOS(IVA) 16%</td>
+            <td class="total">$1,300.00</td>
+          </tr>
+          <tr>
+            <td colspan="4" class="grand total"><b>TOTAL FACTURA</b></td>
+            <td class="grand total">$6,500.00</td>
+          </tr>
+        </tbody>
+      </table>
+      {# <div id="notices"> #}
+        {# <div>NOTICE:</div> #}
+        {# <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div> #}
+      {# </div> #}
+    </main>
+  
+
+
+
+
+
+    		</fieldset>
+		
+       	</div>
+
+		</div>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+ 		// alert("porcentaje mora despues del cambio"+porcentaje);
+ 		$("#btnadd").click(function(){
+
+ 		// alert("Descripcion = "+ $('#valDesc').val()+ " Costo = "+ $('#valCosto').val()+" Interes = "+  $('#valInteres').val());
+		myCreateFunction();
+
+ 			})
+ 		    var contador= {% if detalles %}
+          {{detalles|length}}
+          {% else %}
+          0
+        {% endif %};
+    function myCreateFunction() {
+     contador++;
+    var table = document.getElementById("TablaFactura");
+        var row = table.insertRow(contador);
+        var cell1 = row.insertCell(0);cell1.className="service";
+        var cell2 = row.insertCell(1);cell2.className="desc";
+        var cell3 = row.insertCell(2);cell3.className="unit";
+        var cell4 = row.insertCell(3);cell4.className="qty";
+        var cell5 = row.insertCell(4);cell5.className="total";
+
+        //ponemos nombres a los elementos
+   		// cell2.setAttribute("", "unidad", 0);
+
+
+    // CREO UN ELEMENTO DEL TIPO INPUT CON document.createElement("NOMBRE TAG HTML QUE QUIERO CREAR");
+     
+        var input1 = document.createElement("input"); // input de descipcion
+            input1.type = "hidden";					
+      // CLONAMOS LOS ELEMENTOS
+        var input2 = input1.cloneNode(true); 
+        var input3 = input2.cloneNode(true);
+        var input4 = input3.cloneNode(true);
+
+
+     
+    // HAGO UN CLON DEL PRIMER INPUT PARA TENER OTRO IGUAL
+        
+        // var input2 = input.cloneNode(true);
+        
+    // CON EL METODO appendChild(); LOS AGREGO A LA CELDA QUE QUIERO
+   var descripcion = $('#valDesc').val();
+   var costo = parseInt($('#valCosto').val());
+   var interes = parseInt($('#valInteres').val());
+   // Agregamos los nombres de los input
+   		input1.name="descripcion";
+   		input2.name="valor";
+      input3.name="interes";
+      input4.name="total"
+
+        // input3.value=interes; 
+
+   var  a= document.createTextNode(contador);
+   var  b= document.createTextNode(descripcion);
+   var  c= document.createTextNode("$"+costo);
+   var  d= document.createTextNode(interes+"%");
+   var calculo = parseInt((interes * costo /100+ costo));
+   var  e= document.createTextNode("$"+calculo);
+      //Agregamos los valores a cada input
+        input1.value=descripcion;
+        input2.value=costo;
+        input3.value=interes;
+        input4.value=calculo;
+
+        cell1.appendChild(a);   
+        cell2.appendChild(b);
+        cell3.appendChild(c);   
+        cell4.appendChild(d);   
+        cell5.appendChild(e);   
+
+    // ponemos los valores input en el div de valores
+    var valoresdiv = document.getElementById("valores");
+    valoresdiv.appendChild(input1);
+    valoresdiv.appendChild(input2);
+    valoresdiv.appendChild(input3);
+    valoresdiv.appendChild(input4);
+    //ponemos los valores vacios nuevamente
+    $('#valDesc').val("");
+    $('#valInteres').val(0);
+    $('#valCosto').val(0);
+
+
+     
+    }
+        function myDeleteFunction() {
+        	if (contador>2){
+            document.getElementById("TablaFactura").deleteRow(contador);
+            contador--;
+        }
+        }
+ 		})
+
+        </script>
+	</form>
+
+</div>
+<!-- Trigger the modal with a button -->
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog"  style="display: none;">
+  <div class="modal-dialog" >
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">AGREGAR ITEM A ESTA FACTURA</h4>
+      </div>
+      <div class="modal-body">
+        {# <p>INFORMACION A MOSTRAR.</p> #}
+		{# <form action=""> #}
+		{# <input type="text" id="valCosto"> #}
+			<label for="">Descripcion</label><input type="text" id="valDesc">
+			<label for="">Costo</label>
+			<input id="valCosto" min="0.0" name="coeficiente" step="1000" value="0" required="" type="number">
+			<label for="">Interes</label>
+			<input class="xsinput" id="valInteres" min="0.0" name="coeficiente" step="0.1" value="0.0" required="" type="number">
+			
+			{# <input type="text"> #}
+			<br>
+			<button id="btnadd" class="btn btn-info" data-dismiss="modal">Agregar detalle</button>
+			<button class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+
+		{# </form> #}
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% else %}
+	{# no hay datos #}
+		<div>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+		<br>
+	</div>	
+{% endif %}
+
+{# {% if object_list %} #}
+	{# hay datos : #}
+	{# {{object_list.object_list.nombre}} #}
+	{# {{object_list.presupuesto_anual}} #}
+	{# {% for datos in  object_list %} #}
+	 	{# {{datos.dia_cobro}} #}
+	 {# {% endfor %}  #}
+{# {% else %} #}
+	{# no hay datos #}
+{# {% endif %} #}
+
+
+
+
+{% endblock %}

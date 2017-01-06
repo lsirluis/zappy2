@@ -1,0 +1,136 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+
+{% block title%} {{title}}{%endblock%}
+
+
+{% block content %}
+
+	
+
+
+{% if title == "factura no encontrada" %}
+	
+		<div>
+		<a href="{%url 'Propiedad:Solicitud_listar' %}" class="btn btn-success ribbon1 base">Ver mis facturas</a>
+		{# <br> #}
+	</div>	
+{% else %}
+{# {% include "Propiedad/InfoUnidad.html" %} #}
+<h2>Detalle de factura:</h2>
+{% if object_list %}
+{# {% if deudas %} #}
+{# si hay deudas: #}
+{# <br> #}
+{# {{deudas}} #}
+{# <br> #}
+{# fin deudas #}
+
+	{# {% else %} #}
+	{# no hay deudas #}
+{# {% endif %} #}
+{# si hay detalles para esta factura #}
+	<div class="table-responsivse scrolltable2">          
+		  <table class="table table-striped table-bordered table-hover table-condensed">
+		    <thead>
+		      <tr>
+		      	<td><a href="">#</a></td>
+		        {# <th><a href="">Propiedad</a></th> #}
+		        <th><a href="">Tipo</a></th>
+		        <th><a href="">Descripcion</a></th>
+		        <th><a href="">Valor</a></th>
+		        {# <th><a href="">Estado</a></th> #}
+		        <th><a href="">Acciones</a></th>
+		        {# <th><a href="">Responsable</a></th> #}
+		        {# <th><a href="">Estado</a></th> #}
+		        {# <th><a href="">Dia Corte</a></th> #}
+		        {# <th><a href="">Acciones</a></th> #}
+		    
+		      </tr>
+		    </thead>
+		    <tbody>
+		    	{% for detalle in object_list   %}	    	
+		    	<tr>
+		    		<td>{{forloop.counter}}</td>
+		    		<td>
+		    		{{detalle.tipo}}</td>
+		    		<td>{{detalle.descripcion}}</td>
+		    		<td>{{ detalle.valor}}</td>
+		    		<td>
+		    					No aplican
+		    		</td>
+		    	</tr>
+		    {% endfor %}
+		 
+		    </tbody>
+		</table>
+		 {% if deudas %}
+		 	<b class="errorlist">Deudas:</b>
+		 	<br>
+
+		    {% for deuda in deudas %}
+		    <tr>
+		    	<b>#{{forloop.counter}}: 
+		    	Fecha de la deuda: </b>
+		    	{{deuda.Factura.fecha_cobrada}}
+				<b>Valor de la deuda:
+		    	</b>
+		    	</td>
+		    	<td>
+		    	<b>{{deuda.costo}}</b>
+		    	</td>
+		    	<td> 		
+		    		<div class="btn-group">
+     					 <a href="{% url 'Propiedad:Solicitud_pagosdetalle' DatosUnidad.propiedad.idlegal DatosUnidad.id deuda.Factura.id %}"><button type="button" class="btn btn-success">Ver Recibo</button></a>
+     				</div></td>
+		    </tr>
+
+		     <table class="table table-striped table-bordered table-hover table-condensed">
+		    <thead>
+		      <tr>
+		      	<td><a href="">#</a></td>
+		        {# <th><a href="">Propiedad</a></th> #}
+		        <th><a href="">Tipo</a></th>
+		        <th><a href="">Descripcion</a></th>
+		        <th><a href="">Valor</a></th>
+		        {# <th><a href="">Estado</a></th> #}
+		        <th><a href="">Acciones</a></th>
+		        {# <th><a href="">Responsable</a></th> #}
+		        {# <th><a href="">Estado</a></th> #}
+		        {# <th><a href="">Dia Corte</a></th> #}
+		        {# <th><a href="">Acciones</a></th> #}
+		    
+		      </tr>
+		    </thead>
+		    <tbody>
+		    	{% for detalle in deuda.detalles   %}	
+
+		    	<tr>
+		    		<td>{{forloop.counter}}</td>
+		    		<td>
+		    		{{detalle.tipo}}</td>
+		    		<td>{{detalle.descripcion}}</td>
+		    		<td>{{ detalle.valor}}</td>
+		    		<td>
+		    					No aplican
+		    		</td>
+		    	</tr>
+		    {% endfor %}
+		 
+		    </tbody>
+		</table>
+			
+		    	
+		    {% endfor %}
+		  {% endif %}
+	</div>
+
+{% else %}
+	no hay detalles para esta factura
+
+	{% endif %}
+
+{% endif %}
+
+{# {% include "Pagos/formatoFactura.html" %} #}
+{% endblock %}

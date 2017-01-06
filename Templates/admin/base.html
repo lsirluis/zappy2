@@ -1,0 +1,484 @@
+{# http://www.fiuxy.net/cuentas-premium/3879252-netflix-x4000-mil-cuentas-gratis-user-pass-funcionando-actualizable.html #}
+
+{% load admin_static staticfiles %}{% load suit_tags %}{% load url from suit_compat %}<!DOCTYPE html>
+{% load i18n suit_menu %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}{{ title }} | {{ 'ADMIN_NAME'|suit_conf }}{% endblock %}</title>
+  {% block before_suit_styles %}{% endblock %}
+  <link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% endblock %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static 'suit/bootstrap/css/bootstrap.min.css' %}" media="all"/>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'suit/css/suit.css' %}" media="all">
+  {% block extrastyle %}{% endblock %}
+  {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>{% endif %}
+  <script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
+  <script src="{% static 'suit/js/jquery-1.8.3.min.js' %}"></script>
+  <script type="text/javascript">var Suit = { $: $.noConflict() }; if (!$) $ = Suit.$; </script>
+  <script src="{% static 'suit/bootstrap/js/bootstrap.min.js' %}"></script>
+  
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  {% if 'SHOW_REQUIRED_ASTERISK'|suit_conf %}
+  <style type="text/css">.required:after { content: '*'; margin: 0 0 0 5px; position: absolute; color: #ccc;}</style>
+  {% endif %}
+  
+  
+  
+  <script type="text/javascript" src="/admin/jsi18n/"></script>
+
+  <script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+
+  {% block extrahead %}{% endblock %}
+  {% block blockbots %}
+    <meta name="robots" content="NONE,NOARCHIVE"/>{% endblock %}
+
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}">
+
+<!-- Sticky footer wrap -->
+<div id="wrap">
+      {# decorador azul en la exquina del contenido izquierdo #}
+     {% if not is_popup %}
+      <div class="ribbon2 base"></div>
+        
+      {% endif %} 
+
+  <!-- Container -->
+  {% block container %}
+    <div id="container">
+
+      {% block header %}
+        {% if not is_popup %}
+          <!-- Header -->
+          {# importante si queremos un dropdowm boton modificar el overflow #}
+          <div id="header" class="header">
+            <div id="branding">
+              <!--<a href="{% url 'admin:index' %}"><h1 id="site-name">{% block branding %}{{ 'ADMIN_NAME'|suit_conf }}{% endblock %}</h1></a>-->
+              <a href="{% url 'admin:index' %}"><img src="{% static 'img/zapphy_text.png' %}" alt=""></a>
+
+            </div>
+
+            {% block header_time %}
+            <div class="header-content header-content-first">
+              <div class="header-column icon">
+                <i class="icon-time"></i>
+              </div>
+              <div class="header-column">
+                <span class="date"> {% suit_date %}</span><br>
+                <span class="time" id="clock">{% suit_time %}</span>
+              </div>
+            </div>
+            {% endblock %}
+
+            {# {% block header_content %} #}
+              <!--<div class="header-content">
+                <div class="header-column icon">
+                  <i class="icon-comment"></i>
+                </div>
+                <div class="header-column">
+                  <a href="" class="grey"><b>2</b> new messages</a>
+                </div>
+              </div>-->
+            {# {% endblock %} #}
+            {# Additional header content like notifications or language switcher #}
+			{% block header_content %}
+			    {{ block.super }}
+			    <div class="header-content">
+			        <!-- First icon column -->
+			        {# <div class="header-column icon"> #}
+			            {# <i class="icon-home"></i><br> #}
+			            {# <i class="icon-cog"></i> #}
+			        {# </div> #}
+			        {# <div class="header-column" style="margin-right: 20px"> #}
+			            {# <a href="/" class="grey">Front-end</a><br> #}
+			            {# <a href="" class="grey">One more link</a> #}
+			        {# </div> #}
+			        <!-- Second icon column -->
+			        {# <div class="header-column icon"> #}
+			            {# <i class="icon-comment"></i> #}
+			        {# </div> #}
+			        {# <div class="header-column"> #}
+			            {# <a href="" class="grey">5 new messages</a> #}
+			        {# </div> #}
+			    </div>
+			{% endblock %}
+
+            {% if user.is_active and user.is_staff %}
+              <div id="user-tools">
+
+                  {# <a class="dropdown" href=""><i class="icon-bell"></i>&raquo; Notificaciones </a>&nbsp  #}
+  {# <div class="dropdown"> #}
+   {# <i class="dropdown"> #}
+    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown">
+      <i class="icon-bell icon-white"></i><strong> {{noticia|length}} </strong>Notificaciones
+    <span class="caret"></span></button>
+    &nbsp
+    {# <ul class="dropdown-menu"> #}
+      {# <li><a href="#">HTML</a></li> #}
+      {# <li><a href="#">CSS</a></li> #}
+      {# <li><a href="#">JavaScript</a></li> #}
+    {# </ul> #}
+    {# </i> #}
+  {# </div> #}
+                  {% block welcome-msg %}
+                  {% trans 'Welcome,' %}
+                  <strong>
+                    {% filter force_escape %}
+                      {% firstof user.first_name user.username %}{% endfilter %}</strong>.
+                {% endblock %}
+                <span class="user-links">
+                {% block userlinks %}
+                  {% url 'django-admindocs-docroot' as docsroot %}
+                  {% if docsroot %}
+                    <a href="{{ docsroot }}">{% trans 'Documentation' %}</a>
+                    <span class="separator">|</span>
+                  {% endif %}
+                  <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a>
+                  <span class="separator">|</span>
+                  <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+                {% endblock %}
+                </span>
+              </div>
+            {% endif %}
+            {% block nav-global %}{% endblock %}
+          </div>
+        {% endif %}
+        <!-- END Header -->
+      {% endblock %}
+
+
+      <div class="suit-columns {{ is_popup|yesno:'one-column,two-columns' }}">
+
+        {% block content-center %}
+
+          <div id="suit-center" class="suit-column">
+
+			{# hola este es el contnido #}
+            {# {% if not is_popup %} #}
+              {% block breadcrumbs %}
+                <ul class="breadcrumb breadcrumless">
+                  <li><a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+                    {# {% if title %} #}
+                      <span class="divider">&raquo;</span>
+                      </li>
+                      <li class="active">
+                      {# {{request.path}} #}
+                      {# {{ title }} #}
+                    {# {% endif %} #}
+                    </li>
+                  {% for datos in breadurl %}
+                      {% if forloop.last %}
+                           <li class="active">
+                            {{datos.nombre}}
+                      {% else %}   
+                            <li>   
+                            {% if datos.arg %}
+                                {% if datos.arg2 %}
+                                <a href="{% url datos.url datos.arg datos.arg2%}">{{datos.nombre}}</a>
+                                {% else %}
+                                <a href="{% url datos.url datos.arg %}">{{datos.nombre}}</a>
+                                {% endif %}
+
+                            {% elif datos.url%}
+                                <a href="{% url datos.url %}">{{datos.nombre}}</a> 
+                            {% else %}
+                        <a href="">{{datos.nombre}}</a>                       {% endif %}                
+                      <span class="divider">&raquo;</span>
+                      {% endif %}
+                      
+                      </li>
+                  {% endfor %}
+                </ul>
+              {% endblock %}
+            {# {% endif %} #}
+
+            {% block messages %}
+
+              {% if messages %}
+              {# hay un mensaje #}
+                {% for message in messages %}
+                  <div class="alert alert-{% firstof message.tags 'info' %}">
+                    <button class="close" data-dismiss="alert">×</button>
+                    <h2>{{ message }}</h2>
+                  </div>
+                {% endfor %}
+            {%else %}
+            {# no hay mensajes #}
+              {% endif %}
+            {% endblock messages %}
+           
+            <!-- Content -->
+            <div id="content" class="{% block coltype %}colM{% endblock %} row-fluid">
+            	{# prueba1 #}
+              {% block pretitle %}{# pretitulo #} {# {{request.user.id}} #}{% endblock %}
+              {% block content_title %}
+              	{% if title %}
+                	<h2 class="content-title">{{ title }}</h2>
+              	{% endif %}
+              {% endblock %}
+              {% block content %}blockec contenido
+                {% block object-tools %}{% endblock %}
+                {{ content }}
+              {% endblock %}
+              {% block sidebar_content %}
+                {% block sidebar %}{% endblock %}
+              {% endblock %}
+            </div>
+            <!-- END Content -->
+          </div>
+        {% endblock %}
+
+
+        {% block content-left %}
+
+          {% if not is_popup %}
+            <div id="suit-left" class="suit-column">
+                {# sirve para decoracion azul en los bordes sup e inf #}
+
+              <img src="{% static 'img/zapphy_iso.png' %}" class="logo_aside" alt="">
+              {% block quick-search %}
+                {% with 'SEARCH_URL'|suit_conf as search_url %}
+                  {% if search_url %}
+                    <form class="form-search nav-quick-search" autocomplete="off" action="{% if '/' in search_url %}{{ search_url }}{% else %}{% url search_url %}{% endif %}" method="GET">
+                      <input type="text" name="q" class="input-medium search-query" id="quick-search">
+                      <i class="input-icon icon-search"></i>
+                      <input type="submit" class="submit" value="">
+                    </form>
+                  {% endif %}
+                {% endwith %}
+              {% endblock %}
+
+              {# {% include 'suit/menu.html' %} #}
+				    {% block menu-left%}
+           
+           {# <a href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-primary col-xs-12">Mis Propiedades</a> #}
+        
+            {%endblock%}
+            {#{% load sitetree %}#}
+
+
+<div class="left-nav" id="left-nav">
+
+  <ul>
+    {% block menu_home %}
+      {% url 'admin:index' as index_url %}
+      <li{% if index_url == request.path %} class="active"{% endif %}>
+        <a href="{{ index_url }}"><i class="icon-home"></i>{% trans 'Home' %}
+        </a>
+      </li>
+    {% endblock %}
+
+    {# {% get_menu request as app_list %} #}
+    {# {% if app_list %} #}
+      {# {% for app in app_list %} #}
+        {# {% if app.separator %} #}
+        {% url 'Propiedad:Solicitud_listar' and url 'Propiedad:Solicitud_crearpro' as solapp %}
+        {# {% with "Propiedad:Solicitud_listar" as solapp and "hola" as hola%} #}
+
+          {# <li class="separator"></li> #}
+        {# {% else %} #}
+          <li {% if "Propiedad/listar"  in request.path %} class="active" {% elif "Propiedad/crear"  in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listar' %}"><i class="{% if  'Propiedad/listar' in request.path or 'Propiedad/crear' in request.path %}icon-chevron-down {% else %} icon-chevron-right {%endif%}  "></i>Propiedades</a>
+
+            <ul> 
+              <li {% if "Propiedad/listar" in request.path %} class="active"{% endif %}>
+                <a href="{% url 'Propiedad:Solicitud_listar' %}">
+                   Mis propiedades
+                </a> 
+              </li>
+              <li {% if "Propiedad/crear" in request.path %} class="active"{% endif %}>
+                <a href="{%url 'Propiedad:Solicitud_crearpro' %}">Agregar propiedad</a> 
+              </li>
+              {# <li class=""> #}
+                {# <a href="{% url 'Propiedad:Solicitud_apartamentos' 'TOTALUNIDADES' %}"> Ver unidades <b>(Todas)</b></a>  #}
+              {# </li>           #}
+
+            </ul>
+          </li>
+          {# {%endwith%} #}
+          {% url 'Usuario:Solicitud_listar' as solapp %}
+          {# <li {% if  solapp in request.path %} class="active"{% endif %}><a href="{% url 'Usuario:Solicitud_listar' %}"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-user {%endif%}  "></i>Usuarios</a> #}
+            
+          </li>
+          <li {% if  "Propiedad/bancos" in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listarBanco' %}"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-lock {%endif%}  "></i>Bancos</a>
+            <ul>
+                <li {% if "bancos/listar" in request.path %} class="active"{% endif %}>
+                <a href="{%url 'Propiedad:Solicitud_listarBanco' %}">Mis Bancos
+                </a> 
+              </li>
+                <li {% if "bancos/crear" in request.path %} class="active"{% endif %}>
+                <a href="{%url 'Propiedad:Solicitud_crearBanco' %}">Agregar banco
+                </a> 
+              </li>              
+            </ul>
+          </li>
+          {# <li {% if  solapp in request.path %} class="active"{% endif %}><a href="{% url 'Usuario:Solicitud_listar' %}"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-briefcase {%endif%}  "></i>Cartera</a> #}
+            
+          </li>
+
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-calendar {%endif%}  "></i>Mi Calendario de eventos</a>
+            
+          </li>               
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-bell {%endif%}  "></i>Notificaciones</a>
+            
+          </li>  
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-user {%endif%}  "></i>Mi cuenta</a>
+            
+          </li>                         
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-cog {%endif%}  "></i>Configuraciones</a>
+            
+          </li>     
+{# <li class=""><a href=""><i class="icon-l% blank %</i>Agregar Propiedad</a> </li> #}
+
+
+        {# {% endif %} #}
+      {# {% endfor %} #}
+    {# {% endif %} #}
+  </ul>
+</div>
+
+
+        {# hola este es el menu #}
+            </div>
+          {% endif %}
+        {% endblock %}{# fin contenido menulef#}
+
+      </div>
+    </div>
+  {% endblock %}
+
+  {% if not is_popup %}
+  <!-- Sticky footer push -->
+  <div id="push"></div>
+  {% endif %}
+
+</div>
+
+{% block footer %}
+  {% if not is_popup %}
+  <div id="footer" class="footer">
+    
+    <div class="content ">
+      <div class="tools ">
+                                    <div class="ribbon3 base"></div>
+
+        {% block footer_links %}
+          <a href="http://djangosuit.com/support/" target="_blank" class="icon"><i class="icon-question-sign"></i>Support</a>
+          <a href="http://djangosuit.com/pricing/" target="_blank" class="icon"><i class="icon-bookmark"></i>Licence</a>
+          <a href="http://github.com/darklow/django-suit/issues" target="_blank" class="icon"><i class="icon-comment"></i>Report a bug</a>
+        {% endblock %}
+      </div>
+
+      <div class="copyright">
+
+        {% block copyright %}
+          Copyright &copy; 2016 DjangoSuit.com<br>Developed by <a href="http://djangosuit.com" target="_blank">DjangoSuit.com</a>
+        {% endblock %}
+      </div>
+
+      <div class="branding">{% block footer_branding %}
+        {% with 'ADMIN_NAME'|suit_conf as admin_name %}
+          {{ admin_name }}
+          {% if admin_name == 'Django Suit' %}
+            v{{ 'VERSION'|suit_conf }}
+          {% endif %}
+        {% endwith %}
+      {% endblock %}</div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
+
+  <script src="{% static 'suit/js/suit.js' %}"></script>
+  {% block extrajs %}{% endblock %}
+      <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#example">Open Modal2</button>
+
+
+
+  <div id="example" class="modal hide fade in" style="display:none;">
+     <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+    <div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3><i class="icon-bell"></i> Notificacion!!!</h3>
+     </div>
+     <div class="modal-body">
+       <div class="scrolltable">
+           <h5>Se han generado factura automatica a las siguientes unidades :</h5>
+           <table class="table table-striped table-bordered table-hover table-condensed" border="0px">
+           <thead>
+            <tr>
+              {# <td><a href="">#</a></td> #}
+              {# <th><a href="">Propiedad</a></th> #}
+              <th><a href="">Propiedad</a></th>
+              <th><a href="">Unidades</a></th>
+      
+        
+          </tr>
+        </thead>
+        <tbody>
+          {% if noticia %}
+            {% for detalles in noticia  %}
+                <tr>
+                  <td>{{detalles.propiedad}}</td>
+                  <td>{% for unidad in detalles.unidades %}
+                        <b>Torre:</b> {{unidad.unidad.torre}} 
+                       <b> #:</b> {{unidad.unidad.numero}}
+                        <br>      
+                    {% endfor %}
+                </td>
+                </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+
+        </table>
+
+          {% if noticisa %}
+               Hay Noticias : {{noticia|length}} 
+               <br>
+               Propiedad:
+               {% for detalles in noticia  %}
+                    {{detalles.propiedad}}
+                    con unidades: <br> 
+                    {% for unidad in detalles.unidades  %}
+                        Torre:{{unidad.unidad.torre}} 
+                        #Apto:{{unidad.unidad.numero}}
+                        <br>
+                    {% endfor %}
+                   <br>
+                {% endfor %}
+          {%else%}
+            {# No hay noticias #}
+          {% endif %}
+       </div> 
+    </div>
+      <div class="modal-footer">
+        <a href="index.html" class="btn btn-success">Guardar</a>
+        <a href="#" data-dismiss="modal" class="btn">Cerrar</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  {% if  noticia %}
+      $('#example').modal('toggle');
+  {% endif %}
+  // $('#example').modal('show')
+
+</script>
+
+</body>
+</html>

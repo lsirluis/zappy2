@@ -1,0 +1,128 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+
+{% block title%} {{title}}{%endblock%}
+
+
+{% block content %}
+{# media url es: {{imgpropiedad.Imagen}} <br> #}
+{# <IMG SRC="Img/Propiedad/thumbnail_png_zapphybd.jpg_qaf4745.png" height="420"> #}
+
+{% if title == "No Existe esta propiedad" %}
+	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+		{# <br> #}
+	</div>	
+{% else %}
+	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearuni' DatosPropiedad.idlegal %}" class="btn btn-info ribbon1 base">	Agregar nueva Unidad</a>
+	</div>
+	<br>
+            {% include "Propiedad/InfoPropiedad.html" %}
+{% endif %}
+{# <br> #}
+          
+            {# <div class="object-tools"> #}
+                  {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}" class="btn btn-success"> #}
+                    {# <i class="icon-plus-sign icon-white"></i>&nbsp; #}
+                    {# Editar Propiedad #}
+                  {# </a> #}
+            {# </div> #}
+{% if apartamentos %}
+{# <br> #}
+            {{"UnidaDes"|title}}
+
+
+{# <img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 > #}
+{# <form id="changelist-search" action="" method="get" class="form-inline"> #}
+      {# <div class="search-container"> #}
+        
+        {# <span class="search-filters"><select data-name="conjunto" class="auto-width search-filter" style="max-width: 200px"><option value="">Conjunto</option><option value="">---</option><option data-name="conjunto" value="1">Conjunto El Prado</option><option data-name="conjunto" value="2">SEXTA AVENIDA</option><option data-name="conjunto" value="5">CC Castilla</option></select> #}
+
+                  {# &nbsp; #}
+                
+                {# </span> #}
+
+        {# <input value="Buscar" class="btn btn-info" type="submit"> #}
+        &nbsp;
+        
+      {# </div> #}
+
+    {# </form> #}
+
+<div class="table-responsivse scrolltable">          
+  <table class="table table-striped table-bordered table-hover table-condensed" border="0px">
+    <thead>
+      <tr>
+        {# <th><a href="">Propiedad</a></th> #}
+        <th><a href="">#</a></th>
+        <th><a href="">Estado Pago</a></th>
+        <th><a href="">Torre</a></th>
+        <th><a href="">Numero</a></th>
+        <th><a href="">Propietario</a></th>
+        <th><a href="">Residente</a></th>
+        <th><a href="">Responsable</a></th>
+        <th><a href="">Estado</a></th>
+        <th><a href="">Dia Cobro</a></th>
+        <th><a href="">Acciones</a></th>
+    
+      </tr>
+    </thead>
+    <tbody>
+			{# {% if apartamentos %} #}
+				{# hay apartamentos #}
+				{# {{apartamentos.propiedad}} #}
+				{# {%else%} #}
+				{# no hay apartamentos #}
+			{# {% endif %} #}
+				{% for datos in apartamento2  %}
+					<tr>
+          <td>{{forloop.counter}}</td>  
+            <td>{% if datos.0.valor_mora > 0 or datos.1 %}
+              <img alt="True" src="/static/admin/img/icon-no.svg"> 
+              Moroso
+              {% else %}
+              <img alt="True" src="/static/admin/img/icon-yes.svg"> 
+               Al Dia 
+             {% endif %}</td>
+					{# <td title="{{datos.propiedad}}"> #}
+						{# <a href=" {% url 'Propiedad:Solicitud_apartamentos' datos.propiedad.idlegal %}">{{ datos.propiedad.nombre }} #}
+						{# </a> #}
+					{# </td> #}
+					<td title=""><b>{{ datos.0.torre }}</b></td>
+					<td title=""><b>{{ datos.0.numero}}</b></td>
+					<td title="{{datos.0.propietario}}">{{ datos.0.propietario.nombre}} {{ datos.0.propietario.apellido}}</td>
+					<td title="{{datos.0.residente}}">{{ datos.0.residente.nombre }} {{ datos.0.residente.apellido}}</td>
+					<td title="kjkjk">{{ datos.0.get_responsable_display}}</td>	
+					<td title="">{{ datos.0.get_estado_display }}</td>
+					<td title="">{{ datos.0.dia_cobro}}</td>							
+					<td>
+						{# <div class="btn-group"> #}
+     						 <a href="{% url 'Propiedad:Solicitud_updateUni' DatosPropiedad.idlegal datos.0.id %}">
+                  {# <button type="button" class="btn btn-success">Editar</button> #}
+                  <button class="btn btn-info"><i class="icon-pencil  icon-white"></i> {{escape}}</button>
+                </a>
+
+     						 <a href="\..\admin/edificios/unidad/{{datos.id}}/change/">
+                 <button class="btn btn-danger"><i class="icon-trash icon-white"></i> </button>
+     						 {# <button type="button" class="btn btn-danger">Eliminar</button> #}
+                </a>
+     						 <a href="{% url 'Propiedad:Solicitud_appagos' DatosPropiedad.idlegal datos.0.id %}"> 
+     						 <button class="btn btn-info"><i class="icon-eye-open icon-white"></i><i class="icon-list-alt icon-white"></i></button>
+                 {# <button type="button" class="btn btn-info btntd">Info</button> #}
+     						</a>     						
+							
+						{# </div>  #}
+					</td>	
+					</tr>
+				{% endfor %}
+    </tbody>
+  </table>
+</div>
+{# {% else %} #}
+
+{# {# <h1>no hay apartamentos en esta <b>Propiedad</b></h1> #}
+
+{%endif%}
+
+	{% endblock%}

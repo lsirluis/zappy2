@@ -1,0 +1,321 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% block title%} {{title}} {%endblock%}
+
+{% block content %}
+
+{# <form action="" method="post"> #}
+    {# {% csrf_token %} #}
+    {# {{ form.as_table }} #}
+	{{is_popup}}
+    <script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+<script>
+function abrir(url) {
+open(url,'','top=300,left=300,width=300,height=300') ;
+}
+</script>
+    {# <button class="btn btn-primary" type="submit">Agregar propiedad</button> #}
+{# </form> #}
+ {# {{ form.errors}} #}
+
+ {% if title == "Unidad no registrada" %}
+ 	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearuni' %}" class="btn btn-success ribbon1 base">Agregar nueva Unidad</a>
+		<br>
+	</div>
+  {% elif title == "Propiedad no registrada" %}
+ 	<div>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+		<br>
+	</div>
+{% else %}
+ {# {% if object_list or form%} #}
+
+<div id="content-main" class="inner-two-columns">
+          	{# <div class="ribbon base"></div> #}
+
+    <form enctype="multipart/form-data" action="" method="post" id="unidad_form" name="unidad_form" class="form-horizontal" novalidate="">
+
+      <div class="inner-right-column">
+
+        <div class="box save-box">
+
+          
+			<div class="submit-row clearfix">
+  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar </b></button>
+
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
+
+			</div>
+
+		</div>   
+
+      </div>
+      <div class="inner-center-column ">
+		{%csrf_token%}
+        <div class="tab-content tab-content-main ">
+          <fieldset class="module aligned first ">
+          	<div class="ribbon base"></div>
+    		<div class="control-group form-row field-propiedad ">
+        
+          		{# <div> #}
+          			{# <div class="control-label "> #}
+          				{# <label class="required" for="id_propiedad">{{form.propiedad.label}}:</label> #}
+          			{# </div> #}
+          				{# <div class="controls"> #}
+          					{# {{form.propiedad}} #}
+          					{# <span class="errorlist">{{form.propiedad.errors.as_text}}</span> #}
+
+          					{# {{form.errors.propiedad}} #}
+          				{# </div> #}
+
+          		{# </div> #}
+	<input type="hidden" id="id_propiedad" name="propiedad" value="{{object_list.idlegal}}">
+     		</div>
+
+      		<div class="control-group form-row field-torre ">
+		         <div>
+		         	<div class="control-label"><label class="required" for="id_torre">{{form.torre.label}}:</label>
+		         	</div><div class="controls">{{form.torre}}
+		         	<span class="secondinput"> {{form.numero.label}}:</span>{{form.numero}}
+					<span class="errorlist"> 
+						{% if form.torre.errors or form.numero.errors%}
+							 * Ambos campos son obligatorios
+
+						{% endif %}
+						
+					</span> 
+		         </div>
+		         </div>
+        	</div>
+
+		    <div class="control-group form-row field-estado ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_estado">{{form.estado.label}}:</label>
+		        	</div><div class="controls ">{{form.estado}}</div>
+		        </div>
+		      </div>
+
+		    <div class="control-group form-row field-dia_cobro ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_dia_cobro">{{form.dia_cobro.label}}:</label>
+		        	</div><div class="controls">
+		        	{{form.dia_cobro}}		        	
+						<input id="btnList" class="btn btn-xs btn-info formtambuton"type="button" value="Usar el de mi edificio">
+		        		{# <button onclick="" id="btnList" class="btn btn-xs btn-info formtambuton">Usar el de mi edificio</button> #}
+		        		<span class="errorlist">{{form.dia_cobro.errors.as_text}}</span>
+					</div>
+		        </div>
+		      </div>
+
+		    <div class="control-group form-row field-residente ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_residente">{{form.residente.label}}:</label>
+		        	</div><div class="controls">
+		        	
+
+
+		        	<div class="related-widget-wrapper">{# {{form.residente}} #}
+		        		<select id="id_residente" name="residente">
+{% if not form.residente.value  %}
+<option value="" selected="selected">---------</option>
+{% else %}
+	<option value="{{form.residente.value}}" selected="selected">{{form.instance.residente}}
+	</option>
+
+{% endif %}
+</select> 
+{{form.errors.residente}} 
+
+		        		<a class="related-widget-wrapper-link change-related" id="change_id_residente" data-href-template="/admin/edificios/persona/__fk__/change/?_to_field=id&amp;_popup=1" title="Cambiar Persona seleccionado">
+		        			<img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
+		        		</a>
+		        		{# /admin/edificios/persona/add/?_to_field=id&amp;_popup=1 #}
+		        		{# {% url 'Propiedad:Solicitud_crearpersona' object_list.idlegal %}?_to_field=id&amp;_popup=1 #}
+		        		{# <a class="related-widget-wrapper-link add-related" id="add_id_residente" href="/admin/edificios/persona/add/?_to_field=id&amp;_popup=1 " title="Añadir otro Persona"> #}
+		        			{# <img src="/static/admin/img/icon-addlink.svg" alt="Añadir"> #}
+		        		{# </a> #}
+
+		        		<a class="related-widget-wrapper-link add-related" id="add_id_residente" href="{% url 'Propiedad:Solicitud_crearpersona' object_list.idlegal %}?_to_field=id&amp;_popup=1" title="mas">
+		        			<img src="/static/admin/img/icon-addlink.svg" alt="Añadir mas">
+		        		</a>
+
+		        	</div>
+		        </div>
+		        </div>
+		      </div>
+		      
+		    <div class="control-group form-row field-propietario ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_propietario">{{form.propietario.label}}:</label>
+		        	</div>
+		        	<div class="controls">
+						<div class="related-widget-wrapper">
+							{{form.propietario}}
+							<a class="related-widget-wrapper-link change-related" id="change_id_propietario" data-href-template="/admin/edificios/persona/__fk__/change/?_to_field=id&amp;_popup=1" title="Cambiar Persona seleccionado">
+		        			<img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
+		        			</a>
+		        			<a class="related-widget-wrapper-link add-related" id="add_id_propietario" href="{% url 'Propiedad:Solicitud_crearpersona' object_list.idlegal %}?_to_field=id&amp;_popup=1" title="mas">
+		        			<img src="/static/admin/img/icon-addlink.svg" alt="Añadir mas">
+		        		</a>
+						</div>
+
+		        	 <span class="errorlist">{{form.propietario.errors.as_text}}</span></div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-arrendatario ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_arrendatario">{{form.arrendatario.label}}:</label>
+		        	</div><div class="controls">
+					<div class="related-widget-wrapper">
+							{{form.arrendatario}}
+							<a class="related-widget-wrapper-link change-related" id="change_id_arrendatario" data-href-template="/admin/edificios/persona/__fk__/change/?_to_field=id&amp;_popup=1" title="Cambiar Persona seleccionado">
+		        			<img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
+		        			</a>
+		        			<a class="related-widget-wrapper-link add-related" id="add_id_arrendatario" href="{% url 'Propiedad:Solicitud_crearpersona' object_list.idlegal %}?_to_field=id&amp;_popup=1" title="mas">
+		        			<img src="/static/admin/img/icon-addlink.svg" alt="Añadir mas">
+		        		</a>
+						</div>
+		        	{{form.errors.arrendatario}}</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-responsable ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_responsable">{{form.responsable.label}}:</label>
+		        	</div><div class="controls">{{form.responsable}}{{form.errors.responsable}} <span class="errorlist">{{form.responsable.errors.as_text}}</span>
+		        </div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-forma_recibo ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_forma_recibo">{{form.forma_recibo.label}}:</label>
+		        	</div><div class="controls">{{form.forma_recibo}}{{form.errors.forma_recibo}}</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-saldo_favor ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_saldo_favor">{{form.saldo_favor.label}}:</label>
+		        	</div><div class="controls">{{form.saldo_favor}}{{form.errors.saldo_favor}}</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-porcentaje_mora ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_porcentaje_mora">{{form.porcentaje_mora.label}}:</label>
+		        	</div><div class="controls">{{form.porcentaje_mora}}
+		        		<input id="btnporcentaje" class="btn btn-xs btn-info formtambuton"type="button" value="Usar el de mi edificio">
+		        		{# <button type="input" class="btn btn-xs btn-info formtambuton">Usar el de mi edificio</button> #}
+		       		 </div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-valor_mora ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_valor_mora" >{{form.valor_mora.label}}:</label>
+		        	</div><div class="controls">{{form.valor_mora}}</div>
+		        </div>
+		      </div>
+		    <div class="control-group form-row field-coeficiente ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_coeficiente">{{form.coeficiente.label}}:</label>
+		        	</div><div class="controls">{{form.coeficiente}} 
+		        <span class="errorlist">{{form.coeficiente.errors.as_text}}</span>
+		    </div>
+		        </div>
+		      </div>		      
+		    <div class="control-group form-row field-valor_pago ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_valor_pago">{{form.valor_pago.label}}:</label>
+		        	</div><div class="controls">{{form.valor_pago}}
+		        		
+		        <input title="calculo basado en el presupuesto del edificio y su coeficiente" id="btnvalor" class="btn btn-xs btn-success formtambuton"type="button" value="Calcular Auto">
+
+		        {# <button title="calculo basado en el area del edificio y coeficiente" class=" btn  btn-success formtambuton ">Calcular Auto</button> #}
+		        {# </div>     #}
+		        {# <div class="ribbon-content"> #}
+                {# <div class="ribbon base"><span>Calcular automaticamente</span></div> #}
+            {# </div> #}
+
+		        	</div>
+		        </div>
+		      </div>	
+    		</fieldset>
+		
+       	</div>
+
+		</div>
+<script type="text/javascript">
+	$(document).ready(function() {
+	    var diacobro ={{object_list.dia_cobro}};  //variable de Resultado
+ 		 	// alert("Valor de dia de cobro="+diacobro);
+ 	    var Temp="{{object_list.porcentaje_mora}}";
+ 		var porcentaje = Change4point(Temp);
+ 		// alert("porcentaje mora antes del cambio"+Temp);
+ 		var Temp="{{object_list.presupuesto_anual}}";
+ 		var Presupuesto = Change4comma(Temp);
+		
+		function Change4point(cadena){
+			var flotante = 0.0;
+			Buscarpunto=cadena.indexOf(',');
+			Parte1=cadena.substring(0,Buscarpunto);
+			Parte2=cadena.substring(Buscarpunto+1,cadena.length);
+			flotante=parseFloat(Parte1+"."+Parte2); 
+		
+			return flotante;
+		}
+		function Change4comma(cadena){
+			var entero = 0;
+			entero =parseInt(cadena.split('.').join(''))
+			return entero;
+		}		
+
+ 		// alert("porcentaje mora despues del cambio"+porcentaje);
+ 		$("#btnList").click(function(){
+			 $('#id_dia_cobro').val(diacobro);
+			 $('#id_dia_cobro').focus();
+
+ 			})
+ 		$("#btnporcentaje").click(function(){
+ 			 $('#id_porcentaje_mora').val(porcentaje);
+			 $('#id_porcentaje_mora').focus();
+ 			})
+ 		$("#btnvalor").click(function(){
+ 			var coeficiente =  $('#id_coeficiente').val();
+ 			if(coeficiente == 0){
+ 				alert("Ingrese el coeficiente primero");
+ 			}else{
+ 			  var valor = (Presupuesto * (coeficiente/100));
+ 			  $('#id_valor_pago').val(Math.round(valor));
+ 			 
+ 			}
+			 $('#id_valor_pago').focus();
+ 			})
+
+
+		})
+
+        </script>
+	</form>
+
+</div>
+
+{# {% else %} #}
+	{# no hay datos #}
+	
+{% endif %}
+
+{# {% if object_list %} #}
+	{# hay datos : #}
+	{# {{object_list.object_list.nombre}} #}
+	{# {{object_list.presupuesto_anual}} #}
+	{# {% for datos in  object_list %} #}
+	 	{# {{datos.dia_cobro}} #}
+	 {# {% endfor %}  #}
+{# {% else %} #}
+	{# no hay datos #}
+{# {% endif %} #}
+
+{% endblock %}

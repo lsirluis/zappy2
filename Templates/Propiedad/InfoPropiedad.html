@@ -1,0 +1,89 @@
+{# <img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 > #}
+<table class="table tbottom"  border="0px">
+	<thead>
+		<tr>
+			<th class="tr1">
+				{# Imagen #}
+			</th>
+			<th class="tr2" colspan="2">
+				{# Ficha #}
+			</th>
+			<th class="tr3" colspan="2">
+				{# Estadistica #}
+			</th>
+			<th class="tr4"></th>
+			<th class="tr5" >
+				{# Acciones #}
+			</th>
+		</tr>
+	</thead>
+	          	{# <div class="ribbon base"></div> #}
+
+	<tbody>
+		<tr class="trh">
+			<td rowspan="4">
+				<img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 >
+			</td>
+			<td class="tup">
+				<b>Nombre Propiedad </b>
+			</td>
+			<td  class="text-center tup">
+				{{DatosPropiedad.nombre}}
+			</td>
+			<td class="tup"><b>Cantidad Unidades</b></td>
+			<td class="tup">{% if apartamentos %}
+					{{apartamentos.count}}
+				{% else %}
+					0
+				{% endif %}
+			</td>
+			<td></td>
+			<td>
+				<div class="btn-group">
+     			 <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}"> 
+     			 <button type="button" class="btn btn-info btntd">Editar</button>
+     			</a>
+     			 <a href="{% url 'Propiedad:Solicitud_Cartera' DatosPropiedad.idlegal %}"> 
+     			 <button type="button" class="btn btn-info btntd"><i class="icon-briefcase icon-white"></i> Cartera</button>
+     			</a>
+						
+				</div> 
+
+
+              </td>
+		</tr>
+
+
+		<tr class="trh">
+			<td class="tup"><b>Ciudad</b></td>
+			<td class="text-center tup">{{DatosPropiedad.ciudad.nombre}}</td>
+			<td class="tup">{# Estadistica 1 #}</td>
+			<td class="tup">{# Estadistica 2 #}</td>
+			<td></td>
+			<td>
+				<div class="btn-group">
+     			 {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}">  #}
+     			 {# <button type="button" class="btn btn-success btntd">Facturas</button> #}
+     			{# </a> #}
+     			 <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}"> 
+     			 <button type="button" class="btn btn-info btntd">Banco</button>
+     			</a>
+						
+				</div> 
+              </td>
+		</tr>
+		<tr class="trh">
+			<td class="tup"><b>Tipo Propiedad</b></td>
+			<td class="text-center tup">{{DatosPropiedad.get_tipo_display}}</td>
+			<td class="tup">{# Estadistica 1 #}</td>
+			<td class="tup">{# Estadistica 2 #}</td>
+			<td></td>
+			<td></td>
+			{# <td></td> #}
+		</tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+
+		
+	</tbody>
+</table>

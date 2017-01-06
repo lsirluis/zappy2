@@ -1,0 +1,75 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+
+{% block title%} {{title}}{%endblock%}
+
+
+{% block content %}
+{% if title == "Propiedad no encontrada" %}
+<div>
+		<a href="{%url 'Propiedad:Solicitud_listar' %}" class="btn btn-success ribbon1 base">Ver mis propiedades</a>
+		{# <br> #}
+	</div>
+	{% else %}
+{% if Noticias %}
+<h2>Noticias:</h2>
+	<div class="table-responsivse scrolltable2">          
+		  <table class="table table-striped table-bordered table-hover table-condensed">
+		    <thead>
+		      <tr>
+		      	<td><a href="">#</a></td>
+		        {# <th><a href="">Propiedad</a></th> #}
+		        <th><a href="">Estado</a></th>
+		        <th><a href="">Descripcion</a></th>
+		        <th><a href="">Fecha Generacion</a></th>
+		        <th><a href="">Propiedad</a></th>
+		        {# estado 1 es sin pagar, 2 abonada, 3 pagada #}
+		        {# <th><a href="">Ac</a></th> #}
+		        {# <th><a href="">Responsable</a></th> #}
+		        {# <th><a href="">Estado</a></th> #}
+		        {# <th><a href="">Dia Corte</a></th> #}
+		        {# <th><a href="">Acciones</a></th> #}
+		    
+		      </tr>
+		    </thead>
+		    <tbody>
+		    	{% for noticia in Noticias  %}
+		    		 <tr>
+		    		 	<td>{{forloop.counter}}</td>
+		    		 	<td>{{noticia.Noticia.get_estado_display}} </td>
+		    		 	<td>{{noticia.Noticia.descripcion}}</td>
+		    		 	<td>{{noticia.Noticia.fecha_generacion}}</td>
+		    		 	<td>{{noticia.Noticia.propiedad}} </td>
+		    		 </tr>
+		    		 {% for detalles in noticia.Detalles %}
+		    		 	<tr>
+		    		 		<td></td>
+		    		 		<td><span class="errorlist">Detalles:</span>
+		    		 		</td>
+		    		 	</tr>
+						<tr>
+			    		 	<td></td>
+			    		 	<td>--</td>
+			    		 	<td>Se Genero Factura Automatica a la siguiente Unidad: {{detalles.unidad}}</td>
+			    		 	<td>--</td>
+			    		 	<td>-- </td>
+		    		 	</tr>
+		    		 {% endfor %}
+		    		 <tr><td></td><td></td></tr>
+		    	{% endfor %}
+		    </tbody>
+		</table>
+	</div>
+
+{% else %}
+	{# no hay Recibos #}
+	<div class="alert alert-error">
+              No hay Noticias Disponibles
+     </div>
+	
+	{% endif %}
+
+{% endif %}
+
+{# {% include "Pagos/formatoFactura.html" %} #}
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+
+ {# {% block breadcrumbs %} #}
+ {# {% endblock %} #}
+
+{% block content %}
+		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Usuarios</h1></a>
+		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Mis propiedades</h1></a>
+		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Mis bancos</h1></a>
+		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Notificaciones</h1></a>
+
+		<!-- <div id="container"> -->
+	 <img src="{% static 'img/zappyfondo.jpg' %}"  class="imgcentral" alt="">
+
+
+{% endblock %}

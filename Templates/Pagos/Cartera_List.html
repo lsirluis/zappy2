@@ -1,0 +1,196 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+
+{% block title%} {{title}}{%endblock%}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/FacturaStyles.css' %}" media="all">
+
+{% if object_lists %}
+		Existe objeto <br>
+		
+				{% for recibo in object_list  %}
+				{# <tr>s</tr> #}
+					{{recibo}}
+					<br>
+				{% endfor %}
+	{% else %}
+	No hay objeto
+	{% endif %}
+
+{% if milistas %}
+	si hay lista
+	{# {% for lista in milista  %} #}
+		{# {{lista}} #}
+	{# {% endfor %} #}
+	<br>
+
+	LISTA= {{milista}}
+<br>
+	<br><br>
+	{% for lista in milista %}
+		<li>Unidad: {{lista.unidad}}
+		<br>
+			<ul>
+				{% for recibo in lista.recibos %}
+					<li>
+						Recibo {{forloop.counter}} - {{recibo.recibo.fecha_cobrada|date:"F Y"}}
+						<ul>
+							
+							{% for detalle in recibo.detalles %}
+								<li>
+									{{detalle.descripcion}}: Valor = {{detalle.valor}}
+								</li>
+							{% endfor %}
+
+						</ul>	
+					</li>
+					{# <br> #}
+				{% endfor %}
+			</ul>
+		</li>
+	{% endfor %}
+	
+{% endif %}
+{% if milista %}
+	
+
+<header class="clearfix ">
+      {# <div id="logo"> #}
+        {# <img src="{% static 'img/zapphy_text.png' %}"> #}
+      {# </div> #}
+      <h1>Cartera propiedad: {{milista.0.unidad.propiedad.nombre}} </h1>
+      
+      {# <div id="company" class="clearfix"> #}
+        {# <div>Company Name</div> #}
+        {# <div>455 Foggy Heights,<br> AZ 85004, US</div> #}
+        {# <div>(6/02) 519-0450</div> #}
+        {# <div><a href="mailto:company@example.com">company@example.com</a></div> #}
+      {# </div> #}
+      {# <div id="project"> #}
+        {# <div><span>PROJECT</span> Website development</div> #}
+        {# <div><span>CLIENT</span> John Doe</div> #}
+        {# <div><span>ADDRESS</span> 796 Silver Harbour, TX 79273, US</div> #}
+        {# <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div> #}
+        {# <div><span>DATE</span> August 17, 2015</div> #}
+        {# <div><span>DUE DATE</span> September 17, 2015</div> #}
+      {# </div> #}
+    </header>
+    <main class="ContainerInvoice">
+      <table id="TablaFactura" border="0px;">
+        <thead>
+          <tr>
+            <th class="service">#</th>
+            <th class="service">UNIDAD</th>
+            <th class="desc">DESCRIPCION-DEUDA</th>
+            <th>COSTO</th>
+            <th>INTERES</th>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {# <tr> #}
+            {# <td class="service">1</td> #}
+            {# <td class="desc">PAGO ADMINISTRACION</td> #}
+            {# <td class="unit">$100.000</td> #}
+            {# <td class="qty">0%</td> #}
+            {# <td class="total">$100.000</td> #}
+          {# </tr> #}
+        {% if milista %}
+       
+ 
+
+          {% for lista in milista %}
+            
+          <tr>
+          	  <td></td>
+              <td class="UnidadCartera">{{lista.unidad}}</td>
+              <td class="desc">  
+				{% for recibo in lista.recibos %}
+					{# <li class="active"> #}
+			{# <span class="label label-info"> #}
+			<div class="contenedorRCartera">
+				<div class="headRcartera">
+				<span class="labelRcartera">	
+						R {{forloop.counter}} - {{recibo.recibo.descripcion}} - {{recibo.recibo.fecha_cobrada|date:"F Y"}}
+				
+			</span>
+			</div>
+						{# <ul > #}
+							{# <br> #}
+					<div class="Bodycartera">
+							{% for detalle in recibo.detalles %}
+								{# <li class="active"> #}
+						----- {{detalle.descripcion}}: Valor = {{detalle.valor}}
+							<br>	{# </li> #}
+							{% endfor %}
+							{# <br> #}
+						{# </ul>	 #}
+					{# </li> #}
+					{# <br> #}
+				</div>
+			</div>
+				<br>
+				{% endfor %}
+              </td>
+              <td class="unit">${{lista.costo}}</td>
+              <td class="qty">{{datos.2}}%</td>
+              <td class="total">${{datos.3}}</td>
+           </tr>
+          {% endfor %}
+
+        {% endif %}
+
+  
+          <tr>
+            <td class="service"></td>
+            <td></td>
+            <td class="desc">
+
+			</td>
+            <td class="unit"></td>
+            <td class="qty"></td>
+            <td class="total"></td>
+          </tr>
+
+          {# parte post detalles #}
+          <tr class="tax separator">
+          	<td></td>
+            <td colspan="4">SUBTOTAL</td>
+            <td class="total">$5,200.00</td>
+          </tr>
+          <tr class="tax">
+
+          	<td class="service"> 
+          	
+          	</td>
+          	<td></td>
+          	<td class="service">  
+
+
+			       	 		
+  			</td>
+            <td colspan="2">IMPUESTOS(IVA) 16%</td>
+            <td class="total">$1,300.00</td>
+          </tr>
+          <tr>
+          	<td class="grand total"></td>
+            <td colspan="4" class="grand total"><b>TOTAL FACTURA</b></td>
+            <td class="grand total">$6,500.00</td>
+          </tr>
+        </tbody>
+      </table>
+      {# <div id="notices"> #}
+        {# <div>NOTICE:</div> #}
+        {# <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div> #}
+      {# </div> #}
+    </main>
+  
+	{% else %}
+	no hay lista
+{% endif %}
+
+{# {% include "Pagos/formatoFactura.html" %} #}
+{% endblock %}

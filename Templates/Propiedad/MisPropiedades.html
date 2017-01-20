@@ -25,7 +25,7 @@
 	{# <link rel="stylesheet" href=" {% static 'css/bootstrap.min.css' %}"> #}
 {# {% endblock %} #}
 	<div>
-		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
+		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-info ribbon1 base">Agregar nueva propiedad</a>
 	</div>	
 	<br>
 <br>
@@ -57,7 +57,7 @@
 					<tr >
 					<td><img src="/media/{{ datos.Imagen}}" class="imgperfilpropiedades"></td>						
 					<td   style="vertical-align:middle;" >
-						<a class="btn btn-info btn-block" href=" {% url 'Propiedad:Solicitud_apartamentos' datos.idlegal %}"><b>{{ datos.nombre }}</b>
+						<a class="btn btn-green btn-block" href=" {% url 'Propiedad:Solicitud_apartamentos' datos.idlegal %}"><b>{{ datos.nombre }}</b>
 						</a>
 					</td>
 					{# <td   style="vertical-align:middle;" >{{ datos.idlegal }}</td> #}

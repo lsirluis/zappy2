@@ -5,12 +5,13 @@ from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect ,HttpRequest
 import datetime
 import calendar
+import json
 
 # generic views
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 # models
 from apps.pagos.models import Recibo , Detalle, Noticia, DeNoticia \
-							  ,Deuda , RecibosAuto
+							  ,Deuda , RecibosAuto, RecibosPagos
 from apps.edificios.models import Unidad, Propiedad
 from apps.usuarios.models import Administrador
 
@@ -560,9 +561,13 @@ def SaveFacturaDetalles(pkunidad,valor):
 def Deudaxrecibo(recibo):
 	listafacturas=[]
 	# la forma [{"factura":factura, "Detalles":[]}]
-	fechalimite=recibo.fecha_cobrada
+	# fechalimite=recibo.fecha_cobrada
+	fechalimite=recibo.fecha_generacion
+
 	# obtenemos las facturas sin pagar anteriores a esta
-	facturas = Recibo.objects.exclude(id=recibo.id).filter(estado=0,unidad= recibo.unidad, fecha_cobrada__lte=fechalimite)
+	# facturas = Recibo.objects.exclude(id=recibo.id).filter(estado=0,unidad= recibo.unidad, fecha_cobrada__lte=fechalimite)
+	facturas = Recibo.objects.exclude(id=recibo.id).filter(estado=0,unidad= recibo.unidad, fecha_generacion__lte=fechalimite)
+
 	# por cada factura obtenemos sus detalles
 	if facturas:
 		for factura in facturas:
@@ -581,7 +586,7 @@ def Deudaxrecibo(recibo):
 
 
 
-# INICIO DeudaUnidad()
+# INICIO DeudaUnidad() ---- no se esta usando
 def DeudaUnidad(pkunidad):
 	mora=0
 	RecibosMora = Recibo.objects.filter(unidad=pkunidad, estado=0).order_by('-fecha_generacion')
@@ -661,39 +666,7 @@ class CarteraList(ListView):
 			recibos = Recibo.objects.filter(estado=0\
 											,unidad__propiedad = propiedad[0].idlegal).order_by('unidad_id')
 			
-
-			lista=[] # lista
-
-	# [{'unidad':unidad, 'recibos':[{'recibo':idRecibo, 'detalles':[{'detalle':idDetalle}] }]}]		
-			if recibos :
-				unidad = recibos[0].unidad # obtenemos unidad del recibo
-				RECIBOS = []
-				COSTO=0 # costo de todas los detalles de esa unidad
-				for recibo in recibos:
-					# buscamos los detalles en cada recibo de la unidad
-					detalles = Detalle.objects.filter(idRecibo=recibo.id)
-					RECIBO = {'recibo':recibo, 'detalles':detalles}
-					# procedemos a sacar los costos
-					CostoTemp = 0
-					for detalle in detalles:
-						CostoTemp = CostoTemp + detalle.valor
-					# for detalle in detalles:
-					if recibo.unidad == unidad :
-						RECIBOS.append(RECIBO)
-						COSTO = COSTO + CostoTemp
-					else:
-						dato = {'unidad':unidad,'recibos':RECIBOS,"costo":COSTO}
-						lista.append(dato)
-						RECIBOS = []
-						COSTO=CostoTemp
-						RECIBOS.append(RECIBO)
-						unidad = recibo.unidad
-				# esta parte garantiza que cuando se es el ultimo ciclo
-				# se agrege a la lista, caso contrario no lo haria
-				# para la ultima unidad
-				dato = {'unidad':unidad,'recibos':RECIBOS,"costo":COSTO}		
-				lista.append(dato)
-
+			lista = listaUdeudas(recibos)
 			context['object_list'] = recibos
 			context['milista']=lista
 
@@ -702,10 +675,121 @@ class CarteraList(ListView):
 			context['object_list']=""
 		return context
 # FIN CARTERA
+def listaUdeudas(recibos):
+	lista=[] # lista
+	if recibos :
+		unidad = recibos[0].unidad # obtenemos unidad del recibo
+		RECIBOS = []
+		COSTO=0 # costo de todas los detalles de esa unidad
+		for recibo in recibos:
+			# buscamos los detalles en cada recibo de la unidad
+			detalles = Detalle.objects.filter(idRecibo=recibo.id)
+			RECIBO = {'recibo':recibo, 'detalles':detalles}
+			# procedemos a sacar los costos
+			CostoTemp = 0
+			for detalle in detalles:
+				CostoTemp = CostoTemp + detalle.valor
+			# for detalle in detalles:
+			if recibo.unidad == unidad :
+				RECIBOS.append(RECIBO)
+				COSTO = COSTO + CostoTemp
+			else:
+				dato = {'unidad':unidad,'recibos':RECIBOS,"costo":COSTO}
+				lista.append(dato)
+				RECIBOS = []
+				COSTO=CostoTemp
+				RECIBOS.append(RECIBO)
+				unidad = recibo.unidad
+		# esta parte garantiza que cuando se es el ultimo ciclo
+		# se agrege a la lista, caso contrario no lo haria
+		# para la ultima unidad
+		dato = {'unidad':unidad,'recibos':RECIBOS,"costo":COSTO}		
+		lista.append(dato)	
+	return lista
 
-
+# a continuacion se hara un metodo que retorne una lista de recibos 
+# en deuda y seguido de su costo en el siguiente formato
+# lista[ {'recibo':recibo, 'costo': costo},... ]
+# el costo incluye sus detalles y sus deudas
+def listaReciboCosto(unidadid):
+	lista=[] # lista
+	# obtenemos los recibos en mora de esa unidad
+	recibos = Recibo.objects.filter(estado=0\
+					,unidad=unidadid).\
+					order_by('fecha_generacion')
+	# teniendo todos los recibos vencidos.a uno por uno le 
+	# obtenemos los recibos anteriores al actual y el actual
+	for recibo in recibos:
+		# obtenemos el costo del actualrecibo 
+		# costo = 0
+		# luego de tener el costo del actual recibo, 
+		# recibosAnt = Recibo.objects.exclude(id=recibo.id).filter(estado=0,unidad= recibo.unidad, fecha_generacion__lte=recibo.fecha_generacion)
+		# obtenemos los
+		recibosAntyAct = Recibo.objects.filter(estado=0,unidad= recibo.unidad, fecha_generacion__lte=recibo.fecha_generacion)
+		costo = 0
+		# por cada factura obtenemos sus detalles
+		if recibosAntyAct:
+			for factura in recibosAntyAct:
+				detalles = Detalle.objects.filter(idRecibo=factura.id)
+				if detalles:
+					# costo=0
+					for detalle in detalles:
+						costo = costo+detalle.valor
+		fechacobrada = str(recibo.fecha_cobrada)
+		dato={"reciboid":recibo.id,"reciboConsecutivo":recibo.numConsecutivo,\
+			"fechacobrada":fechacobrada,"costo":costo}
+		lista.append(dato)
+	return lista
 
 # INICIO METODO HACER INTERESES AUTOMATICAMENTE
 # def InteresAuto:
 
 # FIN INTERESES AUTOMATICAMENTE
+
+
+# INICIO listarPagos
+# listarpagos metodo para listar todos los pagos realizados de una unidad
+class listarPagos(ListView):
+	model = RecibosPagos
+	template_name = "Pagos/RecibosPagos_list.html"
+
+	def get_context_data(self, **kwargs):
+		context = super(listarPagos, self).get_context_data(**kwargs)
+		uid = self.request.user.id
+		idpro = self.kwargs.get('id_propiedad',0)
+		pkunidad= self.kwargs.get('pk',0)
+		# realizamos la consulta para obtener los recibos pagos
+		pagos= RecibosPagos.objects.filter(recibo__unidad = pkunidad, recibo__unidad__propiedad__idlegal=idpro)
+		context['object_list']= pagos
+		return context
+
+# FIN listarPagos
+# INICIO verPago
+def verPago(request):
+	if request.is_ajax() or request:
+		# uid= request.user.id
+ 		idcomprobante = request.GET['idcomprobante']
+ 		pago = RecibosPagos.objects.filter(id = idcomprobante).\
+ 			values("no_comprobante","pagador","suma","enletras","concepto",\
+ 				"forma_pago","referencia1","referencia2","tipo")
+ 		temp = RecibosPagos.objects.filter(id = idcomprobante)
+ 		dia = temp[0].fecha_generacion.day
+ 		mes = temp[0].fecha_generacion.month
+ 		año = temp[0].fecha_generacion.year
+ 		recibo ="Consecutivo (#"+str(temp[0].recibo.numConsecutivo)+") "
+ 		recibo +=str(temp[0].recibo.fecha_cobrada)
+ 		respuesta=list(pago)
+ 		# agregamos al diccionario el dia, mes y año
+ 		respuesta[0]['dia']=dia
+ 		respuesta[0]['mes']=mes
+ 		respuesta[0]['anio']=año
+ 		respuesta[0]['recibo']=recibo
+
+ 		# respuesta.append(dia)
+ 		return HttpResponse( json.dumps(respuesta), content_type='application/json' )
+
+
+	else:
+ 		return HttpResponse("Error! what are you doing noob?")
+
+# FIN verPago

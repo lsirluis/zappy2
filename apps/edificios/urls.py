@@ -5,13 +5,15 @@ from apps.edificios.views import index, listarList, apartamentos, listar \
                                , BancoList, BancoEdit \
                                , PropiedadEdit \
                                , UnidadEdit \
-                               , NotiVencidas, PersonaCreate
+                               , NotiVencidas, PersonaCreate\
+                               , Buscador, Addpago \
+                               , pruebas
 
 from apps.pagos.views import ReciboList, DetalleFactura \
                             , FacturaCreate, probar, GenerardorGlobal\
                             , pruebagenerador \
                             ,DeudaUnidad, CarteraList\
-                            ,NoticiaList
+                            ,NoticiaList,listarPagos, verPago
 
 urlpatterns = [
 
@@ -44,6 +46,9 @@ urlpatterns = [
 
 # para pagos
     url(r'^listar/unidades/(?P<id_propiedad>[A-Za-z0-9-_]+)/(?P<pk>[A-Za-z0-9-_]+)/pagos$', ReciboList.as_view(), name = 'Solicitud_appagos'),#listara los administradores
+# para listar los pagos realizados
+    url(r'^listar/unidades/(?P<id_propiedad>[A-Za-z0-9-_]+)/(?P<pk>[A-Za-z0-9-_]+)/comprobantesdepago$', listarPagos.as_view(), name = 'Solicitud_comprobante'),#listara los administradores
+
     url(r'^listar/unidades/(?P<id_propiedad>[A-Za-z0-9-_]+)/(?P<pk>[A-Za-z0-9-_]+)/detallefactura/(?P<factura>[A-Za-z0-9-_]+)/$', DetalleFactura.as_view(), name = 'Solicitud_pagosdetalle'),#listara los administradores
     url(r'^listar/unidades/(?P<id_propiedad>[A-Za-z0-9-_]+)/(?P<pk>[A-Za-z0-9-_]+)/pagos/addFactura$', FacturaCreate.as_view(), name = 'Solicitud_addfactura'),#listara los administradores
     url(r'^listar/unidades/(?P<id_propiedad>[A-Za-z0-9-_]+)/cartera$', CarteraList.as_view(), name = 'Solicitud_Cartera'),#mostrara la cartera de la propiedad enviada
@@ -51,6 +56,13 @@ urlpatterns = [
     url(r'^noticias/listar$', NoticiaList.as_view(), name = 'Solicitud_listarNoticias'),#listara los administradores
     # solo test y generador automatico de factura default=generador2
     url(r'^probar/$', NotiVencidas,name="probar"),
+    url(r'^busqueda/$', Buscador,name="buscador"),
+    url(r'^addpago/$', Addpago,name="Addpago"),
+    url(r'^verpago/$', verPago,name="verpago"),
+
+
+    url(r'^pruebas/$', pruebas,name="prueba"),
+    
     url(r'^generador/$', GenerardorGlobal,name="generar"),
     url(r'^generador2/$', pruebagenerador,name="generar2"),
 

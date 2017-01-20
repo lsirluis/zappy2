@@ -274,7 +274,7 @@
     {% block menu_home %}
       {% url 'admin:index' as index_url %}
       <li{% if index_url == request.path %} class="active"{% endif %}>
-        <a href="{{ index_url }}"><i class="icon-home"></i>{% trans 'Home' %}
+        <a href="{{ index_url }}"><i class="icon-home icon-white"></i>{% trans 'Home' %}
         </a>
       </li>
     {% endblock %}
@@ -288,7 +288,7 @@
 
           {# <li class="separator"></li> #}
         {# {% else %} #}
-          <li {% if "Propiedad/listar"  in request.path %} class="active" {% elif "Propiedad/crear"  in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listar' %}"><i class="{% if  'Propiedad/listar' in request.path or 'Propiedad/crear' in request.path %}icon-chevron-down {% else %} icon-chevron-right {%endif%}  "></i>Propiedades</a>
+          <li {% if "Propiedad/listar"  in request.path %} class="active" {% elif "Propiedad/crear"  in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listar' %}"><i class="{% if  'Propiedad/listar' in request.path or 'Propiedad/crear' in request.path %}icon-chevron-down icon-white {% else %} icon-chevron-right icon-white  {%endif%}  "></i>Propiedades</a>
 
             <ul> 
               <li {% if "Propiedad/listar" in request.path %} class="active"{% endif %}>
@@ -310,7 +310,7 @@
           {# <li {% if  solapp in request.path %} class="active"{% endif %}><a href="{% url 'Usuario:Solicitud_listar' %}"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-user {%endif%}  "></i>Usuarios</a> #}
             
           </li>
-          <li {% if  "Propiedad/bancos" in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listarBanco' %}"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-lock {%endif%}  "></i>Bancos</a>
+          <li {% if  "Propiedad/bancos" in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listarBanco' %}"><i class="{% if  solapp in request.path %}icon-user icon-white {% else %} icon-lock icon-white {%endif%}  "></i>Bancos</a>
             <ul>
                 <li {% if "bancos/listar" in request.path %} class="active"{% endif %}>
                 <a href="{%url 'Propiedad:Solicitud_listarBanco' %}">Mis Bancos
@@ -326,13 +326,13 @@
             
           </li>
 
-          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-calendar {%endif%}  "></i>Mi Calendario de eventos</a>
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user  {% else %} icon-calendar icon-white {%endif%}  "></i>Mi Calendario de eventos</a>
             
           </li>               
-          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-bell {%endif%}  "></i>Notificaciones</a>
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="{% url 'Propiedad:Solicitud_listarNoticias'%}"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-bell icon-white {%endif%}  "></i>Notificaciones</a>
             
           </li>  
-          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-user {%endif%}  "></i>Mi cuenta</a>
+          <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-user  icon-white {%endif%}  "></i>Mi cuenta</a>
             
           </li>                         
           <li {% if  solapp in request.path %} class="active"{% endif %}><a href="#"><i class="{% if  solapp in request.path %}icon-user {% else %} icon-cog {%endif%}  "></i>Configuraciones</a>

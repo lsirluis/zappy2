@@ -1,0 +1,42 @@
+{# test #}
+ {% load staticfiles %}
+    <script src="{% static 'suit/js/jquery-1.8.3.min.js' %}"></script>
+    {# // <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>#}
+	<script src="{% static 'js/utileria.js' %}"></script>
+
+	<script type="text/javascript">
+
+	// 	function buscador(unidad){
+ // 		$.ajax({
+ // 			data:{'unidad': unidad},
+	// 		 url:'/Propiedad/busqueda',
+	// 		 type:'get',
+	// 		 success : function(data) {
+	// 				var Rtorre = data[0].torre;
+	// 				$("#resultado").html(Rtorre);
+	// 		 		$('#busquedProyecto').val(Rtorre);
+	// 		 		$('#id_torre').val(data[0].torre);
+	// 		 		$('#id_numero').val(data[0].torre);
+	// 				console.log(data[0].torre, data[0].numero,"Propietario: ",data[0].propi);
+	// 		 },
+	// 		 error : function(message) {
+	// 		         console.log(message);
+	// 		      }
+ // 		});//ajax
+	// };
+
+		function obtenerDunidad(val){
+			var res = buscador(val);
+			var dive = document.getElementById('dum');
+			dive.innerHTML=res;
+			// $('#busquedProyecto').val(datosunidad);
+		}
+	</script>
+<h1>
+hola test para buscador
+</h1>
+<div id="dum"></div>
+Resultado1: <span id="resultado">0</span> <br>
+Resultado2: <span id="resultado2">Aqui va el id del primer recibo</span> <br>
+ <input type="text" placeholder="Buscar proyectos"  id="busquedProyecto">
+ <button class="btn btn-primary" onclick="buscador(1,'mon-12390182093')">Buscar</button>

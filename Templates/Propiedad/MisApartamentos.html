@@ -1,5 +1,10 @@
 {% extends "admin/base_site.html" %}
 {% load staticfiles %}
+{% block extrahead %}
+  
+<script src="{% static 'js/utileria.js' %}"></script>
+{# <script src="{% static 'suit/js/jquery-1.8.3.min.js' %}"></script> #}
+{% endblock extrahead %}
 
 {% block title%} {{title}}{%endblock%}
 
@@ -7,7 +12,23 @@
 {% block content %}
 {# media url es: {{imgpropiedad.Imagen}} <br> #}
 {# <IMG SRC="Img/Propiedad/thumbnail_png_zapphybd.jpg_qaf4745.png" height="420"> #}
+<script>
+    $(document).ready(function(){
+    $('[data-toggletwo="tooltip"]').tooltip();   
+});
+    function Reporpago(val, pro){
+      // alert("Iniciando la busqueda");
+      // mage();
+      buscador(val,pro);
+      // alert("abriendo modal");
+      // $('#ModalReporPago').modal('show');
+      // $('#ModalReporPago').modal('toggle');
 
+    }
+</script>
+{% if busqueda %}
+  {# {{busqueda}} #}
+{% endif %}
 {% if title == "No Existe esta propiedad" %}
 	<div>
 		<a href="{%url 'Propiedad:Solicitud_crearpro' %}" class="btn btn-success ribbon1 base">Agregar nueva propiedad</a>
@@ -15,9 +36,21 @@
 	</div>	
 {% else %}
 	<div>
-		<a href="{%url 'Propiedad:Solicitud_crearuni' DatosPropiedad.idlegal %}" class="btn btn-info ribbon1 base">	Agregar nueva Unidad</a>
-	</div>
-	<br>
+    <a href="{%url 'Propiedad:Solicitud_crearuni' DatosPropiedad.idlegal %}" class="btn btn-info ribbon1 base"> Agregar nueva Unidad</a>
+  </div>
+<div class="toolbar-content clearfix">
+    <div class="object-tools">
+
+      <div class="btn-group">
+        <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}" class="btn btn-info "> Editar Propiedad</a>
+       
+        <a href="{% url 'Propiedad:Solicitud_Cartera' DatosPropiedad.idlegal %}" class="btn btn-info "><i class="icon-briefcase icon-white"></i> Cartera de esta propiedad</a>
+        <a href="{%url 'Propiedad:Solicitud_crearuni' DatosPropiedad.idlegal %}" class="btn btn-info "> Banco</a>
+      </div>
+   </div>
+</div>
+
+	{# <br> #}
             {% include "Propiedad/InfoPropiedad.html" %}
 {% endif %}
 {# <br> #}
@@ -97,28 +130,37 @@
 					<td title="">{{ datos.0.get_estado_display }}</td>
 					<td title="">{{ datos.0.dia_cobro}}</td>							
 					<td>
-						{# <div class="btn-group"> #}
-     						 <a href="{% url 'Propiedad:Solicitud_updateUni' DatosPropiedad.idlegal datos.0.id %}">
+						<div class="btn-group">
+     						 <a  href="{% url 'Propiedad:Solicitud_updateUni' DatosPropiedad.idlegal datos.0.id %}" class="btn btn-info " data-toggletwo="tooltip" data-placement="top" title="" data-original-title="Editar unidad">
                   {# <button type="button" class="btn btn-success">Editar</button> #}
-                  <button class="btn btn-info"><i class="icon-pencil  icon-white"></i> {{escape}}</button>
+                  <i class="icon-pencil  icon-white" ></i>
                 </a>
 
-     						 <a href="\..\admin/edificios/unidad/{{datos.id}}/change/">
-                 <button class="btn btn-danger"><i class="icon-trash icon-white"></i> </button>
+     						 <a href="\..\admin/edificios/unidad/{{datos.id}}/change/"
+                 class="btn btn-danger" data-toggletwo="tooltip" data-placement="top" title="" data-original-title="Eliminar unidad"><i class="icon-trash icon-white"></i>
      						 {# <button type="button" class="btn btn-danger">Eliminar</button> #}
                 </a>
-     						 <a href="{% url 'Propiedad:Solicitud_appagos' DatosPropiedad.idlegal datos.0.id %}"> 
-     						 <button class="btn btn-info"><i class="icon-eye-open icon-white"></i><i class="icon-list-alt icon-white"></i></button>
+     						 <a href="{% url 'Propiedad:Solicitud_appagos' DatosPropiedad.idlegal datos.0.id %}" class="btn btn-info" data-toggletwo="tooltip" data-placement="top" title="" data-original-title="Ver recibos de la unidad"> 
+     						 <i class="icon-eye-open icon-white"></i><i class="icon-list-alt icon-white"></i>
                  {# <button type="button" class="btn btn-info btntd">Info</button> #}
-     						</a>     						
-							
-						{# </div>  #}
+     						</a>   
+                <button type="button" class="btn btn-success btn-lg"  data-toggletwo="tooltip" data-placement="top" title="" data-original-title="Reportar un pago" onclick="Reporpago({{datos.0.id}},'{{DatosPropiedad.idlegal}}')"><i class="icon-plus icon-white"></i>pago</button>
+                {# <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#ModalReporPago" data-toggletwo="tooltip" data-placement="top" title="" data-original-title="Reportar un pago"><i class="icon-plus icon-white"></i>pago</button> #}
+
+                 {# <a href="\..\admin/edificios/unidad/{{datos.id}}/change/"class="btn btn-success" data-toggle="tooltip" data-placement="top" title="" data-original-title="Reportar un pago"> #}
+                 {# <i class="icon-plus icon-white"></i>pago #}
+                {# </a>                              							 #}
+                 <a href="{% url 'Propiedad:Solicitud_comprobante' datos.0.propiedad.idlegal datos.0.id  %}"
+                 class="btn btn-info"><i class="icon-eye-open icon-white"></i>Historial pagos
+                </a>                              
+						</div> 
 					</td>	
 					</tr>
 				{% endfor %}
     </tbody>
   </table>
 </div>
+{% include "Pagos/formato_pago.html" %}
 {# {% else %} #}
 
 {# {# <h1>no hay apartamentos en esta <b>Propiedad</b></h1> #}

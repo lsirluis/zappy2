@@ -2,6 +2,7 @@ from django import forms
 
 from apps.edificios.models import Propiedad, Persona, Unidad, Banco
 from apps.usuarios.models import Administrador
+from apps.pagos.models import RecibosPagos
 from django.http import HttpResponse,HttpResponseRedirect ,HttpRequest
 
 
@@ -56,9 +57,28 @@ class UnidadForm(forms.ModelForm):
 		self.fields['residente'].queryset = Persona.objects.filter(administrador=uid)
 		self.fields['propietario'].queryset = Persona.objects.filter(administrador=uid, propiedad=propiedad)
 		self.fields['arrendatario'].queryset = Persona.objects.filter(administrador=uid, propiedad=propiedad, tipo=2)
-		# self.fields['propiedad'].queryset = Propiedad.objects.filter(administrador__idu = uid)
-
-
+		Prop = Propiedad.objects.filter(idlegal=propiedad)
+		if Prop:
+			tipoPro = Prop[0].tipo
+			vmoratext="Este Valor no puede ser modificado Debido a que la Propiedad\
+						'%s' es Netamente " %(Prop[0].nombre)
+			if tipoPro == 1:
+				tipoUnidadChoises = (('1', 'Residencial'),)
+				vmoratext+="Residencial"
+				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
+                                   widget=forms.Select(attrs={'disabled':'disabled','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
+			elif tipoPro == 2:
+				tipoUnidadChoises = (('2', 'Comercial'),)
+				vmoratext+="Comercial"
+				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
+                                   widget=forms.Select(attrs={'disabled':'disabled','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
+			elif tipoPro == 3:
+				tipoUnidadChoises = (('1', 'Residencial'),('2', 'Comercial'))
+				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
+                                   widget=forms.Select(attrs={'enabled':'enabled'}))
+		# tipoUnidad = (('1', 'Residencial'),('2', 'Comercial'))
+		# self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidad, 
+                                   # widget=forms.Select(attrs={'disabled':'disabled'}))
 
 	class Meta:
 		model = Unidad
@@ -78,7 +98,8 @@ class UnidadForm(forms.ModelForm):
 			'porcentaje_mora',
 			'valor_mora',
 			'coeficiente',
-			'valor_pago'
+			'valor_pago',
+			'tipo',
 
 			
 		)
@@ -90,6 +111,9 @@ class UnidadForm(forms.ModelForm):
 			'telefono': 'Telefono',
 			'tipo': 'Tipo',
 			'valor_pago':'Valor a Pagar',
+			'tipo':'Tipo Unidad',
+			'valor_mora':'saldo en mora',
+			'dia_cobro':'Dia de Facturacion',
 
 		}
 		FAVORITE_COLORS_CHOICES = (
@@ -141,6 +165,24 @@ class UnidadForm(forms.ModelForm):
 		# 	raise forms.ValidationError("El autor debe contener mas de tres caracteres")
 		return propiedad
 
+	def clean_numero(self):
+		diccionario_limpio = self.cleaned_data
+		numero = diccionario_limpio.get('numero') 
+
+		formtorre = self.request.POST['torre']
+		formnumero = self.request.POST['numero']
+		propiedad= self.request.POST['propiedad']
+		uid = self.request.user.id
+		qs=Unidad.objects.filter(propiedad__idlegal=propiedad,\
+								propiedad__administrador__idu = uid,\
+								torre=formtorre, numero=formnumero)
+								# si existe un valor en la consulta
+		if qs:
+			raise forms.ValidationError("novalido")
+
+		# if propiedad=="holas" :
+		# 	raise forms.ValidationError("El autor debe contener mas de tres caracteres")
+		return numero
 # def __init__(self,*args,**kwargs):
 # 	super (UnidadForm,self ).__init__(*args,**kwargs)
 # 	uid = self.request.user.id
@@ -227,3 +269,21 @@ class PersonaForm(forms.ModelForm):
 		# if propiedad=="holas" :
 		# 	raise forms.ValidationError("El autor debe contener mas de tres caracteres")
 		return propiedad
+
+
+class  PagoForm(forms.ModelForm):
+	class Meta:
+		model = RecibosPagos
+		fields = [
+			'unidad',
+			'no_comprobante',
+			'pagador',
+			'suma',
+			'enletras',
+			'concepto',
+			'forma_pago',
+			'referencia1',
+			'referencia2',
+			'recibo',
+			'tipo',
+		]

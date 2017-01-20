@@ -85,7 +85,8 @@ class Unidad(models.Model):
 	valor_mora = models.PositiveIntegerField(null = True,blank=True,default=0)
 	coeficiente = models.FloatField(default=1.0, )
 	valor_pago = models.PositiveIntegerField(blank=False, null=False, default=0) 
-
+	TIPOUnidad_choose = ((1,'Residencial'),(2,'Comercial'))
+	tipo = models.IntegerField(choices = TIPOUnidad_choose, default=1)
 	class Meta:
 		verbose_name='Unidad'
 		verbose_name_plural='Unidades'

@@ -7,7 +7,7 @@
 {# <form action="" method="post"> #}
     {# {% csrf_token %} #}
     {# {{ form.as_table }} #}
-	{{is_popup}}
+	{# {{is_popup}} #}
     <script>
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
@@ -85,7 +85,11 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		         	<span class="secondinput"> {{form.numero.label}}:</span>{{form.numero}}
 					<span class="errorlist"> 
 						{% if form.torre.errors or form.numero.errors%}
+							 {% if "novalido" in form.numero.errors  %}
+							 	Lo sentimos esta unidad aparece registrada, <b>Verifiquelo!</b>
+							 	{% else %}
 							 * Ambos campos son obligatorios
+							 {% endif %}
 
 						{% endif %}
 						
@@ -100,6 +104,14 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		        	</div><div class="controls ">{{form.estado}}</div>
 		        </div>
 		      </div>
+
+		    <div class="control-group form-row field-tipo ">
+		        <div>
+		        	<div class="control-label"><label class="required" for="id_tipo">{{form.tipo.label}}:</label>
+		        	</div><div class="controls ">{{form.tipo}}</div>
+		        </div>
+		      </div>
+ 
 
 		    <div class="control-group form-row field-dia_cobro ">
 		        <div>
@@ -163,9 +175,10 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		        			<a class="related-widget-wrapper-link add-related" id="add_id_propietario" href="{% url 'Propiedad:Solicitud_crearpersona' object_list.idlegal %}?_to_field=id&amp;_popup=1" title="mas">
 		        			<img src="/static/admin/img/icon-addlink.svg" alt="Añadir mas">
 		        		</a>
+		        	 <span class="errorlist">{{form.propietario.errors.as_text}}</span>
 						</div>
 
-		        	 <span class="errorlist">{{form.propietario.errors.as_text}}</span></div>
+		        	</div>
 		        </div>
 		      </div>
 		    <div class="control-group form-row field-arrendatario ">

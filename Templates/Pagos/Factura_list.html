@@ -56,7 +56,8 @@
 		    		 <td>{% if recibo.estado == 1 %}
 							Pagada
 							<img alt="True" src="/static/admin/img/icon-yes.svg"> 
-					
+						{% elif recibo.estado == 2 %}
+							Abonado
 						{% else %}
 							En deuda
 							<img alt="True" src="/static/admin/img/icon-no.svg"> 

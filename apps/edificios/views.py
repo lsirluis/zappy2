@@ -1,5 +1,6 @@
 from django.shortcuts import render, reverse
 
+import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse,HttpResponseRedirect ,HttpRequest
 from django.core.urlresolvers import reverse_lazy
@@ -11,6 +12,7 @@ import datetime
 from datetime import  date, time, timedelta
 from django.utils import timezone 
 from django.db.models import Q
+from django.db.models import F
 
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -18,12 +20,172 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from apps.edificios.models import Propiedad, Unidad, Persona, Banco
 from apps.usuarios.models import Administrador
 from apps.pagos.models import Recibo , Detalle, Noticia, DeNoticia \
-							  ,Deuda , RecibosAuto
+							  ,Deuda , RecibosAuto ,RecibosPagos, RecibosyComprobante,Abono
 
-from apps.edificios.forms import PropiedadForm,UnidadForm, BancoForm, PersonaForm
-
+from apps.edificios.forms import PropiedadForm,UnidadForm, BancoForm, PersonaForm,PagoForm
+# from apps.pagos.forms import AddPagoForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+
+# inicio pruebas
+from apps.pagos.views import listaReciboCosto
+
+def Buscador(request):
+ 	if request.is_ajax() or request:
+ 		# usuario = [{'nombre':'Eduardo Ismael'},{'nombre':'javier'}]
+ 		uid= request.user.id
+ 		idunidad = request.GET['unidad']
+ 		propiedad = request.GET['propiedad']
+ 		if EsMiPropiedad(uid, propiedad):
+ 			if EsMiUnidad(uid, propiedad, idunidad):
+ 				unidadinfo = Unidad.objects.filter(id= idunidad, propiedad__administrador__idu=uid ).\
+ 					annotate(propi=F('propietario__nombre'),apellido=F('propietario__apellido')).\
+ 					values("torre","numero","propi","apellido")
+		 		# dato={"DeudaTotal": 10000}
+		 		respuesta=list(unidadinfo)
+		 		# respuesta.append(dato)
+		 		respuesta.append(listaReciboCosto(idunidad))
+		 		respuesta.append(idunidad)
+		 		# def listaReciboCosto(unidadid):
+
+		 		# unidadinfo.append(dato)		
+ 				return HttpResponse( json.dumps(list(respuesta)), content_type='application/json' )
+ 			else:
+ 				return HttpResponse("Error no es la unidad")
+ 		else:
+ 			return HttpResponse("Error no es la propiedad")		
+ 		# usuario = Administrador.objects.filter(nombre1__startswith= request.GET['nombre'] ).values('nombre1','nombre2','apellido1', 'apellido2')
+ 		# return HttpResponse( json.dumps(list(usuario)), content_type='application/json' )
+ 	else:
+ 		return HttpResponse("Error! what are you doing noob?")
+
+def pruebas(request):
+	return render(request, "Propiedad/test.html","")
+
+
+def Addpago(request):
+	if request.method == 'POST':
+		# post_text = request.POST.get('the_post')
+		response_data = {}
+		# formu = AddPagoForm(request.POST)
+		formu = PagoForm(request.POST)
+		if formu.is_valid():
+			# preguntamos primero la modalidad de pago, si es abono o pago total
+			valor = int(request.POST.get('suma'))
+			if request.POST.get('tipo') == "0": # si es o espago total
+				idrecibo = request.POST.get('recibo')
+				# procedemos a busca rle recibo en cuestion
+				recibo = Recibo.objects.get(id = idrecibo)
+	# ahora buscaremos los recibos anteriores que esten vencidos a este
+	# y miraremos si el valor que se va a pagar el igual al total de la deuda
+				idunidad= recibo.unidad
+				Recendeuda = Recibo.objects.filter(estado=0,unidad=idunidad\
+									,fecha_generacion__lte=recibo.fecha_generacion)
+	# ya teniendo todos los recibos incluyendo el rec en cuestion, procedemos
+	# a sacar el costo total de la deuda conjunta de todos los recibos
+				deuda=0
+				for recibo in Recendeuda:
+					deuda = deuda + Valordeudarecibo(recibo)					
+				
+				if valor >= deuda:
+					comprobante = formu.save(commit=False)
+					comprobante.save()
+					for recibo in Recendeuda:
+						recibo.estado = 1
+						recibo.save()
+						RyC = RecibosyComprobante(recibo= recibo, comprobante= comprobante, tipo=0)
+						RyC.save()
+
+					response_data['success'] = 'guardado exitosamente'
+				else : 
+					response_data['errors'] = {"recibo":" el valor pagado debe ser superior a la deuda, corrigalo o de lo contrario escoger la opcion de abono"}
+			
+			else: #PARA ABONO
+			# buscamos los recibos en deuda de la unidad
+				idunidad = request.POST.get('unidad')
+				recibos = Recibo.objects.filter(estado=0, unidad = idunidad).order_by('fecha_generacion')
+			# guardamos el comprobante primero
+				comprobante = formu.save(commit=False)
+				comprobante.save()
+			# procedemos a verificar si con la suma abonada se puede pagar 
+			# el primer recibo
+				for recibo in recibos:
+					if valor >= Valordeudarecibo(recibo): # es un pago
+						recibo.estado = 1
+						recibo.save()
+						RyC = RecibosyComprobante(recibo= recibo, comprobante= comprobante, tipo=0)
+						RyC.save()
+						valor = valor - Valordeudarecibo(recibo)
+					else: # es un abono
+						nuevovalor = Valordeudarecibo(recibo)
+						recibo.estado = 2 # abonado
+						recibo.save() 
+						RyC = RecibosyComprobante(recibo= recibo, comprobante= comprobante, tipo=1)
+						RyC.save()
+						ReducirValorDetalles(recibo,valor)
+						break
+				response_data['success'] = 'Abonado exitosamente'
+
+
+					
+						
+
+
+
+
+			# response_data['estado']+="valores"+ valor +" del " 
+			# else:
+			# response_data['success'] = 'guardado exitosamente'
+		else:
+			response_data['errors'] =formu.errors
+
+		return HttpResponse(
+			json.dumps(response_data),
+			content_type="application/json"
+		)
+	else:
+		return HttpResponse(
+			json.dumps({"Nada que ver": "Esto no sucederia"}),
+			content_type="application/json"
+			)
+
+# def deudas():
+
+def Valordeudarecibo(recibo):
+	deuda = 0
+	detalles = Detalle.objects.filter(idRecibo = recibo.id)
+	for detalle in detalles:
+		deuda = deuda + detalle.valor
+	return deuda
+
+def ReducirValorDetalles(recibo,valor):
+	detalles = Detalle.objects.filter(idRecibo = recibo.id).order_by('valor')
+	suma = valor
+	for detalle in detalles:
+		if detalle.valor <= suma  :
+			suma = suma - detalle.valor
+			abono = Abono( detalle = detalle, \
+							valor_inicial= detalle.valor,\
+							valor_abonado= detalle.valor ,\
+							valor_restante= 0)
+			abono.save()
+			detalle.valor = 0
+			detalle.save()
+		else:
+			restante = detalle.valor - suma
+			abono = Abono( detalle = detalle, \
+							valor_inicial= detalle.valor,\
+							valor_abonado= suma ,\
+							valor_restante= restante)
+			abono.save()
+			detalle.valor = restante
+			detalle.save()
+			break
+
+
+# Fin pruebas
+
+# *********************************************************************
 
 def NoticiasList(uid):
 	# vamos a ver las noticias de el usuario enviado y no haigan sido vistas
@@ -159,6 +321,8 @@ def apartamentos(request,id_propiedad):
 	nombre=""
 	deudas={}
 	apartamento2=""
+	switch=False
+	V =""
 	# mensaje = {}
 	# messages.add_message(request, messages.INFO, 'Hello world.')
 	if id_propiedad != "TOTALUNIDADES":
@@ -169,16 +333,30 @@ def apartamentos(request,id_propiedad):
 		if Propiedad.objects.filter(administrador__idu = uid, idlegal=id_propiedad):
 			url = Propiedad.objects.filter(idlegal=id_propiedad)[0]
 			titulo = "Unidades en "+url.nombre
-			apartamento=Unidad.objects.filter(propiedad__administrador__idu=uid, propiedad=id_propiedad)
+			#procedemos a reliazar la busque si es que hay 
+			busqueda= request.GET.get('qpropietario', '0-_no')
+			if busqueda !='0-_no':
+				if busqueda == '':
+					apartamento=Unidad.objects.filter(propiedad__administrador__idu=uid, propiedad=id_propiedad)
+					messages.add_message(request, messages.ERROR, 'Lo sentimos, No hay propietario a buscar, escribalo en el campo')
+				else:
+					apartamento= QunidadPropietario(id_propiedad,uid,busqueda)
+					V = busqueda
+			else:
+				apartamento=Unidad.objects.filter(propiedad__administrador__idu=uid, propiedad=id_propiedad)
+			nombre=url.nombre
 			if apartamento :
 				titulo = "Unidades en "+url.nombre
-				nombre=url.nombre
 				deudas=EnDeudaApartamentos((apartamento))
 				apartamento2 = zip_longest(apartamento,deudas,"")
 				apartamento2 = list(apartamento2)
 			else:
 			# titulo = "no hay unidades"
-				messages.add_message(request, messages.ERROR, 'No tiene ningun Apartamento en esta propiedad')
+				# si hay una busqueda, pero sin resultados
+				if busqueda !='0-_no':
+					messages.add_message(request, messages.ERROR, 'Lo sentimos, no hubo ningun resultado para su busqueda')
+				else:
+					messages.add_message(request, messages.ERROR, 'No tiene ningun Apartamento en esta propiedad')
 
 		else:
 			titulo = "No Existe esta propiedad"
@@ -203,13 +381,15 @@ def apartamentos(request,id_propiedad):
 									  # and auth_User.identificacion = edificios_propiedad.administrador_id \
 									  # and edificios_propiedad.identificacion = edificios_unidad.propiedad_id',[uid])
 	# return HttpResponse(apartamento)
-
-
-
 	contexto = {'apartamentos': apartamento,'title':titulo,'DatosPropiedad':url}
-	if "Unidades en " in titulo :
+	
+	if V :
+		contexto['busqueda'] = V
+	if url:
 		contexto['breadurl']=[{'nombre':'Propiedades','url':"Propiedad:Solicitud_listar"},\
-								 {'nombre':nombre,'url':"Propiedad:Solicitud_apartamentos",'arg':id_propiedad}]	
+							 {'nombre':nombre,'url':"Propiedad:Solicitud_apartamentos",'arg':id_propiedad}]	
+		
+	if "Unidades en " in titulo :
 		contexto['deuda']=deudas
 		contexto['apartamento2']=apartamento2
 	return render(request, 'Propiedad/MisApartamentos.html',contexto)
@@ -225,6 +405,30 @@ def EnDeudaApartamentos(apartamentos):
 		# lista.append(apartamento.id)
 	# al final retorno la lista del estado de deuda (si, no), de apartamentos
 	return lista
+
+def QunidadPropietario(propiedad, uid, qpropietario):
+	# primero contaremos el numero de palabras
+	ListaPalabras = qpropietario.split()
+	CantidadPalabras = len(ListaPalabras)
+	# teniendo las palabras y la cantidad, procedemos
+	# si hay una sola palabra, buscara en los nombres y en los apellidos
+	apartamento = False
+	if CantidadPalabras == 1:
+		apartamento=Unidad.objects.filter(Q(propiedad__administrador__idu=uid, \
+										  propiedad=propiedad, propietario__nombre=qpropietario)|\
+										 Q(propiedad__administrador__idu=uid, \
+										  propiedad=propiedad,propietario__apellido=qpropietario))
+	elif CantidadPalabras == 2:
+		apartamento=Unidad.objects.filter(Q(propiedad__administrador__idu=uid, \
+										  propiedad=propiedad, propietario__nombre=qpropietario)|\
+										 Q(propiedad__administrador__idu=uid, \
+										  propiedad=propiedad,propietario__apellido=qpropietario)|\
+
+										 Q(propiedad__administrador__idu=uid, \
+										  propiedad=propiedad, propietario__nombre=ListaPalabras[0])|\
+										 Q(propiedad__administrador__idu=uid, \
+										  propiedad=propiedad,propietario__apellido=ListaPalabras[1]))
+	return apartamento
 
 
 # vista para crear una nueva propiedad
@@ -317,7 +521,8 @@ class UnidadEdit(UpdateView):
 	template_name = 'Propiedad/Unidad_form.html'
 	success_url = reverse_lazy('Propiedad:Solicitud_listar')
 	def get_initial(self):
-		self.initial.update({ 'request': self.request})
+		self.propiedad = self.kwargs.get('id_propiedad',0)
+		self.initial.update({ 'request': self.request,'propiedad':self.propiedad})
 		return self.initial
 	def get_context_data(self, **kwargs):
 		context = super(UnidadEdit, self).get_context_data(**kwargs)
@@ -328,6 +533,8 @@ class UnidadEdit(UpdateView):
 			if EsMiUnidad(uid, idpro, pkunidad):
 		# if Unidad.objects.filter(propiedad__idlegal=idpro,id=pkunidad, propiedad__administrador=uid):
 				context['title']="Editar unidad"
+				context['object_list']= Propiedad.objects.filter(administrador__idu = uid, idlegal=idpro)[0]
+
 				return context
 
 			else:

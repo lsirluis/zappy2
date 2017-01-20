@@ -1,0 +1,194 @@
+ {% load staticfiles %}
+ <link rel="stylesheet" href="{% static 'css/radiocheckbox.css' %}">
+ <script type="text/javascript" src="{% static 'js/NumeroALetras.js'%}"></script>
+
+
+<div id="ModalimprimirComprobantePago"  class="modalPago hide fade in" style="display:none;">
+  {# <div class="msgcentral"><h1>Se han presentado errores!, Corrigalos antes de seguir</h1></div> #}
+     <div class="modal-dialog ">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+
+    <input type="hidden" name="tipo" id="id_tipo" value="1">
+    <input type="hidden" name="unidad" id="id_unidad" value="0">
+    <div class="modal-header">
+<button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3><i class="icon-bell"></i> Reportar pago!!!</h3>
+     </div>
+     <div class="modal-body">
+{# Inicio Formato #}
+<div class="formatopago">
+  <table border="0px" class="tablecenter">
+    <tbody >
+      {# linea 0 de control de tamaños #}
+      <tr>
+        <td class="a"></td>
+        <td class="b"></td>
+        <td class="c"></td>
+        <td class="d"></td>
+        <td class="e"></td>
+        <td class="f"></td>        
+      </tr>
+    {# linea1 #}
+    <tr>
+      <td rowspan="4"><img class="ImgReporPago" src="/media/Img/Propiedad/stylotoesca.jpg" width="150" height="150"></td>
+      <td></td>
+      {# dia mes año #}<td></td><td></td><td></td>
+      <td class="space"></td>
+    </tr>
+    {# linea2 #}
+    <tr>
+      <td></td>
+      <td class="dateColor">dia</td>
+      <td class="dateColor">mes</td>
+      <td class="dateColor">año</td>
+      <td class="comprobantetext f">Comprobante</td>
+    </tr>
+    {# linea3 #}
+    <tr><td></td>
+      {# dia mes ano #}<td><span id="id_dia"></span></td> <td><span id="id_mes"></span></td><td>   <span id="id_año"></span> </td>
+      <td class="comprobantetext">de ingreso</td>
+    </tr>
+    {# linea4 #}
+    <tr><td>{{object_list.0.unidad.propiedad.direccion}}</td>
+      {# dia mes año #}<td></td><td></td><td></td>
+      <td rowspan="2"><input name="no_comprobante" id="id_no_comprobante" type="text" class="xsinput" placeholder="#1234" readonly></td>
+    </tr>
+    {# linea5 #}
+    <tr>
+      <td>{{object_list.0.unidad.propiedad.nombre}}</td><td>{{object_list.0.unidad.propiedad.idlegal}} </td>
+    </tr>
+    </tbody>
+
+  </table>
+  {# <hr> #}
+  <div class="secondtablecontainer">
+    <table class="tablecenter table2 " border="0px">
+      <tbody>
+        {# linea1 #}
+        <tr>
+          <div class="control-group form-row field-torre ">
+              <td class="firstinput">
+                <b>Ciudad:</b> 
+              </td>
+              <td class="secondinput" colspan="2">
+                <input type="text"  id="id_ciudad" disabled value="{{object_list.0.unidad.propiedad.ciudad}}">
+              </td>
+              <td class="midl">
+                  <input type="text" name="referencia1" id="id_referencia1" class="input-mediusm search-querys"  placeholder="Referencia 1  opcional" value="" readonly>
+              </td>
+              {# <td class=""> #}
+               {# <input type="text" placeholder="$" class="form-control"> #}
+              {# </td> #}
+              {# <td class="last"></td> #}
+          </div>
+        </tr>
+        {# linea2 #}
+        <tr>
+          <td > <b>Recibió de :</b></td>
+          <td class="secondinput" colspan="2">
+             <input type="text" class="" id="id_recibio" name="pagador" readonly>
+          </td>
+        <td colspan="1" rowspan="1">
+          <input type="text" name="referencia2" id="id_referencia2" class="input-mediusm search-querys"  placeholder="Referencia 2   opcional" value="" readonly>
+          {# <span class="errorlist"><b>Facturas en deuda:</b></span> #}
+              
+
+              {# <textarea class="form-control areadeudas" maxlength="200" id="id_aletras" disabled> </textarea>          #}
+          </td>
+           {# <td class="last"></td> #}
+        </tr>
+        {# linea3 #}
+        <tr>
+          <td><b>Apartamento No :</b></td>
+          <td colspan="1">
+             <input type="text" class="xsinput" id="id_numero" name="apartamento" readonly value="{{object_list.0.unidad.numero}}">
+                <b>Torre #</b>
+             <input type="text" class="xsinput" id="id_torre" name="torre" readonly value="{{object_list.0.unidad.torre}}">
+            {# <span class="errorlist"><b>Facturas en deuda:</b></span> #}
+          </td>
+          <td style="text-align:right;"><span class="errorlist"><b>Factura Pagada:</b></span></td>
+          <td colspan="1">
+           <span id="id_fact"></span>
+         </td>
+        {# <td class="last"></td> #}
+        </tr>
+        {# linea4 #}        
+        <tr>
+          <td><b>La suma de :</b></td>
+          <td colspan="2">
+             <input type="number" min="0" class="input-medium" name="suma" id="id_suma" onkeyup="aletras()"  placeholder="ejem: 150000" readonly>
+                {# <span id="aletras" class="enletras"></span> #}
+              {# <span disabled>abonando</span> #}
+          </td>
+          <td colspan="1">
+            <span id="vfactselect"></span>
+           
+            {# <button class="btn btn-success" type="button" onclick="Usar()">usar</button> #}
+          </td>
+
+          {# <td class="last"></td> #}
+        </tr>
+        {# linea5 #}
+        <tr>
+          <td><b>En letras</b></td>
+          <td colspan="3">
+            <textarea class="form-control areaconcepto" maxlength="200" id="id_aletras" name="enletras" readonly ></textarea>
+          </td>
+          {# <td class="last"></td> #}
+        </tr>
+        {# linea6 #}
+        <tr>
+          <td><b>Por concepto de :</b></td>
+          <td colspan="3">
+             {# <input type="text" class="input-large"> #}
+             <textarea class="form-control concepto" maxlength="200" rows="2" id="id_concepto" name="concepto" readonly></textarea>
+          </td>
+          {# <td class="last"></td> #}
+        </tr> 
+        <tr>
+        {# linea6 #}           
+          <td><b>Forma de pago:</b></td>
+          <td colspan="4">
+            <div class="funkyradio">
+              <div class="funkyradio-success">
+                  <input type="radio" name="forma_pago" id="radio1"  value="0"/>
+                  <label for="radio1" class="radio-inline">Cheque</label>
+              </div>
+              <div class="funkyradio-success">
+                  <input type="radio" name="forma_pago" id="radio2" value="1"/>
+                  <label for="radio2" class="radio-inline">Banco</label>
+              </div>
+              <div class="funkyradio-success">
+                  <input type="radio" name="forma_pago" id="radio3" value="2"  />
+                  <label for="radio3" class="radio-inline" >Efectivo</label>
+              </div> 
+              <div class="funkyradio-success">
+                  <input type="radio" name="forma_pago" id="radio4" value="3"/>
+                  <label for="radio4" class="radio-inline transferencia">transferencia</label>
+              </div>                                         
+            </div> {# fin funkyradio #}
+          </td>
+          {# <td class="last"></td> #}
+        </tr>     
+      </tbody>
+    </table>
+  </div>
+
+
+
+</div>
+
+{# Fin Formato #}
+    </div>
+      <div class="modal-footer">
+        {# <input type="submit" id="submitpagos"value="Guardar" class="btn btn-high btn-info"> #}
+        <button type="button" class="btn btn-high btn-info" name="s_save"><b>Imprimir </b></button>
+        {# <input type="submit" class="btn btn-success" value="Guardar"> #}
+        {# <a href="index.html" class="btn btn-success">Guardar</a> #}
+        <a href="#" data-dismiss="modal" class="btn">Cerrar</a>
+      </div>
+    </div>
+  </div>
+</div>

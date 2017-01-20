@@ -5,13 +5,43 @@
  {# {% endblock %} #}
 
 {% block content %}
-		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Usuarios</h1></a>
-		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Mis propiedades</h1></a>
-		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Mis bancos</h1></a>
-		<a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Notificaciones</h1></a>
+		{# <a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default "><h1 style="line-height:200px;">Usuarios</h1></a> #}
+		<!-- <a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Mis propiedades</h1></a> -->
+		{# <a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Mis bancos</h1></a> #}
+		{# <a style="width:200px; height:200px; line-height:200px;" href="{% url 'Propiedad:Solicitud_listar' %}" class="btn btn-default"><h1 style="line-height:200px;">Notificaciones</h1></a> #}
 
 		<!-- <div id="container"> -->
-	 <img src="{% static 'img/zappyfondo.jpg' %}"  class="imgcentral" alt="">
+	 {# <img src="{% static 'img/zappyfondo.jpg' %}"  class="imgcentral" alt=""> #}
+	 <table class="PrincipalTable" border="0px">
+	 	<tbody>
+	 		<tr>
+	 			<td class="PrincBpropiedades"><a href="{% url 'Propiedad:Solicitud_listar' %}"></a>
+	 			</td>
+	 			<td class="PrincBbancos"><a href="#"></a>
+	 			</td>
+	 			<td class="PrincBfacturas"><a href="#"></a>
+	 			</td>
+	 			<td class="PrincBregpagos"><a href="#"></a>
+	 		</tr>
+	 		<tr>
+	 			<td class="PrincBnotifi"><a href="#"></a>
+	 		</tr>
+	 	</tbody>
+	 </table>
 
-
+	
 {% endblock %}
+
+{# <div class="row"> #}
+    {# <div class="col-md-12"> #}
+		{# <h2>Conectate a nuestras redes<br /></h2> #}
+                            {# <div class="col-md-6 .col-md-offset-3"> #}
+                                 {# <ul class="social"> #}
+                                  {# <li class="facebook"><a href="http://facebook.com/alterowo"><i class="fa fa-facebook fa-3x"></i></a></li> #}
+                                  {# <li class="twitter"><a href="http://twitter.com/Kyokushinowa"><i class="fa fa-twitter fa-3x"></i></a></li> #}
+                                  {# <li class="pinterest"><a href="http://www.pinterest.com/beatagibalska/"><i class="fa fa-pinterest-p fa-3x"></i></a></li> #}
+                                  {# <li class="behance"><a href="https://www.behance.net/Kurnikowa"><i class="fa fa-behance fa-3x"></i></a></li> #}
+                                {# </ul> #}
+                          {# </div> #}
+    {# </div> #}
+    {# </div> #}

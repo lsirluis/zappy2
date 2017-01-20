@@ -5,7 +5,7 @@ forms.DateInput(format='%m/%d/%Y' )
 # from apps.edificios.models import Propiedad, Persona, Unidad, Banco
 # from apps.usuarios.models import Administrador
 from django.http import HttpResponse,HttpResponseRedirect ,HttpRequest
-from apps.pagos.models import Recibo , Detalle
+from apps.pagos.models import Recibo , Detalle, RecibosPagos
 
 class ReciboForm(forms.ModelForm):
 	fecha_vencimiento = forms.DateField(label=("fecha_vencimiento"), 
@@ -68,3 +68,4 @@ class DetalleForm(forms.ModelForm):
 			'presupuesto_anual': forms.TextInput(attrs={'class':'form-control'}),		
 			'area': forms.TextInput(attrs={'class':'form-control'}),		
 		}
+

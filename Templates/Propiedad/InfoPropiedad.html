@@ -30,47 +30,50 @@
 			<td  class="text-center tup">
 				{{DatosPropiedad.nombre}}
 			</td>
-			<td class="tup"><b>Cantidad Unidades</b></td>
-			<td class="tup">{% if apartamentos %}
+			<td class="tup"><b>Cantidad Unidades: </b>
+			{% if apartamentos %}
 					{{apartamentos.count}}
 				{% else %}
 					0
-				{% endif %}
-			</td>
-			<td></td>
-			<td>
+				{% endif %}</td>
+			<td class="tup"></td>
+			{# <td></td> #}
+			<td rowspan="4">
 				<div class="btn-group">
-     			 <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}"> 
-     			 <button type="button" class="btn btn-info btntd">Editar</button>
-     			</a>
-     			 <a href="{% url 'Propiedad:Solicitud_Cartera' DatosPropiedad.idlegal %}"> 
-     			 <button type="button" class="btn btn-info btntd"><i class="icon-briefcase icon-white"></i> Cartera</button>
-     			</a>
+     			 {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}">  #}
+     			 {# <button type="button" class="btn btn-info btntd">Editar</button> #}
+     			{# </a> #}
+     			 {# <a href="{% url 'Propiedad:Solicitud_Cartera' DatosPropiedad.idlegal %}">  #}
+     			 {# <button type="button" class="btn btn-info btntd"><i class="icon-briefcase icon-white"></i> Cartera</button> #}
+     			{# </a> #}
 						
 				</div> 
 
+				<img src="/static/img/Pastel.png" alt="">
 
               </td>
+              <td></td>
 		</tr>
 
 
-		<tr class="trh">
+		<tr class="trh" style="text-align:left;">
 			<td class="tup"><b>Ciudad</b></td>
 			<td class="text-center tup">{{DatosPropiedad.ciudad.nombre}}</td>
-			<td class="tup">{# Estadistica 1 #}</td>
-			<td class="tup">{# Estadistica 2 #}</td>
+			<td class="tup"><b>Direccion: </b>{{DatosPropiedad.direccion}}</td>
+			<td class="tup" colspan="1"></td>
 			<td></td>
-			<td>
-				<div class="btn-group">
+			{# <td> #}
+				{# <div class="btn-group"> #}
      			 {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}">  #}
      			 {# <button type="button" class="btn btn-success btntd">Facturas</button> #}
      			{# </a> #}
-     			 <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}"> 
-     			 <button type="button" class="btn btn-info btntd">Banco</button>
-     			</a>
+     		
+     			 {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}">  #}
+     			 {# <button type="button" class="btn btn-info btntd">Banco</button> #}
+     			{# </a> #}
 						
-				</div> 
-              </td>
+				{# </div>  #}
+              {# </td> #}
 		</tr>
 		<tr class="trh">
 			<td class="tup"><b>Tipo Propiedad</b></td>
@@ -78,10 +81,22 @@
 			<td class="tup">{# Estadistica 1 #}</td>
 			<td class="tup">{# Estadistica 2 #}</td>
 			<td></td>
-			<td></td>
+			{# <td></td> #}
 			{# <td></td> #}
 		</tr>
-		<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr>
+			<form class="form-search nav-quick-search" autocomplete="off" action="" method="GET">
+				<td colspan="3" class="tes"> 
+					<input type="text" name="qpropietario" class="input-medium search-query" id="quick-search" placeholder="Nombres, apellidos" value="{{busqueda}}">
+               	 	<i class="input-icon icon-search"></i>
+				{# </td> #}
+				{# <td> #}
+					<input type="submit" class="submit btn btn-info" value="Buscar por propietario">
+
+				{# </td> #}
+            </form>
+			<td></td><td></td>
+		</tr>
 
 
 		

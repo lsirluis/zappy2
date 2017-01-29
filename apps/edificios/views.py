@@ -63,7 +63,7 @@ def pruebas(request):
 	return render(request, "Propiedad/test.html","")
 
 
-def Addpago(request):
+def Addpago(request): # agregar if es ajax
 	if request.method == 'POST':
 		# post_text = request.POST.get('the_post')
 		response_data = {}
@@ -79,8 +79,9 @@ def Addpago(request):
 	# ahora buscaremos los recibos anteriores que esten vencidos a este
 	# y miraremos si el valor que se va a pagar el igual al total de la deuda
 				idunidad= recibo.unidad
-				Recendeuda = Recibo.objects.filter(estado=0,unidad=idunidad\
-									,fecha_generacion__lte=recibo.fecha_generacion)
+				Recendeuda = Recibo.objects.filter(Q(estado=0,unidad=idunidad\
+									,fecha_generacion__lte=recibo.fecha_generacion)|Q(estado=2,unidad=idunidad\
+									,fecha_generacion__lte=recibo.fecha_generacion))
 	# ya teniendo todos los recibos incluyendo el rec en cuestion, procedemos
 	# a sacar el costo total de la deuda conjunta de todos los recibos
 				deuda=0
@@ -103,7 +104,7 @@ def Addpago(request):
 			else: #PARA ABONO
 			# buscamos los recibos en deuda de la unidad
 				idunidad = request.POST.get('unidad')
-				recibos = Recibo.objects.filter(estado=0, unidad = idunidad).order_by('fecha_generacion')
+				recibos = Recibo.objects.filter(Q(estado=0, unidad = idunidad) | Q(estado=2, unidad = idunidad) ).order_by('fecha_generacion')
 			# guardamos el comprobante primero
 				comprobante = formu.save(commit=False)
 				comprobante.save()
@@ -125,13 +126,6 @@ def Addpago(request):
 						ReducirValorDetalles(recibo,valor)
 						break
 				response_data['success'] = 'Abonado exitosamente'
-
-
-					
-						
-
-
-
 
 			# response_data['estado']+="valores"+ valor +" del " 
 			# else:
@@ -335,15 +329,15 @@ def apartamentos(request,id_propiedad):
 			titulo = "Unidades en "+url.nombre
 			#procedemos a reliazar la busque si es que hay 
 			busqueda= request.GET.get('qpropietario', '0-_no')
-			if busqueda !='0-_no':
-				if busqueda == '':
+			if busqueda !='0-_no': # si hay una busqueda 
+				if busqueda == '': # si la busqueda es vacia
 					apartamento=Unidad.objects.filter(propiedad__administrador__idu=uid, propiedad=id_propiedad)
-					messages.add_message(request, messages.ERROR, 'Lo sentimos, No hay propietario a buscar, escribalo en el campo')
-				else:
+					# messages.add_message(request, messages.ERROR, 'Lo sentimos, No hay propietario a buscar, escribalo en el campo')
+				else: # si hay un valor a buscar
 					apartamento= QunidadPropietario(id_propiedad,uid,busqueda)
 					V = busqueda
-			else:
-				apartamento=Unidad.objects.filter(propiedad__administrador__idu=uid, propiedad=id_propiedad)
+			else: # conducto regular, es decir si no hay una busqueda
+				apartamento=Unidad.objects.filter(propiedad__administrador__idu=uid, propiedad=id_propiedad).order_by('torre','numero')
 			nombre=url.nombre
 			if apartamento :
 				titulo = "Unidades en "+url.nombre
@@ -397,7 +391,7 @@ def apartamentos(request,id_propiedad):
 def EnDeudaApartamentos(apartamentos):
 	lista=[]
 	for apartamento in apartamentos:
-		recibos = Recibo.objects.filter(unidad=apartamento.id,estado=0)
+		recibos = Recibo.objects.filter(Q(unidad=apartamento.id,estado=0)| Q(unidad=apartamento.id,estado=2))
 		if recibos or apartamento.valor_mora>0 :
 			lista.append(True)
 		else:
@@ -483,6 +477,10 @@ class PropiedadEdit(UpdateView):
 class UnidadCreate(CreateView):
 	model = Unidad
 	form_class = UnidadForm
+	def get_success_url(self):
+		idpro = self.kwargs.get('id_propiedad',0)
+		return reverse_lazy('Propiedad:Solicitud_apartamentos',args=[idpro])
+
 	def get_initial(self):
 		self.propiedad = self.kwargs.get('id_propiedad',0)
 		self.initial.update({ 'request': self.request,'propiedad':self.propiedad})
@@ -513,13 +511,18 @@ class UnidadCreate(CreateView):
 
 
 	template_name = 'Propiedad/Unidad_form.html'
-	success_url = reverse_lazy('Propiedad:Solicitud_listar')
+	# success_url = reverse_lazy('Propiedad:Solicitud_listar')
 
 class UnidadEdit(UpdateView):
 	model = Unidad
 	form_class = UnidadForm
 	template_name = 'Propiedad/Unidad_form.html'
-	success_url = reverse_lazy('Propiedad:Solicitud_listar')
+	# success_url = reverse_lazy('Propiedad:Solicitud_listar')
+	# idpro=self.kwargs.get('id_propiedad',0)
+	# success_url = reverse_lazy('Propiedad:Solicitud_apartamentos',args=[idpro])
+	def get_success_url(self):
+		idpro = self.kwargs.get('id_propiedad',0)
+		return reverse_lazy('Propiedad:Solicitud_apartamentos',args=[idpro])
 	def get_initial(self):
 		self.propiedad = self.kwargs.get('id_propiedad',0)
 		self.initial.update({ 'request': self.request,'propiedad':self.propiedad})
@@ -529,6 +532,7 @@ class UnidadEdit(UpdateView):
 		uid = self.request.user.id
 		pkunidad = self.kwargs.get('pk',0)
 		idpro = self.kwargs.get('id_propiedad',0)
+		success_url = reverse_lazy('Propiedad:Solicitud_apartamentos',args=[idpro])
 		if EsMiPropiedad(uid, idpro):
 			if EsMiUnidad(uid, idpro, pkunidad):
 		# if Unidad.objects.filter(propiedad__idlegal=idpro,id=pkunidad, propiedad__administrador=uid):
@@ -549,6 +553,24 @@ class UnidadEdit(UpdateView):
 			context['title']="Propiedad no registrada"
 			context['form']=""
 		return context
+	# def post(self, request, *args, **kwargs):
+	# 	self.object = self.get_object
+	# 	# quien es el administrador al que se le guardara? pues este:
+	# 	# uid = request.user.id
+	# 	idpro = self.kwargs.get('id_propiedad',0)
+	# 	# admin = Administrador.objects.get(idu=uid)
+	# 	# propiedad = Propiedad.objects.get(idlegal=idpro, administrador= uid)
+	# 	kwargs = {'initial':{ 'request': self.request, 'propiedad':idpro}}
+	# 	form = self.form_class(request.POST,**kwargs)
+ 
+	# 	if form.is_valid() :
+	# 		form.save()
+	# 		self.success_url = reverse_lazy('Propiedad:Solicitud_apartamentos',args=[idpro])
+	# 		return HttpResponseRedirect(self.get_success_url())
+	# 	else:
+	# 		return self.render_to_response(self.get_context_data(form=form))	
+
+
 # reverse('arch-summary', args=[1945])
 class BancoCreate(CreateView):
 	model = Banco
@@ -684,6 +706,14 @@ class PersonaCreate(CreateView):
 
 	
 # FIN CREAR PERSONA
+
+
+
+
+
+
+
+
 
 def EsMiPropiedad(idadmin, idpro):
 	if Propiedad.objects.filter(administrador=idadmin, idlegal= idpro) :

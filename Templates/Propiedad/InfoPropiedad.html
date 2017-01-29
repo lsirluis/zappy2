@@ -1,18 +1,26 @@
 {# <img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 > #}
-<table class="table tbottom"  border="0px">
+{% load staticfiles %}
+
+  <!-- 
+  <script type="text/javascript" src="{% static 'js/Chart.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+  -->
+   <script type="text/javascript" src="{% static 'js/Chart.bundle.min.js' %}"></script> 
+<div class="table-responsive col-xs-12 col-sm-9">
+<table class="table tbottom table-condensed"  border="0px">
 	<thead>
 		<tr>
-			<th class="tr1">
+			<th class="">
 				{# Imagen #}
 			</th>
-			<th class="tr2" colspan="2">
+			<th class="" colspan="2">
 				{# Ficha #}
 			</th>
-			<th class="tr3" colspan="2">
+			<th class="" colspan="2">
 				{# Estadistica #}
 			</th>
-			<th class="tr4"></th>
-			<th class="tr5" >
+			<th class=""></th>
+			<th class="" >
 				{# Acciones #}
 			</th>
 		</tr>
@@ -20,26 +28,26 @@
 	          	{# <div class="ribbon base"></div> #}
 
 	<tbody>
-		<tr class="trh">
+		<tr class="">
 			<td rowspan="4">
 				<img class="imgpropiedades" src="/media/{{DatosPropiedad.Imagen}}" WIDTH=200 HEIGHT=200 >
 			</td>
-			<td class="tup">
+			<td class="">
 				<b>Nombre Propiedad </b>
 			</td>
 			<td  class="text-center tup">
 				{{DatosPropiedad.nombre}}
 			</td>
-			<td class="tup"><b>Cantidad Unidades: </b>
+			<td class=""><b>Cantidad Unidades: </b>
 			{% if apartamentos %}
 					{{apartamentos.count}}
 				{% else %}
 					0
 				{% endif %}</td>
-			<td class="tup"></td>
+			<td class=""></td>
 			{# <td></td> #}
-			<td rowspan="4">
-				<div class="btn-group">
+			{# <td rowspan="4" style="text-align: end;"> #}
+				{# <div class="btn-group"> #}
      			 {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}">  #}
      			 {# <button type="button" class="btn btn-info btntd">Editar</button> #}
      			{# </a> #}
@@ -47,21 +55,28 @@
      			 {# <button type="button" class="btn btn-info btntd"><i class="icon-briefcase icon-white"></i> Cartera</button> #}
      			{# </a> #}
 						
-				</div> 
+				{# </div>  #}
+				{# <div class="Pastelstadistic"> #}
+				{# <img src="/static/img/Pastel.png" alt=""> #}
+				{# </div> #}
+				{#  204, 146 #}
+				{# ********************************************************** #}
+				{# <div class=""> #}
+				{# <canvas id="canvas" class="Pastelstadistic" height="205px" width="150px"></canvas> #}
+				{# <canvas id="canvas" class="Pastelstadistic" width="200" height="200"></canvas> #}
+				{# </div> #}
 
-				<img src="/static/img/Pastel.png" alt="">
-
-              </td>
-              <td></td>
+              {# </td> #}
+              {# <td></td> #}
 		</tr>
 
 
-		<tr class="trh" style="text-align:left;">
-			<td class="tup"><b>Ciudad</b></td>
-			<td class="text-center tup">{{DatosPropiedad.ciudad.nombre}}</td>
-			<td class="tup"><b>Direccion: </b>{{DatosPropiedad.direccion}}</td>
-			<td class="tup" colspan="1"></td>
-			<td></td>
+		<tr class="" style="text-align:left;">
+			<td class=""><b>Ciudad</b></td>
+			<td class="text-center ">{{DatosPropiedad.ciudad.nombre}}</td>
+			<td class=""><b>Direccion: </b>{{DatosPropiedad.direccion}}</td>
+			<td class="" colspan="1"></td>
+			{# <td></td> #}
 			{# <td> #}
 				{# <div class="btn-group"> #}
      			 {# <a href="{% url 'Propiedad:Solicitud_updatePro' DatosPropiedad.idlegal %}">  #}
@@ -75,30 +90,237 @@
 				{# </div>  #}
               {# </td> #}
 		</tr>
-		<tr class="trh">
-			<td class="tup"><b>Tipo Propiedad</b></td>
-			<td class="text-center tup">{{DatosPropiedad.get_tipo_display}}</td>
-			<td class="tup">{# Estadistica 1 #}</td>
-			<td class="tup">{# Estadistica 2 #}</td>
-			<td></td>
+		<tr class="">
+			<td class=""><b>Tipo Propiedad</b></td>
+			<td class="text-center ">{{DatosPropiedad.get_tipo_display}}</td>
+			<td class="">{# Estadistica 1 #}</td>
+			<td class="">{# Estadistica 2 #}</td>
+			{# <td></td> #}
 			{# <td></td> #}
 			{# <td></td> #}
 		</tr>
 		<tr>
 			<form class="form-search nav-quick-search" autocomplete="off" action="" method="GET">
 				<td colspan="3" class="tes"> 
-					<input type="text" name="qpropietario" class="input-medium search-query" id="quick-search" placeholder="Nombres, apellidos" value="{{busqueda}}">
-               	 	<i class="input-icon icon-search"></i>
+               	 	<div class="col-md-9 col-sm-9 col-xs-12 form-group psull-right top_search">
+                  <div class="input-group">
+                    <input class="form-control" placeholder="Nombres, apellidos" type="text" name="qpropietario" value="{{busqueda}}">
+                    <span class="input-group-btn">
+                      <button class="submit btn btn-info" type="button">Buscar propietario!</button>
+                    </span>
+                  </div>
+                </div>
 				{# </td> #}
 				{# <td> #}
-					<input type="submit" class="submit btn btn-info" value="Buscar por propietario">
+					
+					{# <input type="submit" class="submit btn btn-info" value="Buscar por propietario"> #}
+				{# </div> #}
 
-				{# </td> #}
+				</td>
             </form>
-			<td></td><td></td>
+			<td></td>
 		</tr>
 
 
 		
 	</tbody>
 </table>
+</div>
+<div class="col-xs-12 col-sm-3 text-center " style="background-color:whites;">
+	<canvas id="canvas" class="Pastelstadistic" width="200" height="180"></canvas>
+</div>
+<br>
+<script>
+// $(document).ready(function(){
+	Chart.defaults.pieLabels = Chart.helpers.clone(Chart.defaults.pie);
+var helpers = Chart.helpers;
+var defaults = Chart.defaults;
+
+Chart.controllers.pieLabels = Chart.controllers.pie.extend({
+	updateElement: function(arc, index, reset) {
+    var _this = this;
+    var chart = _this.chart,
+        chartArea = chart.chartArea,
+        opts = chart.options,
+        animationOpts = opts.animation,
+        arcOpts = opts.elements.arc,
+        centerX = (chartArea.left + chartArea.right) / 2,
+        centerY = (chartArea.top + chartArea.bottom) / 2,
+        startAngle = opts.rotation, // non reset case handled later
+        endAngle = opts.rotation, // non reset case handled later
+        dataset = _this.getDataset(),
+        circumference = reset && animationOpts.animateRotate ? 0 : arc.hidden ? 0 : _this.calculateCircumference(dataset.data[index]) * (opts.circumference / (2.0 * Math.PI)),
+        innerRadius = reset && animationOpts.animateScale ? 0 : _this.innerRadius,
+        outerRadius = reset && animationOpts.animateScale ? 0 : _this.outerRadius,
+        custom = arc.custom || {},
+        valueAtIndexOrDefault = helpers.getValueAtIndexOrDefault;
+
+    helpers.extend(arc, {
+      // Utility
+      _datasetIndex: _this.index,
+      _index: index,
+
+      // Desired view properties
+      _model: {
+        x: centerX + chart.offsetX,
+        y: centerY + chart.offsetY,
+        startAngle: startAngle,
+        endAngle: endAngle,
+        circumference: circumference,
+        outerRadius: outerRadius,
+        innerRadius: innerRadius,
+        label: valueAtIndexOrDefault(dataset.label, index, chart.data.labels[index])
+      },
+
+      draw: function () {
+      	var ctx = this._chart.ctx,
+						vm = this._view,
+						sA = vm.startAngle,
+						eA = vm.endAngle,
+						opts = this._chart.config.options;
+				
+					var labelPos = this.tooltipPosition();
+					var segmentLabel = vm.circumference / opts.circumference * 100;
+					
+					ctx.beginPath();
+					
+					ctx.arc(vm.x, vm.y, vm.outerRadius, sA, eA);
+					ctx.arc(vm.x, vm.y, vm.innerRadius, eA, sA, true);
+					
+					ctx.closePath();
+					ctx.strokeStyle = vm.borderColor;
+					ctx.lineWidth = vm.borderWidth;
+					
+					ctx.fillStyle = vm.backgroundColor;
+					
+					ctx.fill();
+					ctx.lineJoin = 'bevel';
+					
+					if (vm.borderWidth) {
+						ctx.stroke();
+					}
+					
+					if (vm.circumference > 0.15) { // Trying to hide label when it doesn't fit in segment
+						// opts.defaultFontSize
+						ctx.beginPath();
+						ctx.font = helpers.fontString(16, 'bold', opts.defaultFontFamily);
+						ctx.fillStyle = "#fff";
+						ctx.textBaseline = "top";
+						ctx.textAlign = "center";
+            
+            // Round percentage in a way that it always adds up to 100%
+						ctx.fillText(segmentLabel.toFixed(0) + "%", labelPos.x, labelPos.y-10);
+					}
+      }
+    });
+
+    var model = arc._model;
+    model.backgroundColor = custom.backgroundColor ? custom.backgroundColor : valueAtIndexOrDefault(dataset.backgroundColor, index, arcOpts.backgroundColor);
+    model.hoverBackgroundColor = custom.hoverBackgroundColor ? custom.hoverBackgroundColor : valueAtIndexOrDefault(dataset.hoverBackgroundColor, index, arcOpts.hoverBackgroundColor);
+    model.borderWidth = custom.borderWidth ? custom.borderWidth : valueAtIndexOrDefault(dataset.borderWidth, index, arcOpts.borderWidth);
+    model.borderColor = custom.borderColor ? custom.borderColor : valueAtIndexOrDefault(dataset.borderColor, index, arcOpts.borderColor);
+
+    // Set correct angles if not resetting
+    if (!reset || !animationOpts.animateRotate) {
+      if (index === 0) {
+        model.startAngle = opts.rotation;
+      } else {
+        model.startAngle = _this.getMeta().data[index - 1]._model.endAngle;
+      }
+
+      model.endAngle = model.startAngle + model.circumference;
+    }
+
+    arc.pivot();
+  }
+});
+var pieData = [
+				{   value: 40,
+					// color:"#0b82e7",
+					color:"#00a637",
+					// highlight: "#0c62ab",
+					highlight:'#008c37',
+					label: "Google Chrome"},
+				// {
+				// 	value: 16,
+				// 	color: "#e3e860",
+				// 	highlight: "#a9ad47",
+				// 	label: "Android"
+				// },
+				{
+					value: 11,
+					color: "#eb5d82",
+					highlight: "#b74865",
+					label: "Firefox",
+
+				}
+				// {
+				// 	value: 10,
+				// 	color: "#5ae85a",
+				// 	highlight: "#42a642",
+				// 	label: "Internet Explorer"
+				// },
+				// {
+				// 	value: 8.6,
+				// 	color: "#e965db",
+				// 	highlight: "#a6429b",
+				// 	label: "Safari"
+				// }
+			];
+		var ctx = document.getElementById("canvas").getContext("2d");
+		// window.myPie = new Chart(ctx).Pie(pieData);
+		// var myLineChart = new Chart(ctx).Pie(pieData, optionsPie);
+		var datas = {
+    			labels: [
+			        "Unidades al día     ",
+			        "Unidades en mora"
+			        // "Yellow"
+    			],
+    			datasets: [
+        			{
+		            data: [300, 50],
+		            backgroundColor: [
+		                "#00a637",
+		                // "#36A2EB",
+		                "#ec514d"
+           				 ],
+           			 hoverBackgroundColor: [
+		                "#008c37",
+		                // "#36A2EB",
+		                "#bd362f"
+            		]
+       			}]
+};
+// Chart.defaults.global.defaultFontSize = 0;
+var myPieChart = new Chart(ctx,{
+    type: 'pieLabels',
+    data: datas,
+    options: {
+    responsive: true,
+    legend: {
+    	display: true,
+      position: 'top',
+
+    labels:{
+    	padding:10,
+
+      // fillStyle: '008c37',
+    // fontColor:'#fff'
+    	
+    }
+
+    },
+    // onClick :function(event, legendItem) {alert('click'+myPieChart.getDatasetAtEvent(event));}
+    
+    animation: {
+      animateScale: true,
+      animateRotate: true
+
+    }
+  }
+});
+
+
+// 	var myLineChart = new Chart(document.getElementById("canvas").getContext("2d")).Line(LineChart, {scaleFontSize : 13, scaleFontColor : "#ffa45e"});
+// })
+</script>

@@ -2,6 +2,24 @@
 	width: 90px;
 	margin: 10px 0 0 10px;
 }
+
+.btn-group2 {
+    position: relative;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    font-size: 0;
+    vertical-align: middle;
+    white-space: nowrap;
+    *margin-left: .3em;
+}
+.input-icon {
+    position: relative;
+    opacity: .2;
+    margin-top: -4px;
+    margin-left: -25px;
+    margin-right: 18px;
+}
 .supercontiner{
     /*min-width: 400px !important; */
     /*width: 100% !important; */
@@ -19,6 +37,10 @@
 
 	width: 150px;
     height: 150px;
+            transition: transform .5s;
+}
+.imgpropiedades:hover{
+        transform: scale(1.25,1.25);
 }
 /*para la imagen en las tablas de las propiedades*/
 .imgperfilpropiedades{
@@ -35,6 +57,7 @@ background-size: 100px;
 /* pone la tabla de la informacion de las propiedades mas cercas*/
 .tbottom{  
     margin-bottom: 1px !important;
+    background-color: rgba(255,255,255,0.9);
 }
 /*imagen central en el index*/
 .imgcentral{
@@ -146,10 +169,11 @@ width: 80px !important;
     /*padding: 5px;*/
 }
 .ribbon1 {
-    position: absolute;
+    position: relative;
     /*top: 20px;*/
-    /*right: -5px;*/
+    /*right: -15px;*/
     /*padding: 5px;*/
+    /*padding-right: 25px;*/
 }
 .ribbon1.base {
     background: #3498db;
@@ -391,12 +415,16 @@ width: 80px !important;
 
 
 .PrincipalTable a:hover{
-    background-size: 190px;
+    transform: scale(1.1,1.1);
+    /*background-size: 190px;*/
+    /*width: 190px;*/
+    /*height: 190px;*/
+    
+
     /*background-size: 260px;*/
-    width: 190px;
-    height: 190px;
     /*width:260px;*/
     /*height: 260px;*/
+
 }
 
 .PrincipalTable a span {
@@ -459,16 +487,25 @@ width: 80px !important;
       background: #fff url('../img/Notificaciones-hover.jpg') no-repeat;
       background-position: left;
       display: block;
-      background-size: 190px;
+      background-size: 165px;
+      /*background-size: 190px;*/
+      /*transform: scale(1.1,1.1);*/
+
 
 }
 /*******************************************************/
 .PrincipalTable a{
     /*width: 208px;*/
     /*height: 208px;*/
-    width: 180px;
-    height: 180px;
-background-size: 180px;
+    width: 165px;
+    height: 160px;
+    /*margin-right: 15px;*/
+background-size: 165px;
+    -webkit-transition: -webkit-transform 0.6s;
+    -moz-transition: -moz-transform 0.6s;
+    -ms-transition: -ms-transform 0.6s;
+    -o-transition: -o-transform 0.6s;
+    transition: transform 0.6s;
 }
 
 
@@ -476,10 +513,10 @@ background-size: 180px;
 
 
 .social {
-    position: absolute;
+    position: relative;
     height: 3em;
     width: 13.5em;
-    margin: 150px 450px;
+    /*margin: 50px 50px;*/
 }
 
 .social li {
@@ -687,6 +724,18 @@ height: 100px;
 text-align: center;
 padding-top: 100px;
 }
+.msgloader{
+left: 30%;
+position: absolute;
+top: 20%;
+/*background-color: rgb(231, 234, 233);*/
+z-index: 1;
+/*width: 200px;*/
+/*height: 100px;*/
+text-align: center;
+/*padding-top: 100px;*/
+display: none;
+}
 /*modal*/
 .modalPago {
     position: fixed;
@@ -722,9 +771,74 @@ padding-top: 100px;
   outline: 0;
 }
 /*FIN MODAL LG*/
+/*******************************************************/
+/*INICIO modal para cuotas extraordinarias*/
+.modal-sm {
+    position: fixed;
+    top: 5%;
+    /*left: 30%;*/
+    z-index: 1050;
+    width: 35%;
+        /*margin:0 auto;*/
+
+    margin-left: 15%;
+    /*margin-left: -3%;*/
+    background-color: #e46565;
+    border: 1px solid #999;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    *border: 1px solid #999;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding-box;
+    background-clip: padding-box;
+    outline: none;
+}
+
+
+/*FIN modal extraordinarias*/
+
+/*******************************************************/
+/*INICIO pastel*/
+.Pastelstadistic{
+        transition: transform .7s;
+
+}
+.Pastelstadistic:hover{
+    /*transform: scale(1.5,1.5);*/
+     transform: translate(0, 15px) scale(1.05,1.05);
+    /*background-color: rgba(50,50,50,.3);*/
+    /*color: white;*/
+}
+.Pastelstadistic {
+        background-color: rgba(255,255,255,0.9);
+    z-index: 1000;
+        /*width: 180px !important;*/
+    /*height: 180px !important;*/
+    /*margin-bottom: -50px;*/
+    height: 173px;
+    max-width: 190px !important;
+    max-height: 190px !important;
+    /*margin-top: -30px;*/
+margin-bottom: -10px;
+
+}
+
+
 .tes{
     text-align: right;
+}.tes .btn{
+        padding: 5px 12px;
+        color: white !important;
+}.tes .btn:hover{
+        transform: scale(1.01,1.01);
+
 }
+/* FIN modalmini*/
 /***********************************************************************/
 
 /*Inicio menu izquierdo*/
@@ -765,11 +879,23 @@ padding-top: 100px;
     background-image:-o-linear-gradient(top, #04c139, #04c139);
     background-image:linear-gradient(to bottom, #04c139, #04c139);
     background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff62c462', endColorstr='#ff51a351', GradientType=0);border-color:#51a351 #51a351 #387038;border-color:rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);*background-color:#51a351;filter:progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    text-decoration: none !important;
+
     }
-.btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.btn-success.disabled,.btn-success[disabled]{
+
+.btn-green:hover,.btn-green:focus,.btn-green:active,.btn-green.active,.btn-green.disabled,.btn-green[disabled]{
     color:#ffffff;
-    background-color:#51a351;
-    *background-color:#499249;
-    }
-.btn-success:active,.btn-success.active{background-color:#408140 \9;}
+    background-color:#1be152;
+    /**background-color:#08ff4d;*/
+    background-image:-webkit-linear-gradient(bottom, #1be152, #1be152);
+    background-image:-o-linear-gradient(bottom, #1be152, #1be152);
+    background-image:linear-gradient(to top, #1be152, #1be152);
+}
+
+/*.btn-success:hover,.btn-success:focus,.btn-success:active,.btn-success.active,.btn-success.disabled,.btn-success[disabled]{*/
+    /*color:#ffffff;*/
+    /*background-color:#04c139;*/
+    /**background-color:#499250;*/
+    /*}*/
+/*.btn-success:active,.btn-success.active{background-color:#408140 \9;}*/
 /*fin boton green*/

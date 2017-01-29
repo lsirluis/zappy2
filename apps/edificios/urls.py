@@ -13,7 +13,8 @@ from apps.pagos.views import ReciboList, DetalleFactura \
                             , FacturaCreate, probar, GenerardorGlobal\
                             , pruebagenerador \
                             ,DeudaUnidad, CarteraList\
-                            ,NoticiaList,listarPagos, verPago
+                            ,NoticiaList,listarPagos, verPago\
+                            ,CuotaextraCreate
 
 urlpatterns = [
 
@@ -59,6 +60,8 @@ urlpatterns = [
     url(r'^busqueda/$', Buscador,name="buscador"),
     url(r'^addpago/$', Addpago,name="Addpago"),
     url(r'^verpago/$', verPago,name="verpago"),
+# para agregar una cuota extra
+    url(r'^addcextra/$', CuotaextraCreate,name="Addcextra"),
 
 
     url(r'^pruebas/$', pruebas,name="prueba"),

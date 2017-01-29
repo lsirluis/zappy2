@@ -20,7 +20,7 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 </script>
     {# <button class="btn btn-primary" type="submit">Agregar propiedad</button> #}
 {# </form> #}
- {# {{ form.errors}} #}
+ {{ form.errors}}
 
  {% if title == "Unidad no registrada" %}
  	<div>
@@ -108,10 +108,10 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		    <div class="control-group form-row field-tipo ">
 		        <div>
 		        	<div class="control-label"><label class="required" for="id_tipo">{{form.tipo.label}}:</label>
-		        	</div><div class="controls ">{{form.tipo}}</div>
+		        	</div><div class="controls ">{{form.tipo}}<span class="errorlist">{{form.tipo.errors.as_text}}</span></div>
 		        </div>
 		      </div>
- 
+ 			
 
 		    <div class="control-group form-row field-dia_cobro ">
 		        <div>

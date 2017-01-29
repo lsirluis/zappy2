@@ -1,0 +1,137 @@
+{% load staticfiles %}
+ <link rel="stylesheet" href="{% static 'css/radiocheckbox.css' %}">
+
+<script>
+	function showaddextra(){
+		$('#ModalExtraordinaria').modal('show');
+
+	};
+
+	$(document).ready(function(){
+
+		// para ajax
+		$('#id_addcuotaextra').on('submit', function(event){
+		    event.preventDefault();
+		    console.log("form cuotas ingresado!");
+		    var frm = $('#id_addcuotaextra');
+		    Reportcuotaextra(frm);
+	  });
+
+
+
+		refreshvalor();
+		function calextra(){
+			// alert("se calculara");
+			var cunidades =parseInt({{apartamentos.count|default:"0"}});
+			var valor = 0;
+			var cuotas = 0;
+			cuotas = parseInt(cuotas + $("#id_cuotas").val());
+			valor =parseInt(valor + $("#id_valor").val());
+			var resultado = parseInt((valor/cunidades)/cuotas);
+			// return resultado;
+			$("#valtotal").html("$ "+resultado + " pesos <br>mensuales");
+
+		}
+		function refreshvalor(){
+			var radiose = $("input[name=tipo_cuota]:checked").val();
+			if (radiose == 1) {
+				$("#todasunidades").hide();
+			}else{
+				$("#todasunidades").show();
+				calextra();
+			}
+		}
+
+		$("#id_cuotas").on('change', function(event){
+			calextra();
+		});
+		$("#id_cuotas").on('keyup', function(event){
+			calextra();
+		});
+		$("#id_valor").on('change', function(event){
+			calextra();
+		});
+		$("#id_valor").on('keyup', function(event){
+			calextra();
+		});
+		$("input[name=tipo_cuota").on('change', function(event){
+			refreshvalor();
+		
+	});
+	});
+</script>
+
+
+<div id="ModalExtraordinaria"  class="modal-sm hide fade in" style="display:none;">
+  
+     <div class="modal-dialog ">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+		<form action="" name="addcuotaextra" method="post" id="id_addcuotaextra">
+			{% csrf_token %}
+	    <input type="hidden" name="propiedad" id="propiedad" value="{{DatosPropiedad.idlegal}}">
+      	<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+        	<h3><i class="icon-bell"></i> Cuotas Extraordinarias:</h3>
+     	</div>
+     <div class="modal-body">
+
+
+		<table class="table" border="0px">		
+			<tr> 
+				<td colspan="1">
+					<label for="">Valor: </label>
+					<input type="number" id="id_valor" name="valor" class="input-medium" min="0" placeholder="ejemplo: 50000" step="1000">
+				</td>
+				<td colspan="2">
+					<label for="">Cantidad de cuotas:</label>
+					<input type="number" min="1" value="1" name="cuotas" id="id_cuotas" class="mdinput">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" >
+					{# selectores para tipo de cuota #} 
+  			<label for="">Tipo de cuota</label>
+  			<div class="funkyradio">
+              <div class="funkyradio-success">
+                  <input type="radio" name="tipo_cuota" id="radio5"  value="0"/>
+                  <label for="radio5" class="radio-inline"> iguales</label>
+              </div>
+              <div class="funkyradio-success">
+                  <input type="radio" name="tipo_cuota" id="radio6"  value="1" checked/>
+                  <label for="radio6" class="radio-inline">coeficiente
+                  </label>
+              </div>              
+             </div>
+             
+				</td>
+				<td ><div id="todasunidades" style="display:none">
+					<label for="">Todas pagaran:</label>
+					<span id="valtotal"></span>
+				</div></td>
+			</tr>		
+		</table>
+			<h6>*<b>Tipo de cuota por Coeficiente: </b>
+			se utiliza la formula: <b>valor</b> x <b>(coeficiente de la unidad)
+			</b> para obtener el valor que le corresponde pagar a cada unidad, dependiento de su coeficiente.
+			</h6>
+			{# <br> #}
+			<h6>**<b>Tipo de cuota iguales: </b>se utiliza la siguiente formula: <b>Valor/(cantidad de unidades)</b> para calcular el valor que deberan pagar por igual las unidades</h6>
+
+
+
+    </div>{# /body#}
+    
+     <div class="modal-footer">
+        {# <input type="submit" id="submitpagos"value="Guardar" class="btn btn-high btn-info"> #}
+        <button type="submit" class="btn btn-high btn-info" name="s_save"><b>Agregar </b> </button>
+        {# <input type="submit" class="btn btn-success" value="Guardar"> #}
+        {# <a href="index.html" class="btn btn-success">Guardar</a> #}
+        <a href="#" data-dismiss="modal" class="btn">Cerrar/Cancelar</a>
+    </div>{# /footer#}
+
+		</form>
+	  </div>{# /content#}
+	</div> {# /dialog#}
+</div>

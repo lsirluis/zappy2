@@ -6,10 +6,12 @@
 
 {% block content %}
 {% if Uestado %}
-	si hay estado deuda	
-	{{Uestado.0}}
+	{# si hay estado deuda	 #}
+
+	{# {{Uestado.0}} #}
+	<h2>Informacion de la unidad: </h2>
 	{% else %}
-	no hay estado	deuda
+	{# no hay estado	deuda #}
 {% endif %}
 	
 
@@ -71,7 +73,7 @@
 		
 		    		<td>
 		    			<div class="btn-group">
-     						 <a href="{% url 'Propiedad:Solicitud_pagosdetalle' DatosUnidad.propiedad.idlegal DatosUnidad.id recibo.id %}"><button type="button" class="btn btn-success">Ver Recibo</button></a>
+     						 <a href="{% url 'Propiedad:Solicitud_pagosdetalle' DatosUnidad.propiedad.idlegal DatosUnidad.id recibo.id %}"><button type="button" class="btn btn-green">Ver detalles</button></a>
      						 {# <a href="\..\admin/edificios/unidad/{{datos.id}}/change/">  #}
      						 {# <button type="button" class="btn btn-danger">Eliminar</button> #}
      						{# </a> #}

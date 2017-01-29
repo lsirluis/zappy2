@@ -6,19 +6,22 @@ from django.http import HttpResponse,HttpResponseRedirect ,HttpRequest
 import datetime
 import calendar
 import json
+from django.db.models import Q
+
 
 # generic views
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 # models
 from apps.pagos.models import Recibo , Detalle, Noticia, DeNoticia \
-							  ,Deuda , RecibosAuto, RecibosPagos
+							  ,Deuda , RecibosAuto, RecibosPagos\
+							  ,CuotaExtraordinaria,CuotaExtraUnidad
 from apps.edificios.models import Unidad, Propiedad
 from apps.usuarios.models import Administrador
 
 # funcion de edificios
 from django.contrib import messages
 # forms
-from apps.pagos.forms import ReciboForm, DetalleForm
+from apps.pagos.forms import ReciboForm, DetalleForm, CuotaextraForm
 
 
 # Create your views here.
@@ -42,7 +45,7 @@ class ReciboList(ListView):
 			if EsMiUnidad(uid, idpro, pkunidad):
 				context['DatosUnidad']= Unidad.objects.filter(id=pkunidad, propiedad=idpro, propiedad__administrador=uid)[0]	
 
-				context['title']= ("Historial Pagos en la Torre : "+(context['DatosUnidad'].torre)+" - Apto : "+(str(context['DatosUnidad'].numero))+"")
+				context['title']= ("Facturas en la Torre : "+(context['DatosUnidad'].torre)+" - Apto : "+(str(context['DatosUnidad'].numero))+"")
 				context['breadurl']=[{'nombre':'Propiedades','url':"Propiedad:Solicitud_listar"},\
 								 {'nombre':context['DatosUnidad'].propiedad.nombre,'url':"Propiedad:Solicitud_apartamentos",'arg':context['DatosUnidad'].propiedad.idlegal},{'nombre':context['title'],'url':"j"}]
 				context['Uestado']=EnDeudaApartamento(context['DatosUnidad'])
@@ -103,7 +106,7 @@ class DetalleFactura(ListView):
 
 
 		context['title'] = "Detalle de Factura"
-		aux = ("Historial Pagos en la Torre : "+(context['DatosUnidad'].torre)+" - Apto : "+(str(context['DatosUnidad'].numero))+"")
+		aux = ("Facturas en la Torre : "+(context['DatosUnidad'].torre)+" - Apto : "+(str(context['DatosUnidad'].numero))+"")
 		context['breadurl']=[{'nombre':'Propiedades','url':"Propiedad:Solicitud_listar"},\
 							 {'nombre':context['DatosUnidad'].propiedad.nombre,'url':"Propiedad:Solicitud_apartamentos",'arg':context['DatosUnidad'].propiedad.idlegal},\
 							 {'nombre':aux,'url':"Propiedad:Solicitud_appagos",'arg':context['DatosUnidad'].propiedad.idlegal,'arg2':context['DatosUnidad'].id},\
@@ -144,7 +147,7 @@ class FacturaCreate(CreateView):
 				if 'form2' not in context:
 					context['form2']= self.second_form_class(self.request.GET)
 				nombrepro=context['DatosUnidad'].propiedad.nombre
-				aux = ("Historial Pagos en la Torre : "+(context['DatosUnidad'].torre)+" - Apto : "+(str(context['DatosUnidad'].numero))+"")
+				aux = ("Facturas en la Torre : "+(context['DatosUnidad'].torre)+" - Apto : "+(str(context['DatosUnidad'].numero))+"")
 				context['breadurl']=[{'nombre':'Propiedades','url':"Propiedad:Solicitud_listar"},\
 							{'nombre':nombrepro,'url':"Propiedad:Solicitud_apartamentos",'arg':idpro},\
 							{'nombre':aux,'url':'Propiedad:Solicitud_appagos','arg':idpro,'arg2':pkunidad},\
@@ -512,6 +515,44 @@ def SaveFacturaDetalles(pkunidad,valor):
 		Detalles = Detalle(valor=valor, tipo="Pago", descripcion="Pago-Administracion", idRecibo = recibo )
 		Detalles.save()
 
+#INICIO CUOTA EXTRA 
+		# procedemos a ver si la propiedad tiene cuota extraordinaria
+		cuotasextras = CuotaExtraordinaria.objects.filter(propiedad= pkunidad.propiedad.idlegal, estado=1)
+		# si tenemos extraordinaria procedemos a agregarla en los detalles
+		if cuotasextras:
+			for cuotaextra in cuotasextras:
+				unidadextra = CuotaExtraUnidad.objects.filter(idExtraordinaria = cuotaextra.id\
+													, unidad= pkunidad.id, idExtraordinaria__estado=1, cont_cuota__lt=cuotaextra.cuotas)
+				if unidadextra: # si la unidad presenta una cuota
+					val = unidadextra[0].valor
+					descripcion = str("Cuota-Extraordinaria(id:"+str(cuotaextra.id)+") cuota: #"+str(unidadextra[0].cont_cuota+1))
+					Detalles = Detalle(valor=val, tipo="Pago", descripcion=descripcion, idRecibo = recibo )
+					Detalles.save()
+					unidadextra[0].cont_cuota = unidadextra[0].cont_cuota + 1
+					unidadextra[0].save()
+
+				# ahora comprobaremos si ya todas las unidades tienen esa cuota extra
+				# primero obtenemos la cantidad de unidades
+				cantunidades = CuotaExtraUnidad.objects.filter(idExtraordinaria = cuotaextra.id).count()
+				# ahora obtenemos las unidades que su cont_cuota es igual a la cuota extra
+				fincuotas = CuotaExtraUnidad.objects.filter(idExtraordinaria = cuotaextra.id, cont_cuota__gte=cuotaextra.cuotas).count()
+				# si son iiguales significa que todas las unidades han resibido todas
+				# las cuotas que les correspondian de las cuotas extraordinarias 
+				if fincuotas >= cantunidades:
+					cuotaextra.estado=0
+					cuotaextra.save()
+# FIN CUOTA EXTRA
+
+
+				# if cuotaextra.tipo_cuota == 0:
+				# 	cantidadunidades = Unidad.objects.filter(propiedad=pkunidad__propiedad.idlegal).count()
+				# 	val = cuotaextra.valor / cantidadunidades
+				# 	Detalles = Detalle(valor=val, tipo="Pago", descripcion="Cuota-Extraordinaria", idRecibo = recibo )
+				# 	Detalles.save()
+				# else:   #para cuando es por coeficiente	
+				# 	val = pkunidad.coeficiente * cuotaextra.valor
+				# 	Detalles = Detalle(valor=val, tipo="Pago", descripcion="Cuota-Extraordinaria", idRecibo = recibo )
+				# 	Detalles.save()
 		# inicio metodo2
 		
 		# ahora vamos a buscar los recibos en deuda de esta unidad
@@ -714,8 +755,9 @@ def listaUdeudas(recibos):
 def listaReciboCosto(unidadid):
 	lista=[] # lista
 	# obtenemos los recibos en mora de esa unidad
-	recibos = Recibo.objects.filter(estado=0\
-					,unidad=unidadid).\
+	recibos = Recibo.objects.filter(Q(estado=0\
+					,unidad=unidadid) | Q(estado=2\
+					,unidad=unidadid) ).\
 					order_by('fecha_generacion')
 	# teniendo todos los recibos vencidos.a uno por uno le 
 	# obtenemos los recibos anteriores al actual y el actual
@@ -725,7 +767,8 @@ def listaReciboCosto(unidadid):
 		# luego de tener el costo del actual recibo, 
 		# recibosAnt = Recibo.objects.exclude(id=recibo.id).filter(estado=0,unidad= recibo.unidad, fecha_generacion__lte=recibo.fecha_generacion)
 		# obtenemos los
-		recibosAntyAct = Recibo.objects.filter(estado=0,unidad= recibo.unidad, fecha_generacion__lte=recibo.fecha_generacion)
+		recibosAntyAct = Recibo.objects.filter(Q(estado=0,unidad= recibo.unidad, fecha_generacion__lte=recibo.fecha_generacion) |\
+											   Q(estado=2,unidad= recibo.unidad, fecha_generacion__lte=recibo.fecha_generacion))
 		costo = 0
 		# por cada factura obtenemos sus detalles
 		if recibosAntyAct:
@@ -793,3 +836,56 @@ def verPago(request):
  		return HttpResponse("Error! what are you doing noob?")
 
 # FIN verPago
+
+
+
+#INICIO crearcuotaextra
+def CuotaextraCreate(request):
+	if request.is_ajax():# or request:
+		if request.method == 'POST':	#Para POST
+			form = CuotaextraForm(request.POST)
+			response_data = {}
+			if form.is_valid(): # si el formulario es valido
+				Cextra = form.save(commit=False)
+				Cextra.estado = 1
+				Cextra.save()
+				# ya con el formulario guardado, creamos las cuotas para cada
+				# unidad, para ello llamamos a todas las unidades de la propiedad
+				propiedad = Cextra.propiedad
+				unidades = Unidad.objects.filter(propiedad = propiedad.idlegal)
+				cunidades = unidades.count() # cantidad de unidades
+				tipocuota = Cextra.tipo_cuota
+				cuotas = Cextra.cuotas
+				valorc = Cextra.valor # valor de la cuota extra
+				# si 0, significa que son iguales las cuotas
+				if tipocuota == 0 or tipocuota == "0":
+					valorcuota = int((valorc / cunidades)/ cuotas)
+					for unidad in unidades:
+						cuotafinal = CuotaExtraUnidad(idExtraordinaria=Cextra,
+									unidad = unidad, valor = valorcuota,
+									cont_cuota = 0)
+						cuotafinal.save()
+				# si 1, sgnifica que es por coeficientes
+				else:
+					presupuesto = unidades[0].propiedad.presupuesto_anual
+					for unidad in unidades:
+						valorcuota = ((valorc * unidad.coeficiente) / 100)/cuotas
+						cuotafinal = CuotaExtraUnidad(idExtraordinaria=Cextra,
+									unidad = unidad, valor = valorcuota,
+									cont_cuota = 0)
+						cuotafinal.save()
+				response_data['success'] = 'guardado exitosamente'
+
+			else:				# sino es valido mandamos los errores
+				response_data['errors'] =form.errors
+			return HttpResponse(
+				json.dumps(response_data),
+				content_type="application/json"
+				)
+		# else: # para metodo GET
+	else:
+		return HttpResponse(
+			json.dumps({"Nada que ver": "Esto no sucederia"}),
+			content_type="application/json"
+			)
+# FIN crearcuotaextra

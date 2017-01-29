@@ -5,7 +5,7 @@ forms.DateInput(format='%m/%d/%Y' )
 # from apps.edificios.models import Propiedad, Persona, Unidad, Banco
 # from apps.usuarios.models import Administrador
 from django.http import HttpResponse,HttpResponseRedirect ,HttpRequest
-from apps.pagos.models import Recibo , Detalle, RecibosPagos
+from apps.pagos.models import Recibo , Detalle, RecibosPagos,CuotaExtraordinaria
 
 class ReciboForm(forms.ModelForm):
 	fecha_vencimiento = forms.DateField(label=("fecha_vencimiento"), 
@@ -69,3 +69,13 @@ class DetalleForm(forms.ModelForm):
 			'area': forms.TextInput(attrs={'class':'form-control'}),		
 		}
 
+class CuotaextraForm(forms.ModelForm):
+	class Meta:
+		model = CuotaExtraordinaria
+		fields = [
+			'valor',
+			'propiedad',
+			'cuotas',
+			'tipo_cuota',
+			# 'estado',
+		]

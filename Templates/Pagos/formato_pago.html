@@ -52,7 +52,11 @@
     function Abonar(){
       // $("#id_suma").val(getValor());
       document.getElementById("id_suma").readOnly=false;
-      document.getElementById("id_suma").value=getValor();
+      document.getElementById("id_suma").value="";
+      $('#id_suma').attr('placeholder','Ingrese el valor a abonar');
+      // document.getElementById("id_suma").placeHolder="";
+
+
       $("#id_tipo").val(1); 
       aletras();
 
@@ -63,18 +67,22 @@ $(document).ready(function(){
     $('#id_reportpago').on('submit', function(event){
     event.preventDefault();
     console.log("form submitted!")  // sanity check
-    alert("se enviara el post");
-    // var form = $(this).closest("form");
+    // alert("se enviara el post");
     var frm = $('#id_reportpago');
     ReportPagoPost(frm);
-    // create_post();
   });
 });
     
 
 </script>
-<div id="ModalReporPago"  class="modalPago hide fade in" style="display:none;">
-  {# <div class="msgcentral"><h1>Se han presentado errores!, Corrigalos antes de seguir</h1></div> #}
+{# <div class="msgcentral" id="msgestado"><h1>Se han presentado errores!, Corrigalos antes de seguir</h1> #}
+{# </div> #}
+ <div class="msgloader" id = "msgloader">
+  <img src=" {% static 'img/ajax-loader.gif' %}" WIDTH="100px" alt="">
+ </div>
+
+<div id="ModalReporPago"  class="modalPago {#hide#} fade in" style="display:none;">
+  
      <div class="modal-dialog ">
     
       <!-- Modal content-->

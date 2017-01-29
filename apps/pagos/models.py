@@ -43,7 +43,7 @@ class RecibosPagos(models.Model):
 		verbose_name_plural='Recibos Pagos'
 	def __str__(self): #forma 2
 		return '{}-{}'.format(self.unidad,self.suma)
-
+# modelo para saber que recibos han sido incluidos en el comprobante o ultimo pago
 class RecibosyComprobante(models.Model):
 	id = models.AutoField(primary_key=True)
 	recibo = models.ForeignKey(Recibo, on_delete = models.CASCADE)
@@ -130,3 +130,25 @@ class DeNoticia(models.Model):
 		verbose_name_plural='Detalles noticias'
 	def __str__(self): #forma 2
 		return '{}{}'.format(self.idNoticia,self.unidad)	
+
+
+class CuotaExtraordinaria(models.Model):
+	id = models.AutoField(primary_key=True)
+	valor = models.BigIntegerField()
+	propiedad = models.ForeignKey(Propiedad, on_delete = models.CASCADE)
+	cuotas = models.IntegerField()
+	TIPOCUOTA_choose = ((0,'igualitaria'),(1,'Coeficiente'))
+	tipo_cuota = models.IntegerField(choices=TIPOCUOTA_choose, default=1)
+	ESTADO_choose = ((0,'finalizada'),(1,'activa'))
+	estado = models.IntegerField(choices=ESTADO_choose, default=0)
+	fecha_generacion = models.DateTimeField(auto_now_add=True)
+	fecha_actualizacion = models.DateTimeField(auto_now=True)
+
+
+class CuotaExtraUnidad(models.Model):
+	id = models.AutoField(primary_key=True)
+	idExtraordinaria= models.ForeignKey(CuotaExtraordinaria, on_delete=models.CASCADE)
+	unidad = models.ForeignKey(Unidad, on_delete=models.CASCADE)
+	valor = models.BigIntegerField()
+# contador de cuota, por cual cuota va
+	cont_cuota = models.PositiveIntegerField()

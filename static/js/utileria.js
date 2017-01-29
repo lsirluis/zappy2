@@ -10,9 +10,12 @@ function buscador(unidad, propiedad){
 			 beforeSend: function(){
      			// alert("iniciando por favor espere");
 				// $.fn.blockUI;
+				limpiador();
 				$("#id_recibo").empty();
+				$("#msgloader").show();
 			},				
 			 success : function(data) {
+	 				$("#msgloader").hide();
 			 		if (data[1][0]) {
 					var Rtorre = data[0].torre;
 					$("#resultado").html(Rtorre);
@@ -51,14 +54,18 @@ function buscador(unidad, propiedad){
 					$('#ModalReporPago').modal('show');
 					}
 					else{
-						alert("Esta unidad No tiene recibos vencidos, desea agregarle un saldo a favor?");
+						alert("Esta unidad No posee recibos vencidos");
 					}
 					console.log(data[0].torre, data[0].numero,"Propietario: ",data[0].propi,data[0].apellido);
 			 },
 			 error : function(message) {
 			         console.log(message);
 			         alert("error! codigo:BP001");
-			      }
+			      },
+			complete: function(){
+ 				$("#msgloader").hide();
+			}
+
  		});//ajax
 	};
 
@@ -71,8 +78,12 @@ function ReportPagoPost(form){
 			 type:'POST',
 			 beforeSend: function(){
      			// alert("iniciando por favor espere");
+     		$("#msgloader").show();
+
    			},				
 			 success : function(data) {
+			 $("#msgloader").hide();
+
     			// alert("Todo ok");
     			if (data.estado) {
 				alert("hay un estado");
@@ -119,6 +130,7 @@ function ReportPagoPost(form){
     			}
 			 },
 			 error : function(message){
+			 	$("#msgloader").hide();
 			   console.log(message);
 			     }
  		});//ajax
@@ -179,6 +191,41 @@ function ReportPagoPost(form){
 			 	console.log(message);
 
 			 }
+			});
+ 	}
+
+
+function Reportcuotaextra(form){
+ 		// var form = $(this).closest("form");
+ 		$.ajax({
+ 			data:form.serialize(),
+			 url:'/Propiedad/addcextra/',
+			 type:'POST',
+			 beforeSend: function(){
+     			// alert("iniciando por favor espere");
+     		$("#msgloader").show();
+
+   			},				
+			 success : function(data) {
+			 $("#msgloader").hide();
+			 if (data.success) {
+					$('#ModalExtraordinaria').modal('hide');
+    				alert("Agregada exitosamente!");
+    				console.log("guardado de cuotas exitoso");
+					// limpiador();
+    			};
+    		if (data.errors) {
+    				alert("Se han presentado errores, por favor corregirlos!!");
+    				console.log("hay errores:"+data.errors);
+
+			}else{
+				 console.log(data.result);
+			}
+
+			},
+			error : function(message){
+			 	console.log(message);
+			}
 			});
  	}
 

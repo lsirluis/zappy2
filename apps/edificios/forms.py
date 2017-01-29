@@ -66,12 +66,12 @@ class UnidadForm(forms.ModelForm):
 				tipoUnidadChoises = (('1', 'Residencial'),)
 				vmoratext+="Residencial"
 				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
-                                   widget=forms.Select(attrs={'disabled':'disabled','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
+                                   widget=forms.Select(attrs={'readonly':'','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
 			elif tipoPro == 2:
 				tipoUnidadChoises = (('2', 'Comercial'),)
 				vmoratext+="Comercial"
 				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
-                                   widget=forms.Select(attrs={'disabled':'disabled','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
+                                   widget=forms.Select(attrs={'readonly':'','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
 			elif tipoPro == 3:
 				tipoUnidadChoises = (('1', 'Residencial'),('2', 'Comercial'))
 				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
@@ -177,8 +177,11 @@ class UnidadForm(forms.ModelForm):
 								propiedad__administrador__idu = uid,\
 								torre=formtorre, numero=formnumero)
 								# si existe un valor en la consulta
-		if qs:
-			raise forms.ValidationError("novalido")
+		if qs :
+			if "edit" in self.request.path:
+				return numero
+			else:
+				raise forms.ValidationError("novalido")
 
 		# if propiedad=="holas" :
 		# 	raise forms.ValidationError("El autor debe contener mas de tres caracteres")

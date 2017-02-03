@@ -34,14 +34,21 @@ class PropiedadForm(forms.ModelForm):
 		}
 
 		widgets = {
+			'idlegal':forms.TextInput(attrs={'class':'form-control'}),
 			'nombre':forms.TextInput(attrs={'class':'form-control'}),
 			'apellidos':forms.TextInput(attrs={'class':'form-control'}),
 			'edad':forms.TextInput(attrs={'class':'form-control'}), 
-			'telefono':forms.TextInput(attrs={'class':'form-control'}),
-			'email':forms.TextInput(attrs={'class':'form-control'}),
-			'domicilio': forms.Textarea(attrs={'class':'form-control'}),
-			'presupuesto_anual': forms.TextInput(attrs={'class':'form-control'}),		
-			'area': forms.TextInput(attrs={'class':'form-control'}),		
+			'telefono':forms.NumberInput(attrs={'class':'form-control','min':0,'data-validate-length-range-minmax':"7,20"}),
+			'email':forms.EmailInput(attrs={'class':'form-control'}),
+			'direccion': forms.TextInput(attrs={'class':'form-control'}),
+			'presupuesto_anual': forms.NumberInput(attrs={'class':'form-control'}),		
+			'area': forms.NumberInput(attrs={'class':'form-control', 'min':0}),		
+			'dia_cobro': forms.NumberInput(attrs={'class':'form-control','min':1,'max':31,'data-validate-minmax':"1,31"}),		
+			'ciudad': forms.Select(attrs={'class':'form-control'}),		
+			'tipo': forms.Select(attrs={'class':'form-control'}),		
+			'porcentaje_mora': forms.NumberInput(attrs={'class':'form-control','min':0,'max':100,'data-validate-minmax':"0,100"}),		
+			
+
 		}
 
 
@@ -66,16 +73,16 @@ class UnidadForm(forms.ModelForm):
 				tipoUnidadChoises = (('1', 'Residencial'),)
 				vmoratext+="Residencial"
 				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
-                                   widget=forms.Select(attrs={'readonly':'','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
+                                   widget=forms.Select(attrs={'class':' form-control','readonly':'','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
 			elif tipoPro == 2:
 				tipoUnidadChoises = (('2', 'Comercial'),)
 				vmoratext+="Comercial"
 				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
-                                   widget=forms.Select(attrs={'readonly':'','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
+                                   widget=forms.Select(attrs={'class':' form-control','readonly':'','data-toggle':"tooltip",'data-placement':"right",'title':vmoratext}))
 			elif tipoPro == 3:
 				tipoUnidadChoises = (('1', 'Residencial'),('2', 'Comercial'))
 				self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidadChoises, 
-                                   widget=forms.Select(attrs={'enabled':'enabled'}))
+                                   widget=forms.Select(attrs={'class':' form-control','enabled':'enabled'}))
 		# tipoUnidad = (('1', 'Residencial'),('2', 'Comercial'))
 		# self.fields['tipo'] = forms.ChoiceField(choices=tipoUnidad, 
                                    # widget=forms.Select(attrs={'disabled':'disabled'}))
@@ -135,14 +142,20 @@ class UnidadForm(forms.ModelForm):
 			'presupuesto_anual': forms.TextInput(attrs={'class':'form-control'}),		
 			'area': forms.TextInput(attrs={'class':'form-control'}),		
 			# 'forma_recibo': forms.RadioSelect(),
-			# 'residente': forms.Select(attrs={'class':'form-control'}),
-			'torre':forms.TextInput(attrs={'class':'xsinput'}),
-			'numero':forms.NumberInput(attrs={'class':'xsinput'}),
-			'dia_cobro':forms.NumberInput(attrs={'max':31,'class':'xsinput'}),
-			'porcentaje_mora':forms.NumberInput(attrs={'max':100,'min':0.0,'step':0.1,'class':'xsinput'}),
-			'coeficiente':forms.NumberInput(attrs={'max':100,'min':0.0,'step':0.1})
-		,	'valor_mora': forms.NumberInput(attrs={'min':0, 'data-toggle':"tooltip",'data-placement':"right",'title':vmoratext})
-		,	'valor_pago': forms.NumberInput(attrs={'min':0})
+			'propietario': forms.Select(attrs={'class':'form-control'}),
+			'arrendatario': forms.Select(attrs={'class':'form-control'}),
+			'responsable': forms.Select(attrs={'class':'form-control'}),
+			'forma_recibo': forms.Select(attrs={'class':'form-control'}),
+			'saldo_favor': forms.NumberInput(attrs={'class':'form-control'}),
+
+			'torre':forms.TextInput(attrs={'class':' form-control'}),
+			'numero':forms.NumberInput(attrs={'class':' form-control'}),
+			'dia_cobro':forms.NumberInput(attrs={'max':31,'class':' form-control'}),
+			'porcentaje_mora':forms.NumberInput(attrs={'max':100,'min':0.0,'step':0.1,'class':' form-control'}),
+			'coeficiente':forms.NumberInput(attrs={'max':100,'min':0.0,'step':0.1,'class':'form-control'})
+		,	'valor_mora': forms.NumberInput(attrs={'min':0,'class':'form-control', 'data-toggle':"tooltip",'data-placement':"right",'title':vmoratext})
+		,	'valor_pago': forms.NumberInput(attrs={'min':0,'class':'form-control'}),
+			'estado': forms.Select(attrs={'class':'form-control'}),
 
 			# data-toggle="tooltip" data-placement="right" title="Hooray!"
 
@@ -217,6 +230,15 @@ class BancoForm(forms.ModelForm):
 			'propiedad',
 
 		]
+		widgets = {
+			'banco': forms.TextInput(attrs={'class':'form-control'}),
+			'num_cuenta': forms.TextInput(attrs={'class':'form-control'}),
+			'tipo_cuenta': forms.Select(attrs={'class':'form-control'}),
+			'propiedad': forms.Select(attrs={'class':'form-control'}),
+
+
+
+		}
 	# def clean_administrador(self):
 	# 	diccionario_limpio = self.cleaned_data
 	# 	administrador = diccionario_limpio.get('administrador') 

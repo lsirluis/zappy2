@@ -40,7 +40,7 @@
             transition: transform .5s;
 }
 .imgpropiedades:hover{
-        transform: scale(1.25,1.25);
+        transform: scale(1.05,1.05);
 }
 /*para la imagen en las tablas de las propiedades*/
 .imgperfilpropiedades{
@@ -725,9 +725,9 @@ text-align: center;
 padding-top: 100px;
 }
 .msgloader{
-left: 30%;
-position: absolute;
-top: 20%;
+left: 50%;
+position: fixed;
+top: 50%;
 /*background-color: rgb(231, 234, 233);*/
 z-index: 1;
 /*width: 200px;*/
@@ -735,6 +735,8 @@ z-index: 1;
 text-align: center;
 /*padding-top: 100px;*/
 display: none;
+margin-left: -50px  ;/* 100/2=50, 100 es lo que mide el gif */
+margin-top: -50px;
 }
 /*modal*/
 .modalPago {

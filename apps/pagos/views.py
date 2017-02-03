@@ -15,7 +15,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from apps.pagos.models import Recibo , Detalle, Noticia, DeNoticia \
 							  ,Deuda , RecibosAuto, RecibosPagos\
 							  ,CuotaExtraordinaria,CuotaExtraUnidad
-from apps.edificios.models import Unidad, Propiedad
+from apps.edificios.models import Unidad, Propiedad,Banco
 from apps.usuarios.models import Administrador
 
 # funcion de edificios
@@ -95,6 +95,8 @@ class DetalleFactura(ListView):
 		qs= Detalle.objects.filter(idRecibo__unidad__propiedad__administrador=uid, idRecibo= factura, idRecibo__unidad=pkunidad, idRecibo__unidad__propiedad = idpro)
 		context['object_list']= qs
 		context['DatosUnidad']= Unidad.objects.filter(id=pkunidad, propiedad=idpro, propiedad__administrador=uid)[0]	
+		
+		context['banco']=Banco.objects.filter(propiedad=idpro)
 		# sino hay detalles
 		if not qs :
 			messages.add_message(self.request, messages.ERROR, 'Lo Sentimos no hay detalles para esta factura')

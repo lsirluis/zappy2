@@ -4,6 +4,8 @@
 {% block title%} {{title}}{%endblock%}
 
 
+
+
 {% block content %}
 
 	
@@ -17,7 +19,7 @@
 	</div>	
 {% else %}
 {# {% include "Propiedad/InfoUnidad.html" %} #}
-<h2>Detalle de factura:</h2>
+{# <h2>Detalle de factura:</h2> #}
 {% if object_list %}
 {# {% if deudas %} #}
 {# si hay deudas: #}
@@ -30,7 +32,7 @@
 	{# no hay deudas #}
 {# {% endif %} #}
 {# si hay detalles para esta factura #}
-	<div class="table-responsivse scrolltable2">          
+<!--	<div class="table-responsive ">          
 		  <table class="table table-striped table-bordered table-hover table-condensed">
 		    <thead>
 		      <tr>
@@ -124,6 +126,192 @@
 		    {% endfor %}
 		  {% endif %}
 	</div>
+-->
+
+{# nuevo contenido para invoice #}
+<script>
+$(document).ready(function(){
+	$("#fechahoy").html(Date.today().toString("d-MMM-yyyy"));
+})
+</script>
+<div class="col-xs-12 col-md-12">
+                <div class="x_panel">
+                  {# <div class="x_title"> #}
+                    {# <h2>Detalle de factura</h2> #}
+                    
+                    {# <div class="clearfix"></div> #}
+                  {# </div> #}
+                  <div class="x_content">
+
+                    <section class="content invoice">
+                      <!-- title row -->
+                      <div class="row">
+                        <div class="col-xs-12 invoice-header">
+                          <h1 >
+                                          <i class="fa fa-globe"></i> Factura.
+                                          <small class="pull-right">Fecha: <span id="fechahoy"></span></small>
+                                      </h1>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- info row -->
+                      <div class="divider"></div>
+                      <div class="row invoice-info">
+                        <div class="col-sm-4 invoice-col">
+                          De Administracion de:
+                          <address>
+                                          <strong>{{DatosUnidad.propiedad.nombre}}</strong>
+                                          <br>{{DatosUnidad.propiedad.direccion}}
+                                          <br>{{DatosUnidad.propiedad.ciudad}}
+                                          <br>{{DatosUnidad.propiedad.telefono}}
+                                          <br>{# Email: ironadmin.com #}
+                                      </address>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-4 invoice-col">
+                          Para 
+                          <address>
+                                          <strong>
+                                          	{{DatosUnidad.propietario.nombre}}
+                                          	{{DatosUnidad.propietario.apellido}}
+                                          </strong>
+                                          <br>{{DatosUnidad.propietario.celular|default:"Cel no-registrado"}}
+                                          <br>{{DatosUnidad.propietario.telefono}}
+                                          <br>{{DatosUnidad.propietario.email|default:"Email no-registrado"}}
+                                          <br>{# 795 Freedom Ave, Suite 600 #}
+                                      </address>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-sm-4 invoice-col">
+                          <b>Factura # {{object_list.0.idRecibo.numConsecutivo}}</b>
+                          <br>
+                          <b>Fecha de cobro:</b>
+                          {{object_list.0.idRecibo.fecha_cobrada}} 
+                          <br>
+                          <b>Cuenta #:</b> {{banco.0.num_cuenta|default:'no registrada'}}
+                          {# <b>Order ID:</b> 4F3S8J #}
+                          <br>
+                          <br>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- /.row -->
+                      <div class="divider"></div>
+
+                      <!-- Table row -->
+                      <div class="row">
+                        <div class="col-xs-12 table table-responsive">
+                          <table class="table table-striped jambo_table bulk_action">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                {# <th>Descrpcion</th> #}
+                                <th>tipo</th>
+                                <th style="width: 59%">Descripcion</th>
+                                <th>Subtotal</th>
+                              </tr>
+                            </thead>
+                            {# ***************************************** #}
+                            <tbody>
+                             
+
+						{% for detalle in object_list   %}	    	
+					    	<tr>
+					    		<td>{{forloop.counter}}</td>
+					    		<td>
+					    		{{detalle.tipo}}</td>
+					    		<td>{{detalle.descripcion}}</td>
+					    		<td>$ {{ detalle.valor}}</td>
+
+					    	</tr>
+					    {% endfor %}
+
+                            </tbody>
+                          </table>
+            {# ***************************************** #}
+						{# comprobamos si tiene deudas vencidas #}
+             {% if deudas %}
+		    		<h4 class="well">Deudas Vencidas</h4>
+					<table class="table table-responsive">
+						<thead>
+							<tr>
+                                <th>#</th>
+                                {# <th>Descrpcion</th> #}
+                                <th>tipo</th>
+                                <th style="width: 59%">Descripcion</th>
+                                <th>Subtotal</th>
+                              </tr>
+						</thead>
+						<tbody>
+								{# {% for deuda in deudas %} #}
+
+						</tbody>
+					</table>
+					{% endif %}
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- /.row -->
+
+                      <div class="row">
+                        <!-- accepted payments column -->
+                        <div class="col-xs-12 col-sm-6">
+                          <p class="lead">Metodos de Pago:</p>
+                          <img src="images/visa.png" alt="Visa">
+                          <img src="images/mastercard.png" alt="Mastercard">
+                          <img src="images/american-express.png" alt="American Express">
+                          <img src="images/paypal.png" alt="Paypal">
+                          <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+                           {% lorem %}
+                          </p>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-xs-12 col-sm-6">
+                          {# <p class="lead">Total Factura 2/22/2014</p> #}
+                          <div class="table-responsive">
+                            <table class="table">
+                              <tbody>
+                                <tr>
+                                  <th style="width:50%">Subtotal:</th>
+                                  <td>$250.30</td>
+                                </tr>
+                                <tr>
+                                  <th>Tax (9.3%)</th>
+                                  <td>$10.34</td>
+                                </tr>
+                                <tr>
+                                  <th>Shipping:</th>
+                                  <td>$5.80</td>
+                                </tr>
+                                <tr>
+                                  <th>Total:</th>
+                                  <td>$265.24</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- /.row -->
+
+                      <!-- this row will not appear when printing -->
+                      <div class="row no-print">
+                        <div class="col-xs-12">
+                          
+                          <div class="hidden-xs">
+                          		<button class="btn btn-info col-sm-1" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+                          </div>
+                          <button class="btn btn-success pull-right col-xs-7 col-sm-3 col-md-2"><i class="fa fa-credit-card"></i> Agregar Pago</button>
+                          <button class="btn btn-primary pull-right col-xs-7 col-sm-2 " style="margin-right: 5px;"><i class="fa fa-download"></i> Generar PDF</button>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+              </div> {# fin div mayor #}
+
+{# fin invoice #}
 
 {% else %}
 	no hay detalles para esta factura

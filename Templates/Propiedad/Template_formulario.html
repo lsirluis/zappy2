@@ -13,32 +13,23 @@
 {% else %}
  {{ form.errors}}
 
-<div id="content-main" class="inner-two-columns">
+<div id="content-main" class=" row col-xs-12">
           	{# <div class="ribbon base"></div> #}
 
     <form enctype="multipart/form-data" action="" method="post" id="propiedad_form" class="form-horizontal" novalidate="">
 
-      <div class="inner-right-column">
 
-        <div class="box save-box">
 
-          
-			<div class="submit-row clearfix">
-  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar </b></button>
-
-  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
-   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
-
-			</div>
-
-		  </div>   
-
-    </div>
-      <div class="inner-center-column ">
+    <div class=" col-xs-12 col-sm-9">
 		    {%csrf_token%}
-        <div class="tab-content tab-content-main ">
-          <fieldset class="module aligned first ">
-          	<div class="ribbon base"></div>
+        <div class=" x_panel">
+        <div class="x_title">
+        <h2>Agregar Banco</h2>
+          <div class="clearfix"></div>
+       </div>
+
+          <div class="x_content ">
+          	{# <div class="ribbon base"></div> #}
 
         {%block DatosFormulario %}
 
@@ -47,8 +38,27 @@
 
 
 
-          </fieldset>
+          </div>
         </div>
+      </div>
+
+
+            <div class="col-xs-12 col-sm-3" style="float:right;">
+
+        <div class="box save-box x_panel">
+
+          
+      <div class="submit-row clearfix">
+        <div class="btn-group">
+          
+            <button type="submit" class="btn btn-high btn-success" name="_save"><b>Guardar</b></button>
+            {# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+            <button type="submit" name="_addanother" class="btn btn-primary">Grabar y añadir otro</button>
+
+        </div>
+      </div>
+    </div>   
+
       </div>
   </form>
 </div>

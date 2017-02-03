@@ -35,54 +35,37 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 {% else %}
  {# {% if object_list or form%} #}
 
-<div id="content-main" class="inner-two-columns">
+<div id="content-main" class=" row col-xs-12">
           	{# <div class="ribbon base"></div> #}
 
     <form enctype="multipart/form-data" action="" method="post" id="unidad_form" name="unidad_form" class="form-horizontal" novalidate="">
 
-      <div class="inner-right-column">
-
-        <div class="box save-box">
-
-          
-			<div class="submit-row clearfix">
-  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar </b></button>
-
-  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
-   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
-
-			</div>
-
-		</div>   
-
-      </div>
-      <div class="inner-center-column ">
+      
+		<div class=" col-xs-12 col-sm-9">
 		{%csrf_token%}
-        <div class="tab-content tab-content-main ">
-          <fieldset class="module aligned first ">
-          	<div class="ribbon base"></div>
+			<div class=" x_panel">
+				<div class="x_title">
+				<h2>Agregar Unidad</h2>
+		   		<div class="clearfix"></div>
+		   </div>
+
+          <div class="x_content ">
+
     		<div class="control-group form-row field-propiedad ">
-        
-          		{# <div> #}
-          			{# <div class="control-label "> #}
-          				{# <label class="required" for="id_propiedad">{{form.propiedad.label}}:</label> #}
-          			{# </div> #}
-          				{# <div class="controls"> #}
-          					{# {{form.propiedad}} #}
-          					{# <span class="errorlist">{{form.propiedad.errors.as_text}}</span> #}
 
-          					{# {{form.errors.propiedad}} #}
-          				{# </div> #}
-
-          		{# </div> #}
-	<input type="hidden" id="id_propiedad" name="propiedad" value="{{object_list.idlegal}}">
+					<input type="hidden" id="id_propiedad" name="propiedad" value="{{object_list.idlegal}}">
      		</div>
 
-      		<div class="control-group form-row field-torre ">
-		         <div>
-		         	<div class="control-label"><label class="required" for="id_torre">{{form.torre.label}}:</label>
-		         	</div><div class="controls">{{form.torre}}
-		         	<span class="secondinput"> {{form.numero.label}}:</span>{{form.numero}}
+      		<div class="form-group field-torre ">
+          		<div class="col-xs-12 iztem">
+		         	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_torre">{{form.torre.label}}:</label>
+		         	<div class="controls col-md-2 col-sm-2 col-xs-12">{{form.torre}}
+		         	</div>
+		         	<div class="col-xs-12 col-sm-4">
+		         	<label id="id_numerolabel" class="newseconinput control-label col-xs-12 col-sm-4"> {{form.numero.label}}:</label>
+		         	<div class="col-xs-12 col-sm-6 newseconinput">
+		         	{{form.numero}}	
+		         	</div>
 					<span class="errorlist"> 
 						{% if form.torre.errors or form.numero.errors%}
 							 {% if "novalido" in form.numero.errors  %}
@@ -98,42 +81,45 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		         </div>
         	</div>
 
-		    <div class="control-group form-row field-estado ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_estado">{{form.estado.label}}:</label>
-		        	</div><div class="controls ">{{form.estado}}</div>
+		    <div class="form-group form-row field-estado ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_estado">{{form.estado.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12 ">{{form.estado}}</div>
 		        </div>
 		      </div>
 
-		    <div class="control-group form-row field-tipo ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_tipo">{{form.tipo.label}}:</label>
-		        	</div><div class="controls ">{{form.tipo}}<span class="errorlist">{{form.tipo.errors.as_text}}</span></div>
+		    <div class="form-group form-row field-tipo ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_tipo">{{form.tipo.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12 ">{{form.tipo}}<span class="errorlist">{{form.tipo.errors.as_text}}</span></div>
 		        </div>
 		      </div>
  			
 
-		    <div class="control-group form-row field-dia_cobro ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_dia_cobro">{{form.dia_cobro.label}}:</label>
-		        	</div><div class="controls">
+		    <div class="form-group form-row field-dia_cobro ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_dia_cobro">{{form.dia_cobro.label}}:</label>
+		        	<div class="controls col-md-2 col-sm-2 col-xs-12">
 		        	{{form.dia_cobro}}		        	
-						<input id="btnList" class="btn btn-xs btn-info formtambuton"type="button" value="Usar el de mi edificio">
+		         	</div>
+
+					<div class="col-xs-12 col-sm-4">
+						<input id="btnList" class="btn btn-xs btn-info "type="button" value="Usar el de mi edificio">
 		        		{# <button onclick="" id="btnList" class="btn btn-xs btn-info formtambuton">Usar el de mi edificio</button> #}
 		        		<span class="errorlist">{{form.dia_cobro.errors.as_text}}</span>
 					</div>
 		        </div>
 		      </div>
 
-		    <div class="control-group form-row field-residente ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_residente">{{form.residente.label}}:</label>
-		        	</div><div class="controls">
+		    <div class="form-group form-row field-residente ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_residente">{{form.residente.label}}:</label>
 		        	
 
 
 		        	<div class="related-widget-wrapper">{# {{form.residente}} #}
-		        		<select id="id_residente" name="residente">
+		        	<div class="controls col-md-4 col-sm-4 col-xs-10">
+		        		<select id="id_residente" name="residente" class='form-control'>
 {% if not form.residente.value  %}
 <option value="" selected="selected">---------</option>
 {% else %}
@@ -142,8 +128,9 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 
 {% endif %}
 </select> 
+</div>
 {{form.errors.residente}} 
-
+<div class="col-xs-2">
 		        		<a class="related-widget-wrapper-link change-related" id="change_id_residente" data-href-template="/admin/edificios/persona/__fk__/change/?_to_field=id&amp;_popup=1" title="Cambiar Persona seleccionado">
 		        			<img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
 		        		</a>
@@ -162,13 +149,19 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		        </div>
 		      </div>
 		      
-		    <div class="control-group form-row field-propietario ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_propietario">{{form.propietario.label}}:</label>
-		        	</div>
-		        	<div class="controls">
+
+
+		    <div class="form-group form-row field-propietario ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_propietario">{{form.propietario.label}}:</label>
+		        	
+		        	{# <div class="controls col-md-5 col-sm-5 col-xs-12"> #}
 						<div class="related-widget-wrapper">
+			        	<div class="controls col-md-4 col-sm-4 col-xs-10">
+
 							{{form.propietario}}
+						</div>
+						<div class="col-xs-2">
 							<a class="related-widget-wrapper-link change-related" id="change_id_propietario" data-href-template="/admin/edificios/persona/__fk__/change/?_to_field=id&amp;_popup=1" title="Cambiar Persona seleccionado">
 		        			<img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
 		        			</a>
@@ -181,12 +174,15 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		        	</div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-arrendatario ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_arrendatario">{{form.arrendatario.label}}:</label>
-		        	</div><div class="controls">
+		    <div class="form-group form-row field-arrendatario ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_arrendatario">{{form.arrendatario.label}}:</label>
 					<div class="related-widget-wrapper">
+						<div class="controls col-md-4 col-sm-4 col-xs-10">
+
 							{{form.arrendatario}}
+						</div>
+						<div class="col-xs-2">
 							<a class="related-widget-wrapper-link change-related" id="change_id_arrendatario" data-href-template="/admin/edificios/persona/__fk__/change/?_to_field=id&amp;_popup=1" title="Cambiar Persona seleccionado">
 		        			<img src="/static/admin/img/icon-changelink.svg" alt="Modificar">
 		        			</a>
@@ -197,52 +193,55 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		        	{{form.errors.arrendatario}}</div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-responsable ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_responsable">{{form.responsable.label}}:</label>
-		        	</div><div class="controls">{{form.responsable}}{{form.errors.responsable}} <span class="errorlist">{{form.responsable.errors.as_text}}</span>
+		    <div class="form-group form-row field-responsable ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_responsable">{{form.responsable.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.responsable}}{{form.errors.responsable}} <span class="errorlist">{{form.responsable.errors.as_text}}</span>
 		        </div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-forma_recibo ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_forma_recibo">{{form.forma_recibo.label}}:</label>
-		        	</div><div class="controls">{{form.forma_recibo}}{{form.errors.forma_recibo}}</div>
+		    <div class="form-group form-row field-forma_recibo ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_forma_recibo">{{form.forma_recibo.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.forma_recibo}}{{form.errors.forma_recibo}}</div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-saldo_favor ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_saldo_favor">{{form.saldo_favor.label}}:</label>
-		        	</div><div class="controls">{{form.saldo_favor}}{{form.errors.saldo_favor}}</div>
+		    <div class="form-group form-row field-saldo_favor ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_saldo_favor">{{form.saldo_favor.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.saldo_favor}}{{form.errors.saldo_favor}}</div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-porcentaje_mora ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_porcentaje_mora">{{form.porcentaje_mora.label}}:</label>
-		        	</div><div class="controls">{{form.porcentaje_mora}}
-		        		<input id="btnporcentaje" class="btn btn-xs btn-info formtambuton"type="button" value="Usar el de mi edificio">
+		    <div class="form-group form-row field-porcentaje_mora ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_porcentaje_mora">{{form.porcentaje_mora.label}}:</label>
+		        	<div class="controls col-md-2 col-sm-2 col-xs-12">
+		        		{{form.porcentaje_mora}}
+		        	</div>
+		        	<div class="col-xs-12 col-sm-4">
+		        		<input id="btnporcentaje" class="btn btn-xs btn-info "type="button" value="Usar el de mi edificio">
 		        		{# <button type="input" class="btn btn-xs btn-info formtambuton">Usar el de mi edificio</button> #}
 		       		 </div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-valor_mora ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_valor_mora" >{{form.valor_mora.label}}:</label>
-		        	</div><div class="controls">{{form.valor_mora}}</div>
+		    <div class="form-group form-row field-valor_mora ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_valor_mora" >{{form.valor_mora.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.valor_mora}}</div>
 		        </div>
 		      </div>
-		    <div class="control-group form-row field-coeficiente ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_coeficiente">{{form.coeficiente.label}}:</label>
-		        	</div><div class="controls">{{form.coeficiente}} 
+		    <div class="form-group form-row field-coeficiente ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_coeficiente">{{form.coeficiente.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.coeficiente}} 
 		        <span class="errorlist">{{form.coeficiente.errors.as_text}}</span>
 		    </div>
 		        </div>
 		      </div>		      
-		    <div class="control-group form-row field-valor_pago ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_valor_pago">{{form.valor_pago.label}}:</label>
-		        	</div><div class="controls">{{form.valor_pago}}
+		    <div class="form-group form-row field-valor_pago ">
+          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_valor_pago">{{form.valor_pago.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.valor_pago}}
 		        		
 		        <input title="calculo basado en el presupuesto del edificio y su coeficiente" id="btnvalor" class="btn btn-xs btn-success formtambuton"type="button" value="Calcular Auto">
 
@@ -255,11 +254,11 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		        	</div>
 		        </div>
 		      </div>	
-    		</fieldset>
+    		</div> <!-- fin x_content antes fieldset-->
 		
-       	</div>
+       	</div><!-- fin x_panel-->
 
-		</div>
+		</div> <!-- fin col9-->
 <script type="text/javascript">
 	$(document).ready(function() {
 	    var diacobro ={{object_list.dia_cobro}};  //variable de Resultado
@@ -311,6 +310,26 @@ open(url,'','top=300,left=300,width=300,height=300') ;
 		})
 
         </script>
+
+
+        <div class="col-xs-12 col-sm-3" style="float:right;">
+
+        <div class="box save-box x_panel">
+
+          
+			<div class="submit-row clearfix">
+				<div class="btn-group">
+					
+  					<button type="submit" class="btn btn-high btn-success" name="_save"><b>Guardar</b></button>
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn btn-primary">Grabar y añadir otro</button>
+
+				</div>
+			</div>
+		</div>   
+
+      </div>
+
 	</form>
 
 </div>

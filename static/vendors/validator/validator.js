@@ -15,21 +15,21 @@ var validator = (function($){
     /* general text messages
     */
     message = {
-        invalid         : 'invalid input',
-        checked         : 'must be checked',
-        empty           : 'please put something here',
-        min             : 'input is too short',
-        max             : 'input is too long',
-        number_min      : 'too low',
-        number_max      : 'too high',
-        url             : 'invalid URL',
-        number          : 'not a number',
-        email           : 'email address is invalid',
-        email_repeat    : 'emails do not match',
-        password_repeat : 'passwords do not match',
-        repeat          : 'no match',
-        complete        : 'input is not complete',
-        select          : 'Please select an option'
+        invalid         : 'Invalido',
+        checked         : 'Debe ser checkeado',
+        empty           : 'Ingresa un valor',
+        min             : 'Muy corto',
+        max             : 'Muy largo',
+        number_min      : 'Muy bajo',
+        number_max      : 'Muy alto',
+        url             : 'URL invalida',
+        number          : 'No es un numero',
+        email           : 'Email es invalido',
+        email_repeat    : 'Emails no coinciden',
+        password_repeat : 'Contrasena no conincide',
+        repeat          : 'No coincide',
+        complete        : 'No está completo',
+        select          : 'Seleccione una opcion'
     };
 
     if(!window.console){
@@ -43,7 +43,8 @@ var validator = (function($){
         classes : {
 	        item    : 'item',
 	        alert   : 'alert',
-	        bad     : 'bad'
+	        bad     : 'bad',
+            alerta : 'alerta',
         }
     };
 
@@ -240,15 +241,31 @@ var validator = (function($){
         var item = field.closest('.' + defaults.classes.item),
             warning;
 
-        if( item.hasClass(defaults.classes.bad) ){
-            if( defaults.alerts )
-                item.find('.'+defaults.classes.alert).html(text);
-        }
+        // if( item.hasClass(defaults.classes.bad) ){
+        //     alert("este tiene la clase bad");
+        //     if( defaults.alerts )
+        //         item.find('.alerta').html(text);
+        // }
 
 
-        else if( defaults.alerts ){
-            warning = $('<div class="'+ defaults.classes.alert +'">').html( text );
+        // else if( defaults.alerts ){
+        //     alert("este no tiene la clase bad");
+
+        //     warning = $('<div class="'+ defaults.classes.alerta+' col-xs-12 col-md-3">').html( text );
+        //     item.append( warning );
+        //     }
+
+        if (item.find('div.alerta')[0]) {
+            // alert("si tiene alerta"+item.find('div.alerta'));
+            item.find('.alerta').html(text);
+        }else{
+            // alert("no tiene alerta");
+            if( defaults.alerts ){
+        //     alert("este no tiene la clase bad");
+            warning = $('<div class="'+ defaults.classes.alerta+' col-xs-12 col-md-3">').html( text );
             item.append( warning );
+            }
+// item.find('.alerta').html(text)
         }
 
         item.removeClass(defaults.classes.bad);
@@ -267,7 +284,7 @@ var validator = (function($){
 
         field.closest('.' + defaults.classes.item)
              .removeClass(defaults.classes.bad)
-             .find('.'+ defaults.classes.alert).remove();
+             .find('.'+ defaults.classes.alerta).remove();
     };
 
     function testByType(type, value){

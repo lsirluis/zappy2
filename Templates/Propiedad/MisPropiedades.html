@@ -29,6 +29,7 @@
 	</div>	
 	{# <br> #}
 {# <br> #}
+<!--
 <div class="table-responsive col-sm-12">          
   <table class="table table-hover table-condensed table-striped jambo_table bulk_action  " >
     <thead>
@@ -99,9 +100,82 @@
   </ul>
    {# <script type="text/javascript" src="https://form.jotformz.com/jsform/63306089762663"></script>#}
   </div>
+-->
+	{% for propiedad in object_list  %}
+	
+  <div class="col-md-4 col-sm-6 col-xs-12 profile_left">
+         <div class=" x_panel">
+			<div class="x_title">
+				<h2>{{propiedad.nombre|title|truncatechars:30}}</h2>
+		   		<div class="clearfix"></div>
+		   </div>
+          <div class="x_content ">
+                      <div class="profile_img">
+                        <div id="crop-avatar">
+                          <!-- Current avatar -->
+                          {# <img class="img-responsive avatar-view" src="images/picture.jpg" alt="Avatar" title="Change the avatar"> #}
+                          <img src="/media/{{ propiedad.Imagen}}" class="img-responsives avatar-view" WIDTH=160 HEIGHT=160>
+                        </div>
+                      </div>
+                      {# <h3>{{propiedad.nombre|title}}</h3> #}
+<div class="divider"></div>
+                      <ul class="list-unstyled user_data">
+                        <li><i class="fa fa-map-marker user-profile-icon"></i>
+                        	Ubicacion: <b>{{propiedad.ciudad}}</b>
+                        </li>
+
+                        <li>
+                          <i class="fa fa-briefcase user-profile-icon"></i> 
+                          Tipo: <b>{{propiedad.get_tipo_display}}</b>
+                        </li>
+
+						 <li data-inputmask="'mask': '999-999999'">
+                          <i class="fa fa-phone user-profile-icon"></i> 
+                          Tel: <b>{{propiedad.telefono|addslashes|default:"no-registrado"}}</b>
+                        </li>
+
+						 <li data-inputmask="'mask': '999-999999'">
+                          <i class="fa fa-dollar user-profile-icon"></i> 
+                          Presupuesto: $ <b>{{propiedad.presupuesto_anual}}</b>
+                        </li>
+
+                        <li data-inputmask="'mask': '999-999999'">
+                          <i class="fa fa-sun-o user-profile-icon"></i> 
+                          Dia de cobro: <b>{{propiedad.dia_cobro}}</b>
+                        </li>
+
+                  
+                      </ul>
+
+                      <a class="btn btn-success" href="{% url 'Propiedad:Solicitud_apartamentos' propiedad.idlegal %}"><i class="fa fa-home m-right-xs"></i>Ver Unidades</a>
+                      <br>
+					
+					</div>{# xcontent #}
+                    </div>{# xpanel #}
+                    </div>
 
 
+{% endfor %}
+ <div class="col-xs-12">
+                    	
+<ul class="pager">
+  	{# <li> #}
+  		{# cantidad de paginas: {{paginator.num_pages}} y numero de la siguiente pagina #}
 
+  		{%if object_list.has_previous %}
+  		<a class="btn btn-info" href="?page={{page_obj.previous_page_number}}">Anterior</a>
+  		{%endif%}
+  	{# </li> #}
+        <span class="current">
+          	  		pagina {{ object_list.number }} de {{ object_list.paginator.num_pages }}.
+        </span>
+          	{# <li> #}
+  		{%if object_list.has_next %} {# and paginator.num_pages != page_obj.next_page_number #}
+  			<a class="btn btn-info" href="?page={{page_obj.next_page_number}}">Siguiente &raquo;</a>
+  		{%endif%}
+  	{# </li> #}
+  </ul>
+   </div>
 
 
 

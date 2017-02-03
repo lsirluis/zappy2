@@ -19,74 +19,78 @@
 {% else  %}
 	
 
-{{form.errors}}
-<br>
+{# {{form.errors}} #}
+{# <br> #}
 
-<div id="content-main" class="inner-two-columns">
+<div id="content-main" class=" row col-xs-12">
 
-    <form enctype="multipart/form-data" action="" method="post" id="propiedad_form" class="form-horizontal" novalidate="">
-
-      <div class="inner-right-column">
-
-        <div class="box save-box">
-
-          
-			<div class="submit-row clearfix">
-  					<button type="submit" class="btn btn-high btn-info" name="_save"><b>Guardar</b></button>
-  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
-   					<button type="submit" name="_addanother" class="btn">Grabar y añadir otro</button>
-
-			</div>
-		</div>   
-
-      </div>
+    <form enctype="multipart/form-data" action="" method="post" id="propiedad_form" class="form-horizontal" novalidate="" data-parsley-validate>
       
-      <div class="inner-center-column">
+      
+      <div class=" col-xs-12 col-sm-9">
 		{%csrf_token%}
-        <div class="tab-content tab-content-main">
-          <fieldset class="module aligned first ">
-          	          	<div class="ribbon base"></div>
-
-    		<div class="control-group form-row field-idlegal ">
-        
-          		<div>
-          			<div class="control-label ">
-          				<label class="required" for="id_idlegal">{{form.idlegal.label}}:</label>
-          			</div>
-          				<div class="controls">{{form.idlegal}}</div>
+        <div class=" x_panel">
+			<div class="x_title">
+				<h2>Agregar propiedad</h2>
+		   		<div class="clearfix"></div>
+		   </div>
+          <div class="x_content ">
+          	          	{# <div class="ribbon base"></div> #}
+			
+    		<div class=" form-group field-idlegal">
+          		<div class="col-xs-12 item">
+          					
+          				<label class="control-label col-md-4 col-sm-4 col-xs-12" for="id_idlegal">{{form.idlegal.label}}: <span class="required">*</span>
+                        </label>
+          				{# <label class="required " for="id_idlegal"></label> #}
+          				<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.idlegal}}</div>
+          				{% if form.idlegal.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.idlegal.errors.as_text}}</div>
+          				{% endif %}
+          				{#  #}
           		</div>
-        
-
      		</div>
 
-      		<div class="control-group form-row field-nombre ">
-		         <div>
-		         	<div class="control-label"><label class="required" for="id_nombre">{{form.nombre.label}}:</label>
-		         	</div><div class="controls">{{form.nombre}} </div>
+      		<div class=" form-group field-nombre ">
+          		<div class="col-xs-12 item">
+		         	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_nombre">{{form.nombre.label}}:</label>
+		         	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.nombre}} </div>
+		         	{% if form.nombre.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.nombre.errors.as_text}}</div>
+          				{% endif %}
 		         </div>
         	</div>
 
-		    <div class="control-group form-row field-direccion ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_direccion">{{form.direccion.label}}:</label>
-		        	</div><div class="controls">{{form.direccion}}</div>
+		    <div class="  form-group form-row field-direccion ">
+	          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_direccion">{{form.direccion.label}}:</label>
+		        	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.direccion}}</div>
+		        	{% if form.direccion.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.direccion.errors.as_text}}</div>
+          				{% endif %}
 		        </div>
 		      </div>
     
   
     
-		      <div class="control-group form-row field-telefono "> 
-		          <div>
-		          	<div class="control-label"><label class="required" for="id_telefono">{{form.telefono.label}}:</label>
-		          	</div><div class="controls">{{form.telefono}}</div>
+		      <div class=" form-group form-row field-telefono "> 
+	          		<div class="col-xs-12 item">
+		          	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for=" id_telefono">{{form.telefono.label}}:</label>
+		          	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.telefono}}</div>
+		          	{% if form.telefono.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.telefono.errors.as_text}}</div>
+          				{% endif %}
 		          </div>
 		       </div>
     
-      			<div class="control-group form-row field-ciudad ">
+      			<div class=" form-group form-row field-ciudad ">
         
-         			 <div>
-         			 	<div class="control-label"><label class="required" for="id_ciudad">Ciudad:</label>
-         			 	</div><div class="controls">{{form.ciudad}}</div>
+	           		<div class="col-xs-12 item">
+         			 	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_ciudad">Ciudad:</label>
+         			 	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.ciudad}}</div>
+         			 	{% if form.ciudad.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.ciudad.errors.as_text}}</div>
+          				{% endif %}
          			 </div>
       			</div>
     
@@ -101,25 +105,34 @@
     
   
     
-		      <div class="control-group form-row field-area ">
+		      <div class=" form-group form-row field-area ">
 		        
-		          <div>
-		          	<div class="control-label"><label class="required" for="id_area">Area M<sup>2</sup>:</label>
-		          	</div><div class="controls">{{form.area}}</div>
+	           		<div class="col-xs-12 item">
+		          	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_area">Area M<sup>2</sup>:</label>
+		          	<div class="controls col-md-3 col-sm-3 col-xs-12">{{form.area}}</div>
+		          	{% if form.area.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.area.errors.as_text}}</div>
+          				{% endif %}
 		          </div>
 		      </div>
     
-		      <div class="control-group form-row field-tipo ">
-		        <div>
-		        	<div class="control-label"><label class="required" for="id_tipo">Tipo Propiedad:</label>
-		        	</div><div class="controls">{{form.tipo}} </div>
+		      <div class=" form-group form-row field-tipo ">
+	          		<div class="col-xs-12 item">
+		        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_tipo">Tipo Propiedad:</label>
+		        	<div class="controls col-md-3 col-sm-3 col-xs-12">{{form.tipo}} </div>
+		        	{% if form.tipo.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.tipo.errors.as_text}}</div>
+          				{% endif %}
 		        </div>
 		      </div>
 			    
-			      <div class="control-group form-row field-presupuesto_anual ">
-			          <div>
-			          	<div class="control-label"><label class="required" for="id_presupuesto_anual">Presupuesto anual:</label>
-			          	</div><div class="controls">{{form.presupuesto_anual}}</div>
+			      <div class=" form-group form-row field-presupuesto_anual ">
+	          		<div class="col-xs-12 item">
+			          	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_presupuesto_anual">Presupuesto anual:</label>
+			          	<div class="controls col-md-3 col-sm-3 col-xs-12">{{form.presupuesto_anual}}</div>
+			          	{% if form.presupuesto_anual.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.presupuesto_anual.errors.as_text}}</div>
+          				{% endif %}
 			          </div>
 			        
 
@@ -127,29 +140,38 @@
     
   
     
-			      <div class="control-group form-row field-dia_cobro ">
-			        <div>
-			        	<div class="control-label"><label class="required" for="id_dia_cobro">{{form.dia_cobro.label}}:</label>
-			        	</div><div class="controls">{{form.dia_cobro}}</div>
+			      <div class=" form-group form-row field-dia_cobro ">
+	          		<div class="col-xs-12 item">
+			        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_dia_cobro">{{form.dia_cobro.label}}:</label>
+			        	<div class="controls col-md-2 col-sm-2 col-xs-12">{{form.dia_cobro}}</div>
+			        	{% if form.dia_cobro.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.dia_cobro.errors.as_text}}</div>
+          				{% endif %}
 			        </div>
 			      </div>
     
   
     
-			      <div class="control-group form-row field-porcentaje_mora ">
-			        <div>
-			        	<div class="control-label"><label class="required" for="id_porcentaje_mora">Porcentaje mora:</label>
-			        	</div><div class="controls">{{form.porcentaje_mora}}</div>
+			      <div class=" form-group form-row field-porcentaje_mora ">
+	          		<div class="col-xs-12 item ">
+			        	<label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_porcentaje_mora">Porcentaje mora:</label>
+			        	<div class="controls col-md-2 col-sm-2 col-xs-12">{{form.porcentaje_mora}}</div>
+			        	{% if form.porcentaje_mora.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.porcentaje_mora.errors.as_text}}</div>
+          				{% endif %}
 			        </div>
         		  </div>
-			      <div class="control-group form-row field-Imagen ">    
-			          <div>
-			          	<div class="control-label"><label for="id_Imagen">Imagen:</label>
-			          	</div><div class="controls">{{form.Imagen}} </div></div>
+			      <div class=" form-group form-row field-Imagen ">    
+	          		<div class="col-xs-12 item">
+			          <label class="required control-label col-md-4 col-sm-4 col-xs-12" for="id_Imagen">Imagen:</label>
+			          	<div class="controls col-md-5 col-sm-5 col-xs-12">{{form.Imagen}} </div></div>
+			          	{% if form.Imagen.errors %}
+          					<div class="alerta col-xs-12 col-md-3"> {{form.Imagen.errors.as_text}}</div>
+          				{% endif %}
 			      </div>
     
   
-</fieldset>
+</div>
 
         </div>
 
@@ -179,6 +201,25 @@
 
 
       </div>
+{# ********************************************************************************** #}
+      <div class="col-xs-12 col-sm-3" style="float:right;">
+
+        <div class="box save-box x_panel">
+
+          
+			<div class="submit-row clearfix">
+				<div class="btn-group">
+					
+  					<button type="submit" class="btn btn-high btn-success" name="_save"><b>Guardar</b></button>
+  					{# <button type="submit" name="_continue" class=" btn btn-high">Grabar y continuar editando</button> #}
+   					<button type="submit" name="_addanother" class="btn btn-primary">Grabar y añadir otro</button>
+
+				</div>
+			</div>
+		</div>   
+
+      </div>
+
     </form>
   </div>
 

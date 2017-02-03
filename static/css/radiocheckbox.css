@@ -2,11 +2,12 @@
 .funkyradio div {
   /*clear: both;*/
   /*overflow: hidden;*/
+  left: -10px;
 }
 
 .funkyradio label {
-  /*width: 100%;*/
-  width: 100px;
+  width: 100%;
+  /*width: 100px;*/
   border-radius: 3px;
   border: 1px solid #D1D3D4;
   font-weight: normal;

@@ -1,5 +1,6 @@
 {# {% load staticfiles %} #}
 {% load admin_static staticfiles %}{% load suit_tags %}{% load url from suit_compat %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,7 +13,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentelella Alela! | </title>
+    {# <title>Gentelella Alela! | </title> #}
     <link rel="icon" type="image/png" href="{% static 'img/iconzapphy.png' %} " />
 
     <!-- Bootstrap -->
@@ -98,11 +99,19 @@
                    {# ***************************************************#}
                    <li {% if "Propiedad/listar"  in request.path %} class="active" {% elif "Propiedad/crear"  in request.path %} class="active"{% endif %}>
                       <a ><i class="fa fa-building"></i>Propiedades<span class="{% if  'Propiedad/listar' in request.path or 'Propiedad/crear' in request.path %}fa fa-chevron-down {% else %} fa fa-chevron-right  {%endif%} "></span></a>
-                   <ul class="nav child_menu"> 
+                   <ul class="nav child_menu"  {% if "Propiedad/listar" in request.path %} style="display:block;"{% endif %}> 
                       <li {% if "Propiedad/listar" in request.path %} class="current-page" {% endif %}>
                         <a href="{% url 'Propiedad:Solicitud_listar' %}">
                            Mis propiedades
                         </a> 
+                        {# *********************************** #}
+                        {% block accioneslist %}
+                        {# <ul class="nav child_menu" style="display:blockd;"> #}
+                          {# <li class="sub_menu" ><a href="">carteh</a></li> #}
+                        {# </ul> #}
+                          
+                        {% endblock %}
+                    {# ************************** #}
                       </li>
                       <li {% if "Propiedad/crear" in request.path %} class="current-page" {% endif %}>
                         <a href="{%url 'Propiedad:Solicitud_crearpro' %}">Agregar propiedad</a> 
@@ -457,9 +466,15 @@
     <script src="{% static 'vendors/moment/min/moment.min.js' %}"></script>
     <script src="{% static 'vendors/bootstrap-daterangepicker/daterangepicker.js' %}"></script>
 
+<!-- jquery.inputmask -->
+    <script src="{% static 'vendors/jquery.inputmask/dist/min/jquery.inputmask.bundle.min.js' %}"></script>
     <!-- Custom Theme Scripts -->
-
+    <!-- 
+-->
+    <script src=" {% static 'vendors/validator/validator.js' %}"></script>
     <script src="{% static 'build/js/custom.min.js' %}"></script>
-
+    {% block extrajs %}
+      
+    {% endblock extrajs %}
   </body>
 </html>

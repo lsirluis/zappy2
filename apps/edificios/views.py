@@ -258,7 +258,7 @@ def usuarioId(id):
 
 
 class listarList(ListView):
-	paginate_by =9
+	paginate_by =3
 	model = Propiedad
 	# queryset = Propiedad.objects.filter(administrador=usuario)
 	template_name = 'Propiedad/MisPropiedades.html'
@@ -441,7 +441,7 @@ class PropiedadCreate(CreateView):
 		# quien es el administrador al que se le guardara? pues este:
 		uid = request.user.id
 		admin = Administrador.objects.get(idu=uid)
-		form = self.form_class(request.POST)
+		form = self.form_class(request.POST, request.FILES)
 		if form.is_valid() :
 			solicitud = form.save(commit=False)
 			solicitud.administrador = admin

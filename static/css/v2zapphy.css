@@ -6,6 +6,9 @@
     /*overflow: hidden;*/
     width: 70%;
 }
+body .container.body .right_col {
+    background: #fff;
+}
 .zapphy_datetime{
 	/*line-height: 32px;*/
 	float: right;
@@ -22,12 +25,19 @@ font-size: 1.2rem;
 	/*color: white;*/
 }
 
-
+.nav_menu {
+	background-color: #1E414F !important;
+	color:white !important;
+}
+.nav.navbar-nav > li > a {
+    color: white !important;
+}
 /*reescribimos en navbar right*/
 .top_nav .navbar-right {
     margin: 0;
     width: auto;
     float: right;
+    /*background-color: #1E414F !important;*/
 }
 
 /*reescribimos el boton toggle*/
@@ -43,7 +53,7 @@ body{
 /*reescribimos el metodo btn con el fin de achicar los botones con padding*/
 .btn{
 	    display: inline-block;
-    padding: 4px 12px;
+    padding: 5px 12px;
     margin-bottom: 0;
     font-size: 12px;
     font-weight: 400;
@@ -132,4 +142,82 @@ margin-left: -80px;
 .object-tools {
     float: right !important;
     margin-bottom: 10px;
+}
+
+
+/* estilos para formulario*/
+
+.xs-input{
+	width: 40% !important;
+}
+.sm-input{
+	width: 50% !important;
+}
+.md-input{
+	width: 80% !important;
+}
+
+.control-label{
+	text-align: left !important;
+}
+.item .alerta::after {
+    content: '';
+    display: block;
+    height: 0;
+    width: 0;
+    border-color: transparent #CE5454 transparent transparent;
+    border-style: solid;
+    border-width: 11px 7px;
+    position: absolute;
+    left: -13px;
+    top: 1px;
+}
+.item .alerta{
+	background-color: #CE5454;
+	/*height: 30px;*/
+	min-height: 30px;
+	color: white;
+	/*white-space: pre;*/
+padding-top: 5px;
+}
+
+
+
+/*******************************************************************/
+.newseconinput{
+	padding-left: 0px;
+}
+
+/********************************************************************/
+.nav-sm ul.nav.child_menu li > ul,.nav-md ul.nav.child_menu li > ul {
+/*	left:100%;
+	position:absolute;
+	top:0;
+	width:210px;
+	z-index:4000;
+	background:#3E5367;*/
+	/*background-color: white;*/
+	display:block !important;
+}
+.sub_menu .btn{
+
+	text-align: left;
+	height: 30px !important;
+padding-top: 0px !important;
+}
+.sub_menu a > i{
+	text-align: left !important;
+	width: 100% !important;
+}
+
+.modal {
+	z-index: 10000 !important;
+}
+
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+	/*padding: 8px;*/
+	/*line-height: 1.42857143;*/
+	/*vertical-align: top;*/
+	border-top: 0px solid #ddd !important;
 }
